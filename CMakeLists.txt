@@ -19,3 +19,5 @@ target_include_directories(main PUBLIC ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DI
 
 # # How to add data file
 # file(COPY test.dat DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+# TODO: Consider adding options and messages

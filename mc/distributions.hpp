@@ -6,7 +6,7 @@ public:
   ~Distribution();
   virtual double pdf(double x[dim]) = 0;
   virtual double cdf(double x[dim]) = 0;
-  virtual double x[dim] icdf(double p) = 0;
+  virtual double* icdf(double p) = 0;
   double** sample(int n = 1);
 
 private:

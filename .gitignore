@@ -32,8 +32,7 @@
 *.app
 
 # Custom
-*.pdf
 .DS_Store
-TODO.md
-build/
 .vscode/
+TODO.md
+*.pdf

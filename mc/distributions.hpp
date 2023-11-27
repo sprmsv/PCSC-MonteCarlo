@@ -11,12 +11,10 @@ template<int dim> class Distribution
 public:
   Distribution();
   ~Distribution();
-  // virtual double pdf(double x[dim]) = 0;
-  // virtual double cdf(double x[dim]) = 0;
-  // double* icdf(double);
-  virtual Matrix* sample(const int n = 1) = 0;
+  Matrix* samples(const int n = 1);
 
-// private:
+private:
+  virtual double sample_dim(const int d) = 0;
   const int m_dim;
 };
 
@@ -26,15 +24,22 @@ template<int dim = 1> class Normal:
 public:
   Normal();
   ~Normal();
+  // virtual double pdf(double x[dim]) = 0;
+  // virtual double cdf(double x[dim]) = 0;
+  // double* icdf(double);
 };
 
 template<int dim = 1> class Uniform:
   public Distribution<dim>
 {
 public:
-  Uniform();
+  Uniform(const double* lower, const double* upper);
   ~Uniform();
-  virtual Matrix* sample(const int n = 1) override;
+  const double* m_lower;
+  const double* m_upper;
+
+private:
+  double sample_dim(const int d) override;
 };
 
 // Include separated implementations

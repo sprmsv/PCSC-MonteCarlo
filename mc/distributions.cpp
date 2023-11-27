@@ -25,12 +25,6 @@ Matrix* Distribution::samples(const int n) {
   return samples;
 }
 
-Normal::Normal(const unsigned int dim)
-  : Distribution(dim) {}
-
-Normal::~Normal() {}
-
-
 Uniform::Uniform(const unsigned int dim, const double* lower, const double* upper)
   : Distribution(dim), m_lower(lower), m_upper(upper) {
     // TODO: Assert the dimension of the domain bounds
@@ -45,8 +39,7 @@ Uniform::Uniform(const double& lower, const double& upper)
 Uniform::~Uniform() {}
 
 double Uniform::sample_dim(const int d) {
-  double s = (double)rand() / (double)RAND_MAX;
-  s *= m_upper[d] - m_lower[d];
-  s += m_lower[d];
-  return s;
+  double z = (double)rand() / (double)RAND_MAX;
+  double x = (m_upper[d] - m_lower[d]) * z + m_lower[d];
+  return x;
 }

@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <Eigen/Core>
 
 typedef std::vector<std::vector<double>> Matrix;
 
@@ -18,17 +19,6 @@ private:
   const int m_dim;
 };
 
-class Normal:
-  public Distribution
-{
-public:
-  Normal(const unsigned int dim);
-  ~Normal();
-  // virtual double pdf(double x[dim]) = 0;
-  // virtual double cdf(double x[dim]) = 0;
-  // double* icdf(double);
-};
-
 class Uniform:
   public Distribution
 {
@@ -38,11 +28,29 @@ public:
   Uniform(const double& lower, const double& upper);
   // Destructor
   ~Uniform();
+  const double* m_lower;
+  const double* m_upper;
 
 private:
   double sample_dim(const int d) override;
-  const double* m_lower;
-  const double* m_upper;
 };
+
+template <unsigned int dim = 1>
+class Normal:
+  public Distribution
+{
+public:
+  Normal(Eigen::Matrix<double, dim, 1>& mean, Eigen::Matrix<double, dim, dim>& covariance);
+  Normal(const double mean, const double variance);
+  ~Normal();
+
+  Eigen::Matrix<double, dim, 1> m_mean;
+  Eigen::Matrix<double, dim, dim> m_covariance;
+
+private:
+  double sample_dim(const int d) override;
+};
+
+#include "distributions.tpp"
 
 #endif

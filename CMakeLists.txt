@@ -7,28 +7,34 @@ project(MC VERSION 0.1)
 set(MC_VERSION_NUMBER ${MC_VERSION_MAJOR}.${MC_VERSION_MINOR})
 enable_testing()
 
+# Set directories
+set(MC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/mc)
+set(TESTS_SOURCE_DIR ${PROJECT_SOURCE_DIR}/tests)
+set(EIGEN_SOURCE_DIR ${PROJECT_SOURCE_DIR}/eigen)
+
 # Get source and test files
-set(MC_SOURCE_DIR mc)
-set(TESTS_SOURCE_DIR tests)
-file(GLOB sourcefiles ${MC_SOURCE_DIR}/*.cpp)
+file(GLOB mcfiles ${MC_SOURCE_DIR}/*.cpp ${MC_SOURCE_DIR}/*.hpp ${MC_SOURCE_DIR}/*.tpp)
 file(GLOB testfiles ${TESTS_SOURCE_DIR}/*.cpp)
 
-# Add libraries
-add_library(mc ${sourcefiles})
-add_subdirectory(mc)
-add_subdirectory(eigen)
+# Add subdirectories and libraries
+add_subdirectory(${EIGEN_SOURCE_DIR})
+add_subdirectory(${MC_SOURCE_DIR})
 
-# Add executables
+# Add library and executables
+add_library(mc ${mcfiles})
 add_executable(main main.cpp)
-target_link_libraries(main PUBLIC eigen mc)
-target_include_directories(main PUBLIC ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/eigen ${PROJECT_SOURCE_DIR}/mc)
+
+# Link libraries and include directories
+target_link_libraries(main PRIVATE mc eigen)
+target_link_libraries(mc PRIVATE eigen)
+target_include_directories(main PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR})
 
 # Add tests
 FOREACH(testfile ${testfiles})
     get_filename_component(testname ${testfile} NAME_WLE)
     add_executable(${testname} ${testfile})
-    target_link_libraries(${testname} PRIVATE eigen mc)
-    target_include_directories(${testname} PRIVATE ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/eigen ${PROJECT_SOURCE_DIR}/mc)
+    target_link_libraries(${testname} PRIVATE mc eigen)
+    target_include_directories(${testname} PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR})
     add_test(NAME ${testname} COMMAND $<TARGET_FILE:${testname}>)
 ENDFOREACH(testfile)
 

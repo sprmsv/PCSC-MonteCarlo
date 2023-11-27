@@ -4,16 +4,16 @@
 #define RAND_SEED 42
 
 
-template <int dim> Distribution<dim>::Distribution()
+Distribution::Distribution(const unsigned int dim)
   : m_dim(dim) {
     srand(RAND_SEED);
   }
 
-template <int dim> Distribution<dim>::~Distribution() {}
+Distribution::~Distribution() {}
 
 // TODO: Change to Eigen matrix
 // TODO: Specialize for the 1D case
-template <int dim> Matrix* Distribution<dim>::samples(const int n) {
+Matrix* Distribution::samples(const int n) {
   Matrix* samples = new Matrix(n, std::vector<double>(this->m_dim));
   for (int i = 0; i < n; i++){
     std::vector<double>& s = (*samples)[i];
@@ -24,21 +24,21 @@ template <int dim> Matrix* Distribution<dim>::samples(const int n) {
   return samples;
 }
 
-template <int dim> Normal<dim>::Normal()
-  : Distribution<dim>() {}
+Normal::Normal(const unsigned int dim)
+  : Distribution(dim) {}
 
-template <int dim> Normal<dim>::~Normal() {}
+Normal::~Normal() {}
 
 
-template <int dim> Uniform<dim>::Uniform(const double* lower, const double* upper)
-  : Distribution<dim>(), m_lower(lower), m_upper(upper) {
+Uniform::Uniform(const unsigned int dim, const double* lower, const double* upper)
+  : Distribution(dim), m_lower(lower), m_upper(upper) {
     // TODO: Assert the dimension of the domain bounds
     // TODO: Assert upper is larger than higher
   }
 
-template <int dim> Uniform<dim>::~Uniform() {}
+Uniform::~Uniform() {}
 
-template <int dim> double Uniform<dim>::sample_dim(const int d) {
+double Uniform::sample_dim(const int d) {
   double s = (double)rand() / (double)RAND_MAX;
   s *= m_upper[d] - m_lower[d];
   s += m_lower[d];

@@ -6,7 +6,7 @@ int main(){
   const int dim = 2;
   const double lower[dim] = {1., 10.};
   const double upper[dim] = {2., 20.};
-  Uniform<dim> u(lower, upper);
+  Uniform u(dim, lower, upper);
 
   const int n = 10;
   Matrix* samples = u.samples(n);

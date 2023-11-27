@@ -6,10 +6,10 @@
 
 typedef std::vector<std::vector<double>> Matrix;
 
-template<int dim> class Distribution
+class Distribution
 {
 public:
-  Distribution();
+  Distribution(const unsigned int dim);
   ~Distribution();
   Matrix* samples(const int n = 1);
 
@@ -18,22 +18,23 @@ private:
   const int m_dim;
 };
 
-template<int dim = 1> class Normal:
-  public Distribution<dim>
+class Normal:
+  public Distribution
 {
 public:
-  Normal();
+  Normal(const unsigned int dim);
   ~Normal();
   // virtual double pdf(double x[dim]) = 0;
   // virtual double cdf(double x[dim]) = 0;
   // double* icdf(double);
 };
 
-template<int dim = 1> class Uniform:
-  public Distribution<dim>
+class Uniform:
+  public Distribution
 {
 public:
-  Uniform(const double* lower, const double* upper);
+  Uniform(const unsigned int dim, const double* lower, const double* upper);
+  Uniform(const unsigned int dim, double lower, double upper);
   ~Uniform();
   const double* m_lower;
   const double* m_upper;

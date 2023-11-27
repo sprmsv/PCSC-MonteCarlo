@@ -11,7 +11,8 @@ set(MC_SOURCE_DIR mc)
 add_subdirectory(eigen)
 
 # Executables
-add_executable(main ${MC_SOURCE_DIR}/main.cpp)
+file(GLOB filesmain ${MC_SOURCE_DIR}/*.cpp)
+add_executable(main ${MC_SOURCE_DIR}/main.cpp ${filesmain})
 
 # External libraries
 target_link_libraries(main PUBLIC eigen)

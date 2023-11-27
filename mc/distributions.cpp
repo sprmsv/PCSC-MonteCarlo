@@ -1,8 +1,9 @@
-#ifndef MC_DISTRIBUTIONS_TPP
-#define MC_DISTRIBUTIONS_TPP
+#include "distributions.hpp"
 
+#ifndef RAND_SEED
+// TODO: Set seed based on time
 #define RAND_SEED 42
-
+#endif
 
 Distribution::Distribution(const unsigned int dim)
   : m_dim(dim) {
@@ -36,6 +37,11 @@ Uniform::Uniform(const unsigned int dim, const double* lower, const double* uppe
     // TODO: Assert upper is larger than higher
   }
 
+Uniform::Uniform(const double& lower, const double& upper)
+  : Distribution(1), m_lower(&lower), m_upper(&upper) {
+    // TODO: Assert upper is larger than higher
+  }
+
 Uniform::~Uniform() {}
 
 double Uniform::sample_dim(const int d) {
@@ -44,5 +50,3 @@ double Uniform::sample_dim(const int d) {
   s += m_lower[d];
   return s;
 }
-
-#endif

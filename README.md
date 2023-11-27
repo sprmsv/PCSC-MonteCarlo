@@ -2,6 +2,13 @@
 
 This library deals with the statistical study of non-linear operators by approximating expectations and statistical moments using Monte Carlo methods.
 
+To build the project
+```bash
+cmake -S . -B ./build
+cmake --build ./build
+build/main
+```
+
 # Contributions
 
 This project is part of the Programming Concepts in Scientific Computing (MATH-458) course at École Polytechnique Fédérale de Lausanne (EPFL), given in Fall 2023.

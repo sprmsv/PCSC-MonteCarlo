@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "distributions.hpp"
 
 int main(){
@@ -6,7 +7,8 @@ int main(){
   const int dim = 2;
   const double lower[dim] = {1., 10.};
   const double upper[dim] = {2., 20.};
-  Uniform u(dim, lower, upper);
+//   Uniform u(dim, lower, upper);
+  Uniform u(5., 10.);
 
   const int n = 10;
   Matrix* samples = u.samples(n);

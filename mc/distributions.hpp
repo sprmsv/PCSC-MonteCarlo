@@ -1,8 +1,8 @@
-#include <cstdlib>
-#include <vector>
-
 #ifndef MC_DISTRIBUTIONS_HPP
 #define MC_DISTRIBUTIONS_HPP
+
+#include <cstdlib>
+#include <vector>
 
 typedef std::vector<std::vector<double>> Matrix;
 
@@ -33,17 +33,16 @@ class Uniform:
   public Distribution
 {
 public:
+  // Constructors
   Uniform(const unsigned int dim, const double* lower, const double* upper);
-  Uniform(const unsigned int dim, double lower, double upper);
+  Uniform(const double& lower, const double& upper);
+  // Destructor
   ~Uniform();
-  const double* m_lower;
-  const double* m_upper;
 
 private:
   double sample_dim(const int d) override;
+  const double* m_lower;
+  const double* m_upper;
 };
-
-// Include separated implementations
-#include "distributions.tpp"
 
 #endif

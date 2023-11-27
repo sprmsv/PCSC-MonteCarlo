@@ -2,11 +2,16 @@
 
 This library deals with the statistical study of non-linear operators by approximating expectations and statistical moments using Monte Carlo methods.
 
-To build the project
+To build the project:
 ```bash
 cmake -S . -B ./build
 cmake --build ./build
 build/main
+```
+
+To run the tests:
+```bash
+ctest --test-dir ./build
 ```
 
 # Contributions

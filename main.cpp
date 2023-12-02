@@ -8,7 +8,8 @@
 
 
 int main(){
-  Polynomial p("tmp.dat");
+  Polynomial<double, double> p("tmp.dat");
+  std::cout << p.call(5.) << std::endl;
 
   return 0;
 }

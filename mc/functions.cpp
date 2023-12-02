@@ -1,23 +1,29 @@
 #include "functions.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 
-Scalar1DFunction::Scalar1DFunction() : Function<1, 1>() {}
 
-Polynomial::Polynomial(std::string filepath) : Function<1, 1>() {
+template<>
+Polynomial<double, double>::Polynomial(std::string filepath)
+  : Function<double, double>()
+{
   std::ifstream file(filepath);
   assert(file.is_open());
 
   std::string line;
-  while (file){
+  while (!file.eof()){
     std::getline(file, line);
     try{
       m_coeffs.push_back(std::stod(line));
     }
     catch (std::invalid_argument &e){
-      if (line != ""){
+      if (line == ""){
+        m_coeffs.push_back(0.);
+      }
+      else {
         printf("Warning: Cannot parse \"%s\" as a coefficient.\n", line.c_str());
       }
     }
@@ -26,5 +32,15 @@ Polynomial::Polynomial(std::string filepath) : Function<1, 1>() {
   file.close();
 }
 
-Polynomial::Polynomial(std::vector<double> &coeffs)
-  : Function<1, 1>(), m_coeffs(coeffs) {}
+template<>
+Polynomial<double, double>::Polynomial(std::vector<double> &coeffs)
+  : Function<double, double>(), m_coeffs(coeffs) {}
+
+template<>
+double Polynomial<double, double>::call(double x) {
+  double y = 0;
+  for (int i = 0; i < m_coeffs.size(); ++i) {
+    y += m_coeffs[i] * pow(x, i);
+  }
+  return y;
+}

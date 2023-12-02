@@ -34,5 +34,6 @@
 # Custom
 .DS_Store
 .vscode/
+tmp*.*
 TODO.md
 *.pdf

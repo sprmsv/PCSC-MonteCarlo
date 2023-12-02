@@ -7,27 +7,25 @@
 #include <Eigen/Core>
 
 #include "distributions.hpp"
+#include "functions.hpp"
 
 
 // TODO: Specialize for scalar univariate functions
 // TODO: If feasible, extend to vectorial multivariate functions
-template <unsigned int dim_inp = 1>
+template <typename F>
 class MonteCarloSampler {
 public:
-  typedef double output;
-  typedef Eigen::Matrix<double, dim_inp, 1> input;
-  typedef std::function<output(input)> function;
 
-  MonteCarloSampler(function, std::string = "normal");
+  MonteCarloSampler(typename F::ptr f, std::string mode = "normal");
   ~MonteCarloSampler();
 
-  double moment(int, std::string);
+  double moment(int k, std::string mode);
   double mean();
   double var();
   double skewness();
 
 private:
-  function f;
+  typename F::ptr f;
   std::string dist;
 };
 

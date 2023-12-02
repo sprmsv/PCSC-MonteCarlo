@@ -4,16 +4,11 @@
 
 #include "distributions.hpp"
 #include "sampler.hpp"
+#include "functions.hpp"
 
-
-typedef Eigen::Matrix<double, 1, 1> M1;
-
-double func(M1 x) {
-  return 1.;
-}
 
 int main(){
-  MonteCarloSampler<1> sampler(&func);
+  Polynomial p("tmp.dat");
 
   return 0;
 }

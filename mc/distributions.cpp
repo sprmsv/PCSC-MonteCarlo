@@ -52,13 +52,33 @@ double Uniform::sample_dim(const int d) {
 Normal::Normal(const unsigned int dim, std::vector<double>& mean, std::vector<std::vector<double>>& covariance)
   : Distribution(dim), m_mean(mean), m_covariance(covariance) {
     // TODO: Assert that the dimensions of the inputs match
-    // TODO: Reserve the matrix allocations
-  }
-Normal::Normal(const double mean, const double variance)
-  : Distribution(1), m_mean(mean), m_covariance(variance) {
-    // TODO: Assert dim == 1
-    // TODO: Reserve the matrix allocations
-  }
+}
+
+Normal::Normal(const unsigned int dim, std::vector<double>& mean, std::vector<double>& covariance)
+  : Distribution(dim), m_mean(mean) {
+    // TODO: Assert that the dimensions of the inputs match
+
+    // Instantiate the covariance matrix
+    m_covariance.resize(dim);
+    for (auto& vec : m_covariance) {
+      vec.resize(dim);
+      std::fill(vec.begin(), vec.end(), 0.);
+    }
+    for (int i=0; i<dim; ++i) {
+      m_covariance[i][i] = covariance[i];
+    }
+}
+
+Normal::Normal(const double& mean, const double& variance)
+  : Distribution(1) {
+    // Instantiate the mean vector
+    m_mean.resize(1);
+    m_mean[0] = mean;
+    // Instantiate the covariance matrix
+    m_covariance.resize(1);
+    m_covariance[0].resize(1);
+    m_covariance[0][0] = variance;
+}
 
 Normal::~Normal() {}
 

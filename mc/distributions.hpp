@@ -39,7 +39,8 @@ class Normal:
 {
 public:
   Normal(const unsigned int dim, std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
-  Normal(const double mean, const double variance);
+  Normal(const unsigned int dim, std::vector<double>& mean, std::vector<double>& variance);
+  Normal(const double& mean, const double& variance);
   ~Normal();
 
   std::vector<double> m_mean;

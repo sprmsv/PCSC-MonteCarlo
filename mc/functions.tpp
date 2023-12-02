@@ -39,7 +39,7 @@ Polynomial<input, output>::Polynomial(std::vector<double> &coeffs)
   : Function<input, output>(), m_coeffs(coeffs) {}
 
 template<typename input, typename output>
-output Polynomial<input, output>::call(input x) {
+output Polynomial<input, output>::call(const input& x) {
   output y = 0;
   input x_powered = 1;
   for (int i = 0; i < m_coeffs.size(); ++i) {

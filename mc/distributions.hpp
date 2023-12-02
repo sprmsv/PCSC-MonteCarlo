@@ -3,16 +3,14 @@
 
 #include <cstdlib>
 #include <vector>
-#include <Eigen/Core>
 
-typedef std::vector<std::vector<double>> Matrix;
 
 class Distribution
 {
 public:
   Distribution(const unsigned int dim);
   ~Distribution();
-  Matrix* samples(const int n = 1);
+  std::vector<std::vector<double>>* samples(const int n = 1);
 
 private:
   virtual double sample_dim(const int d) = 0;
@@ -24,33 +22,31 @@ class Uniform:
 {
 public:
   // Constructors
-  Uniform(const unsigned int dim, const double* lower, const double* upper);
+  Uniform(const unsigned int dim, std::vector<double>& lower, std::vector<double>& upper);
   Uniform(const double& lower, const double& upper);
   // Destructor
   ~Uniform();
-  const double* m_lower;
-  const double* m_upper;
+
+  std::vector<double> m_lower;
+  std::vector<double> m_upper;
 
 private:
   double sample_dim(const int d) override;
 };
 
-template <unsigned int dim = 1>
 class Normal:
   public Distribution
 {
 public:
-  Normal(Eigen::Matrix<double, dim, 1>& mean, Eigen::Matrix<double, dim, dim>& covariance);
+  Normal(const unsigned int dim, std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
   Normal(const double mean, const double variance);
   ~Normal();
 
-  Eigen::Matrix<double, dim, 1> m_mean;
-  Eigen::Matrix<double, dim, dim> m_covariance;
+  std::vector<double> m_mean;
+  std::vector<std::vector<double>> m_covariance;
 
 private:
   double sample_dim(const int d) override;
 };
-
-#include "distributions.tpp"
 
 #endif

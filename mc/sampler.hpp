@@ -10,23 +10,26 @@
 #include "functions.hpp"
 
 
-// TODO: Specialize for scalar univariate functions
-// TODO: If feasible, extend to vectorial multivariate functions
-template <typename F>
-class MonteCarloSampler {
+template <unsigned int dim = 1>
+class MonteCarloApproximater {
 public:
-
-  MonteCarloSampler(typename F::ptr f, std::string mode = "normal");
-  ~MonteCarloSampler();
-
-  double moment(int k, std::string mode);
-  double mean();
-  double var();
-  double skewness();
+  // Constructors and destructor
+  MonteCarloApproximater(std::vector<std::vector<double>>* samples);
+  ~MonteCarloApproximater();
+  // Moment
+  Eigen::VectorXd moment(std::vector<unsigned int> &orders, std::string mode);
+  Eigen::VectorXd moment(unsigned int order, std::string mode);
+  Eigen::VectorXd mean();
+  Eigen::VectorXd var();
+  Eigen::VectorXd std();
+  Eigen::VectorXd skewness();
+  Eigen::VectorXd kurtosis();
+  Eigen::VectorXd hyperskewness();
+  Eigen::VectorXd hypertailedness();
 
 private:
-  typename F::ptr f;
-  std::string dist;
+  double moment_dim(unsigned int order, std::string mode, const Eigen::VectorXd& samples_dim);
+  std::vector<std::vector<double>>* m_samples;
 };
 
 #include "sampler.tpp"

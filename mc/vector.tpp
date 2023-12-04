@@ -56,6 +56,42 @@ Vector<dim> Vector<dim>::operator-() const {
 }
 
 template<unsigned int dim>
+Vector<dim> Vector<dim>::operator+(const double& s) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] += s;
+  }
+  return u;
+}
+
+template<unsigned int dim>
+Vector<dim> Vector<dim>::operator-(const double& s) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] -= s;
+  }
+  return u;
+}
+
+template<unsigned int dim>
+Vector<dim> Vector<dim>::operator*(const double& s) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] *= s;
+  }
+  return u;
+}
+
+template<unsigned int dim>
+Vector<dim> Vector<dim>::operator/(const double& s) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] /= s;
+  }
+  return u;
+}
+
+template<unsigned int dim>
 Vector<dim> Vector<dim>::operator+(const Vector<dim>& v) const {
   Vector<dim> u(*this);
   for (int idx = 0; idx < dim; ++idx){

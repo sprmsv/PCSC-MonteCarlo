@@ -16,7 +16,12 @@ public:
   const double& operator[](unsigned int idx) const;
   Vector<dim>& operator=(const double& s);
   Vector<dim>& operator=(const Vector<dim>& v);
+
   Vector<dim> operator-() const;
+  Vector<dim> operator+(const double& s) const;
+  Vector<dim> operator-(const double& s) const;
+  Vector<dim> operator*(const double& s) const;
+  Vector<dim> operator/(const double& s) const;
   Vector<dim> operator+(const Vector<dim>& v) const;
   Vector<dim> operator-(const Vector<dim>& v) const;
 

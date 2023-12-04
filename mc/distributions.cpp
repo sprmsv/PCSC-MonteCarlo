@@ -86,7 +86,7 @@ double Normal::sample_dim(const int d) {
   // NOTE: Covariances are ignored, only variances are taken into account
   // NOTE: The math behind the erfinv becomes complicated
   double u = (double)rand() / (double)RAND_MAX;
-  double z = erfinv(2 * u - 1);
+  double z = sqrt(2.) * erfinv(2. * u - 1.);
   double x = sqrt(m_covariance[d][d]) * z + m_mean[d];
   return x;
 }

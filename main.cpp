@@ -34,8 +34,6 @@ int main(){
   MonteCarloApproximater<dim> app_uniform(samples_uniform);
   std::cout << "Mean (Uniform)    : " << app_uniform.mean().reshaped(1, dim) << std::endl;
   std::cout << "Variance (Uniform): " << app_uniform.var().reshaped(1, dim) << std::endl;
-  // CHECK: Why is variance of normal 0.5? Might be because of the inaccuracy in erfinv.
-  // NOTE: Variance of uniform is correct. It's probably because of erfinv.
   MonteCarloApproximater<dim> app_normal(samples_normal);
   std::cout << "Mean (Normal)     : " << app_normal.mean().reshaped(1, dim) << std::endl;
   std::cout << "Variance (Normal) : " << app_normal.var().reshaped(1, dim) << std::endl;

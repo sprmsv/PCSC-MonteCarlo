@@ -3,6 +3,8 @@
 
 
 bool isequal(double a, double b);
+
+// TODO: Use boost/math/special_functions/detail/erf_inv.hpp instead?
 double erfinv(double v);
 
 #endif

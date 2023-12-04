@@ -17,6 +17,7 @@ Distribution<dim>::~Distribution() {}
 
 template<unsigned int dim>
 std::vector<Vector<dim>>* Distribution<dim>::samples(const int n) {
+  // TODO: Keep track of the samples and destroy them!!
   std::vector<Vector<dim>>* samples = new std::vector<Vector<dim>>(n, Vector<dim>());
   for (int i = 0; i < n; i++){
     Vector<dim>& s = (*samples)[i];

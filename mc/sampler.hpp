@@ -12,11 +12,11 @@
 
 
 template <unsigned int dim = 1>
-class MonteCarloApproximater {
+class MonteCarloApproximator {
 public:
   // Constructors and destructor
-  MonteCarloApproximater(std::vector<Vector<dim>>* samples);
-  ~MonteCarloApproximater();
+  MonteCarloApproximator(std::vector<Vector<dim>>* samples);
+  ~MonteCarloApproximator();
   // Moment
   Eigen::VectorXd moment(std::vector<unsigned int> &orders, std::string mode);
   Eigen::VectorXd moment(unsigned int order, std::string mode);

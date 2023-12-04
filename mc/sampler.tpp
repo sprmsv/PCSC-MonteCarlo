@@ -1,14 +1,14 @@
 #include "sampler.hpp"
 
 template<unsigned int dim>
-MonteCarloApproximater<dim>::MonteCarloApproximater(std::vector<Vector<dim>>* samples)
+MonteCarloApproximator<dim>::MonteCarloApproximator(std::vector<Vector<dim>>* samples)
   : m_samples(samples) {}
 
 template<unsigned int dim>
-MonteCarloApproximater<dim>::~MonteCarloApproximater() {}
+MonteCarloApproximator<dim>::~MonteCarloApproximator() {}
 
 template<unsigned int dim>
-double MonteCarloApproximater<dim>::moment_dim(unsigned int k, std::string mode, const Eigen::VectorXd& samples_dim) {
+double MonteCarloApproximator<dim>::moment_dim(unsigned int k, std::string mode, const Eigen::VectorXd& samples_dim) {
 
   if (mode == "raw"){
     return samples_dim.array().pow(k).mean();
@@ -29,7 +29,7 @@ double MonteCarloApproximater<dim>::moment_dim(unsigned int k, std::string mode,
 };
 
 template<unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::moment(std::vector<unsigned int> &orders, std::string mode) {
+Eigen::VectorXd MonteCarloApproximator<dim>::moment(std::vector<unsigned int> &orders, std::string mode) {
   // TODO: Assert mode is in "raw", "central", "standardized"
 
   // Build mapped matrix from the samples
@@ -48,7 +48,7 @@ Eigen::VectorXd MonteCarloApproximater<dim>::moment(std::vector<unsigned int> &o
 }
 
 template<unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::moment(unsigned int order, std::string mode) {
+Eigen::VectorXd MonteCarloApproximator<dim>::moment(unsigned int order, std::string mode) {
 
   // Build the order vector
   std::vector<unsigned int> orders(dim);
@@ -60,36 +60,36 @@ Eigen::VectorXd MonteCarloApproximater<dim>::moment(unsigned int order, std::str
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::mean() {
+Eigen::VectorXd MonteCarloApproximator<dim>::mean() {
     return moment(1, "raw");
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::var() {
+Eigen::VectorXd MonteCarloApproximator<dim>::var() {
     return moment(2, "central");
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::std() {
+Eigen::VectorXd MonteCarloApproximator<dim>::std() {
     return var().array().sqrt();
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::skewness() {
+Eigen::VectorXd MonteCarloApproximator<dim>::skewness() {
     return moment(3, "standardized");
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::kurtosis() {
+Eigen::VectorXd MonteCarloApproximator<dim>::kurtosis() {
     return moment(4, "standardized");
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::hyperskewness() {
+Eigen::VectorXd MonteCarloApproximator<dim>::hyperskewness() {
     return moment(5, "standardized");
 }
 
 template <unsigned int dim>
-Eigen::VectorXd MonteCarloApproximater<dim>::hypertailedness() {
+Eigen::VectorXd MonteCarloApproximator<dim>::hypertailedness() {
     return moment(6, "standardized");
 }

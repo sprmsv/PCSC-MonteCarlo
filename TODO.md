@@ -1,3 +1,14 @@
+# OUR TODO LIST
+
+*. Merge the current two branches
+4. Add other function classes
+5. Show the Central Limit Theorem
+?. Write output to files
+6. Add assertions and custom exceptions
+7. Add tests
+8. Add documentation
+
+
 # Evaluation criteria and rules
 
 Deadline: Friday 17th December 2023, 14h
@@ -23,6 +34,7 @@ Deadline: Friday 17th December 2023, 14h
     - list of features
     - limitations and problems
 
+
 # Evaluation
 - The code
     1. must be compiling
@@ -36,15 +48,3 @@ Deadline: Friday 17th December 2023, 14h
     1. the implementation in a consise way
     2. the validating tests
     3. the limitations and problems
-
-
-# MAIN TODOs
-
-2. Wrap the steps in main.py in a class or a function for easier access
-3. Implement custom vector/scalar methods with all the operators
-4. Add other function classes
-5. Show the Central Limit Theorem
-?. Write output to files
-6. Add assertions and custom exceptions
-7. Add tests
-8. Add documentation

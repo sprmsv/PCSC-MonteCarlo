@@ -8,20 +8,20 @@
 template <unsigned int dim_inp, unsigned int dim_out>
 Function<dim_inp, dim_out>::Function() {}
 
-// template <unsigned int dim_inp, unsigned int dim_out>
-// Function<dim_inp, dim_out>::Function(Distribution& dist, unsigned int n)
-//   : m_dist(&dist) {
-//     // Get samples and pass them through the function
-//     // TODO: Move to a member function
-//     std::vector<Vector<dim_out>> samples = m_dist.samples(n);
-//     std::vector<Vector<dim_out>> outputs(n);
-//     for (int i = 0; i < n; ++i) {
-//       // outputs[i].resize(1);  // TODO: Reserve size
-//       outputs[i] = poly(samples->at(i));
-//     }
-//     m_mca(outputs);
+template <unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> Function<dim_inp, dim_out>::operator()(const Vector<dim_inp>& x) {
+  return this->call(x);
+}
 
-//   }
+template <unsigned int dim_inp, unsigned int dim_out>
+std::vector<Vector<dim_out>>* Function<dim_inp, dim_out>::operator()(std::vector<Vector<dim_inp>>* xs) {
+  // TODO: Keep track of the samples and destroy them!!
+  std::vector<Vector<dim_out>>* outputs = new std::vector<Vector<dim_out>>(xs->size(), Vector<dim_out>());
+  for (int i = 0; i < xs->size(); ++i) {
+    outputs->at(i) = this->call(xs->at(i));
+  }
+  return outputs;
+}
 
 template<unsigned int dim_inp, unsigned int dim_out>
 Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
@@ -48,10 +48,6 @@ Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
 
   file.close();
 }
-
-// template<unsigned int dim_inp, unsigned int dim_out>
-// Polynomial<dim_inp, dim_out>::Polynomial(std::vector<double> &coeffs, Distribution& dist, unsigned int n)
-//   : Function<dim_inp, dim_out>(dist, n), m_coeffs(coeffs) {}
 
 template<unsigned int dim_inp, unsigned int dim_out>
 Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) {

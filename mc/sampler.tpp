@@ -1,7 +1,7 @@
 #include "sampler.hpp"
 
 template<unsigned int dim>
-MonteCarloApproximater<dim>::MonteCarloApproximater(std::vector<std::vector<double>>* samples)
+MonteCarloApproximater<dim>::MonteCarloApproximater(std::vector<Vector<dim>>* samples)
   : m_samples(samples) {}
 
 template<unsigned int dim>

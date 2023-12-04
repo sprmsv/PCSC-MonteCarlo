@@ -4,25 +4,28 @@
 #include <cstdlib>
 #include <vector>
 
+#include "vector.hpp"
 
+
+template<unsigned int dim>
 class Distribution
 {
 public:
-  Distribution(const unsigned int dim);
+  Distribution();
   ~Distribution();
-  std::vector<std::vector<double>>* samples(const int n = 1);
+  std::vector<Vector<dim>>* samples(const int n = 1);
 
 private:
   virtual double sample_dim(const int d) = 0;
-  const int m_dim;
 };
 
+template<unsigned int dim>
 class Uniform:
-  public Distribution
+  public Distribution<dim>
 {
 public:
   // Constructors
-  Uniform(const unsigned int dim, std::vector<double>& lower, std::vector<double>& upper);
+  Uniform(std::vector<double>& lower, std::vector<double>& upper);
   Uniform(const double& lower, const double& upper);
   // Destructor
   ~Uniform();
@@ -34,12 +37,13 @@ private:
   double sample_dim(const int d) override;
 };
 
+template<unsigned int dim>
 class Normal:
-  public Distribution
+  public Distribution<dim>
 {
 public:
-  Normal(const unsigned int dim, std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
-  Normal(const unsigned int dim, std::vector<double>& mean, std::vector<double>& variance);
+  Normal(std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
+  Normal(std::vector<double>& mean, std::vector<double>& variance);
   Normal(const double& mean, const double& variance);
   ~Normal();
 
@@ -49,5 +53,7 @@ public:
 private:
   double sample_dim(const int d) override;
 };
+
+#include "distributions.tpp"
 
 #endif

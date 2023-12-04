@@ -110,6 +110,24 @@ Vector<dim> Vector<dim>::operator-(const Vector<dim>& v) const {
 }
 
 template<unsigned int dim>
+Vector<dim> Vector<dim>::operator*(const Vector<dim>& v) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] *= v[idx];
+  }
+  return u;
+}
+
+template<unsigned int dim>
+Vector<dim> Vector<dim>::operator/(const Vector<dim>& v) const {
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] /= v[idx];
+  }
+  return u;
+}
+
+template<unsigned int dim>
 std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
   for (int idx = 0; idx < dim; ++idx){
     stream << v[idx];

@@ -5,12 +5,27 @@
 #include <fstream>
 #include <iostream>
 
-template <typename input, typename output>
-Function<input, output>::Function() {}
+template <unsigned int dim_inp, unsigned int dim_out>
+Function<dim_inp, dim_out>::Function() {}
 
-template<typename input, typename output>
-Polynomial<input, output>::Polynomial(std::string filepath)
-  : Function<input, output>()
+// template <unsigned int dim_inp, unsigned int dim_out>
+// Function<dim_inp, dim_out>::Function(Distribution& dist, unsigned int n)
+//   : m_dist(&dist) {
+//     // Get samples and pass them through the function
+//     // TODO: Move to a member function
+//     std::vector<Vector<dim_out>> samples = m_dist.samples(n);
+//     std::vector<Vector<dim_out>> outputs(n);
+//     for (int i = 0; i < n; ++i) {
+//       // outputs[i].resize(1);  // TODO: Reserve size
+//       outputs[i] = poly(samples->at(i));
+//     }
+//     m_mca(outputs);
+
+//   }
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
+  // : Function<dim_inp, dim_out>(dist, n)
 {
   std::ifstream file(filepath);
   assert(file.is_open());
@@ -34,17 +49,17 @@ Polynomial<input, output>::Polynomial(std::string filepath)
   file.close();
 }
 
-template<typename input, typename output>
-Polynomial<input, output>::Polynomial(std::vector<double> &coeffs)
-  : Function<input, output>(), m_coeffs(coeffs) {}
+// template<unsigned int dim_inp, unsigned int dim_out>
+// Polynomial<dim_inp, dim_out>::Polynomial(std::vector<double> &coeffs, Distribution& dist, unsigned int n)
+//   : Function<dim_inp, dim_out>(dist, n), m_coeffs(coeffs) {}
 
-template<typename input, typename output>
-output Polynomial<input, output>::call(const input& x) {
-  output y = 0;
-  input x_powered = 1;
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) {
+  Vector<dim_out> y(0);
+  Vector<dim_inp> x_powered = 1;
   for (int i = 0; i < m_coeffs.size(); ++i) {
-    y += m_coeffs[i] * x_powered;
-    x_powered *= x;
+    y = y + x_powered * m_coeffs[i];
+    x_powered = x_powered * x;
   }
   return y;
 }

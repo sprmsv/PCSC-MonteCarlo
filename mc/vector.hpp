@@ -24,6 +24,8 @@ public:
   Vector<dim> operator/(const double& s) const;
   Vector<dim> operator+(const Vector<dim>& v) const;
   Vector<dim> operator-(const Vector<dim>& v) const;
+  Vector<dim> operator*(const Vector<dim>& v) const;
+  Vector<dim> operator/(const Vector<dim>& v) const;
 
   unsigned int size() {return m_dim;};
 private:

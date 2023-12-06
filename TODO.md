@@ -1,17 +1,27 @@
 # OUR TODO LIST
 
 *. Merge the current two branches
-4. Add other function classes
-5. Show the Central Limit Theorem
-?. Write output to files
+4. Show the Central Limit Theorem
+    - A function for getting m samples of mean(n), then another function which uses this one and checks the variance
+    - Two tests: One for checking that mean(N) works as expected, one for checking the variance of samples from mean(n)
+5. Add other function classes:
+    - CombinedFunc: First implement the class, then possibly also an operators for Function::operator
+    - Exponentials
+    - Logarithms
 6. Add assertions and custom exceptions
 7. Add tests
+*. Use erf_inv from Boost and add a test for it + parameter
+?. Write output to files
+    - Graphs
+    - Output samples as CSV
+*. Write the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
+WEDNESDAY NIGHT
 8. Add documentation
 
 
 # Evaluation criteria and rules
 
-Deadline: Friday 17th December 2023, 14h
+Deadline: Friday 15th December 2023, 12h
 
 - CMake build system
 

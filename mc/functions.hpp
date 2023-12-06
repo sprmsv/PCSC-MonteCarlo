@@ -1,27 +1,35 @@
 #ifndef MC_FUNCTIONS_HPP
 #define MC_FUNCTIONS_HPP
 
+#include "sampler.hpp"
+#include "distributions.hpp"
+#include "vector.hpp"
+
 #include <Eigen/Core>
 
 #include <vector>
 #include <string>
 
 
-template <typename input, typename output>
+template <unsigned int dim_inp, unsigned int dim_out>
 class Function {
 public:
   Function();
-  output operator()(const input& x) {return this->call(x);};
-  virtual output call(const input& x) = 0;
+  // Function(Distribution& dist, unsigned int n = 1000);
+  Vector<dim_out> operator()(const Vector<dim_inp>& x);
+  std::vector<Vector<dim_out>>* operator()(std::vector<Vector<dim_inp>>* x);
+  virtual Vector<dim_out> call(const Vector<dim_inp>& x) = 0;
 };
 
-template <typename input, typename output>
-class Polynomial : public Function<input, output> {
+template <unsigned int dim_inp, unsigned int dim_out>
+class Polynomial : public Function<dim_inp, dim_out> 
+{
 public:
   Polynomial(std::string filepath);
   Polynomial(std::vector<double> &coeffs);
   std::vector<double> m_coeffs;
-  output call(const input& x) override;
+
+  Vector<dim_out> call(const Vector<dim_inp>& x) override;
 };
 
 #include "functions.tpp"

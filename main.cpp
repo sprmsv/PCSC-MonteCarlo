@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 #include <algorithm>
 
 #include "distributions.hpp"
@@ -17,14 +17,14 @@ int main(){
   std::fill(lower.begin(), lower.end(), -1.);
   std::vector<double> upper(dim);
   std::fill(upper.begin(), upper.end(), +1.);
-  Uniform uniform(dim, lower, upper);
+  Uniform<dim> uniform(lower, upper);
 
   // Define normal distribution
   std::vector<double> mean(dim);
   std::fill(mean.begin(), mean.end(), 0.);
   std::vector<double> variance(dim);
   std::fill(variance.begin(), variance.end(), 1.);
-  Normal normal(dim, mean, variance);
+  Normal<dim> normal(mean, variance);
 
   // Get samples
   auto samples_uniform = uniform.samples(n);
@@ -40,16 +40,14 @@ int main(){
 
   // Pass samples through a function
   // TODO: Implement classes for input/output with = * / + [] operators as in Paul's UMLs
-  Polynomial<double, double> poly("tests/data/poly.dat");
-  std::vector<std::vector<double>> outputs_uniform(n);
+  Polynomial<dim, dim> poly("../tests/data/poly.dat");
+  std::vector<Vector<dim>> outputs_uniform(n);
   for (int i=0; i<n; ++i) {
-    outputs_uniform[i].resize(1);
-    outputs_uniform[i][0] = poly(samples_uniform->at(i)[0]);
+    outputs_uniform[i] = poly(samples_uniform->at(i));
   }
-  std::vector<std::vector<double>> outputs_normal(n);
+  std::vector<Vector<dim>> outputs_normal(n);
   for (int i=0; i<n; ++i) {
-    outputs_normal[i].resize(1);
-    outputs_normal[i][0] = poly(samples_normal->at(i)[0]);
+    outputs_normal[i] = poly(samples_normal->at(i));
   }
 
   // Print sample approximations

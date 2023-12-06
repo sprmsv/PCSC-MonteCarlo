@@ -14,8 +14,8 @@ Vector<dim>::Vector(const double& v) {
   }
 }
 
-// Operators
-
+//// Internal operators
+// Assignment operators
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator=(const Vector<dim>& other) {
   for(unsigned int i=0; i<dim; ++i) {
@@ -32,6 +32,7 @@ Vector<dim>& Vector<dim>::operator=(const double& v) {
   return *this;
 }
 
+// Access operators
 template <unsigned int dim>
 double& Vector<dim>::operator[](unsigned int idx) {
   return m_elements[idx];
@@ -42,6 +43,7 @@ const double& Vector<dim>::operator[](unsigned int idx) const {
   return m_elements[idx];
 }
 
+// Opposite operator
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator-() const{
   Vector<dim> result;
@@ -51,6 +53,7 @@ Vector<dim>& Vector<dim>::operator-() const{
   return result;
 }
 
+// Arithmetic vector operators
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator+(const Vector<dim>& other) const{
   Vector<dim> result;
@@ -78,6 +81,7 @@ Vector<dim>& Vector<dim>::operator*(const Vector<dim>& other) const{
   return result;
 }
 
+// Arithmetic reassignment operators
 template <unsigned int dim>
 void Vector<dim>::operator+=(const Vector<dim>& other) {
   for(unsigned int i=0; i<dim; ++i) {
@@ -93,6 +97,40 @@ void Vector<dim>::operator-=(const Vector<dim>& other) {
 }
 
 template <unsigned int dim>
+void Vector<dim>::operator*=(const Vector<dim>& other) {
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] *= other[i];
+  }
+}
+
+template <unsigned int dim>
+void Vector<dim>::operator/=(const Vector<dim>& other) {
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] /= other[i];
+  }
+}
+
+
+// Arithmetic scalar operators
+template <unsigned int dim>
+Vector<dim>& Vector<dim>::operator+(const double& v) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = m_elements[i] + v;
+  }
+  return result;
+}
+
+template <unsigned int dim>
+Vector<dim>& Vector<dim>::operator-(const double& v) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = m_elements[i] - v;
+  }
+  return result;
+}
+
+template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator*(const double& v) {
   Vector<dim> result;
   for(unsigned int i=0; i<dim; ++i) {
@@ -102,14 +140,24 @@ Vector<dim>& Vector<dim>::operator*(const double& v) {
 }
 
 template <unsigned int dim>
-Vector<dim>& Vector<dim>::operator^(unsigned int& d) {
+Vector<dim>& Vector<dim>::operator/(const double& v) {
   Vector<dim> result;
   for(unsigned int i=0; i<dim; ++i) {
-    result[i] = std::pow(m_elements[i], d);
+    result[i] = m_elements[i] / v;
   }
   return result;
 }
 
+template <unsigned int dim>
+Vector<dim>& Vector<dim>::operator^(unsigned int& d) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = pow(m_elements[i], d);
+  }
+  return result;
+}
+
+// Display operator
 template<unsigned int dim>
 std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
     for (int idx = 0; idx < dim; ++idx){
@@ -121,4 +169,43 @@ std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
 
    return stream;
 }
+
+//// External operators
+// Arithmetic scalar operators
+template <unsigned int dim>
+Vector<dim> operator+(const double& v, const Vector<dim>& other) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = v + other[i];
+  }
+  return result;
+}
+
+template <unsigned int dim>
+Vector<dim> operator-(const double& v, const Vector<dim>& other) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = v - other[i];
+  }
+  return result;
+}
+
+template <unsigned int dim>
+Vector<dim> operator*(const double& v, const Vector<dim>& other) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = v * other[i];
+  }
+  return result;
+}
+
+template <unsigned int dim>
+Vector<dim> operator/(const double& v, const Vector<dim>& other) {
+  Vector<dim> result;
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = v / other[i];
+  }
+  return result;
+}
+
 

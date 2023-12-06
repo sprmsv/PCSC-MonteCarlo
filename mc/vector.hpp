@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <cmath>
 
 template <unsigned int dim = 1>
 class Vector
@@ -9,7 +10,7 @@ class Vector
 public:
     // Constructors and destructor
     Vector();
-    Vector(const double& v)
+    Vector(const double& v);
     Vector(const Vector<dim>& other);
     ~Vector();
 
@@ -25,9 +26,14 @@ public:
     Vector<dim>& operator*(const Vector<dim>& other) const;
     void operator+=(const Vector<dim>& other);
     void operator-=(const Vector<dim>& other);
+    void operator*=(const Vector<dim>& other);
+    void operator/=(const Vector<dim>& other);
+    Vector<dim>& operator+(const double& v);
+    Vector<dim>& operator-(const double& v);
     Vector<dim>& operator*(const double& v);
+    Vector<dim>& operator/(const double& v);
     Vector<dim>& operator^(unsigned int& d);
-    
+
 private:
     unsigned int m_dim;
     double m_elements[dim];

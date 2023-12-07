@@ -93,3 +93,16 @@ template <unsigned int dim>
 Eigen::VectorXd MonteCarloApproximater<dim>::hypertailedness() {
     return moment(6, "standardized");
 }
+
+template <unsigned int dim>
+std::vector<Vector<dim>> get_sample_means(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist) {
+  std::vector<Vector<dim_out>> sample_means(m);
+
+  // Sample m_means with n_samples each by c
+  for(int i = 0; i < m; ++i){
+    dist->set_time_seed();
+    sample_means[i] = dist->samples(n_samples);
+  }
+
+  return sample_means;
+}

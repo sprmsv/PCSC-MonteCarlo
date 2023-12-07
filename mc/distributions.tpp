@@ -1,6 +1,8 @@
 #include "distributions.hpp"
 #include "mathutils.hpp"
 
+#include <chrono>
+
 #ifndef RAND_SEED
 #define RAND_SEED 42
 #endif
@@ -19,6 +21,7 @@ Distribution<dim>::~Distribution()
 template<unsigned int dim>
 std::vector<Vector<dim>>* Distribution<dim>::samples(const int n)
 {
+  // TODO - this is a memory leak
   std::vector<Vector<dim>>* samples = new std::vector<Vector<dim>>(n);
   for (int i = 0; i < n; i++)
   {
@@ -30,6 +33,15 @@ std::vector<Vector<dim>>* Distribution<dim>::samples(const int n)
     }
   }
   return samples;
+}
+
+template<unsigned int dim>
+void Distribution<dim>::set_time_seed()
+{
+  auto currentTime = std::chrono::high_resolution_clock::now();
+  auto nano = currentTime.time_since_epoch();
+
+  srand(static_cast<unsigned int>(nano.count()));
 }
 
 template<unsigned int dim>

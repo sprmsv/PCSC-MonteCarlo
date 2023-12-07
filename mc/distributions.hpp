@@ -13,7 +13,7 @@ public:
   Distribution();
   ~Distribution();
   std::vector<Vector<dim>>* samples(const int n = 1);
-
+  void set_time_seed(); // Set a new seed based on the current time (nanoseconds)
 private:
   virtual double sample_dim(const int d) = 0;
 };

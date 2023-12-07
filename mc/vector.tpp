@@ -208,4 +208,14 @@ Vector<dim> operator/(const double& v, const Vector<dim>& other) {
   return result;
 }
 
+template <unsigned int dim>
+std::vector<double> Vector<dim>::to_std_vector() const {
+  assert(dim > 0);
+  std::vector<double> result(dim);
+  for(unsigned int i=0; i<dim; ++i) {
+    result[i] = m_elements[i];
+  }
+  return result;
+}
+
 

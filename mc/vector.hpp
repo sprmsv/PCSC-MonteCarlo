@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 template <unsigned int dim = 1>
 class Vector
@@ -34,6 +35,7 @@ public:
     Vector<dim>& operator/(const double& v);
     Vector<dim>& operator^(unsigned int& d);
 
+    std::vector<double> to_std_vector() const;
 private:
     unsigned int m_dim;
     double m_elements[dim];

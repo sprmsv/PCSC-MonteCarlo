@@ -12,12 +12,14 @@ public:
     // Constructors and destructor
     Vector();
     Vector(const double& v);
+    Vector(const std::vector<double>& v);
     Vector(const Vector<dim>& other);
     ~Vector();
 
     // Operators
     Vector& operator=(const Vector& other);
     Vector& operator=(const double& v);
+    Vector& operator=(const std::vector<double>& v);
     double& operator[](unsigned int idx); 
     const double& operator[](unsigned int idx) const;
 

@@ -14,6 +14,21 @@ Vector<dim>::Vector(const double& v) {
   }
 }
 
+template <unsigned int dim>
+Vector<dim>::Vector(const std::vector<double>& v) {
+  assert(v.size() == dim);
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] = v[i];
+  }
+}
+
+template <unsigned int dim>
+Vector<dim>::Vector(const Vector<dim>& other) {
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] = other[i];
+  }
+}
+
 //// Internal operators
 // Assignment operators
 template <unsigned int dim>
@@ -28,6 +43,15 @@ template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator=(const double& v) {
   for(unsigned int i=0; i<dim; ++i) {
     m_elements[i] = v;
+  }
+  return *this;
+}
+
+template <unsigned int dim>
+Vector<dim>& Vector<dim>::operator=(const std::vector<double>& v) {
+  assert(v.size() == dim);
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] = v[i];
   }
   return *this;
 }

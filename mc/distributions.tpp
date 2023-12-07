@@ -82,6 +82,28 @@ double Uniform<dim>::sample_dim(const int d)
 }
 
 template<unsigned int dim>
+Vector<dim> Uniform<dim>::mean()
+{
+  Vector<dim> mean;
+  for (int d = 0; d < dim; d++)
+  {
+    mean[d] = (m_lower[d] + m_upper[d]) / 2.0;
+  }
+  return mean;
+}
+
+template<unsigned int dim>
+Vector<dim> Uniform<dim>::var()
+{
+  Vector<dim> var;
+  for (int d = 0; d < dim; d++)
+  {
+    var[d] = (m_upper[d] - m_lower[d]) * (m_upper[d] - m_lower[d]) / 12.0;
+  }
+  return var;
+}
+
+template<unsigned int dim>
 Normal<dim>::Normal(std::vector<double>& mean, std::vector<std::vector<double>>& covariance):
   Distribution<dim>(),
   m_mean(mean),
@@ -144,11 +166,28 @@ Normal<dim>::~Normal()
 }
 
 template<unsigned int dim>
+Vector<dim> Normal<dim>::mean()
+{
+  Vector<dim> mean = m_mean;
+  return mean;
+}
+
+template<unsigned int dim>
+Vector<dim> Normal<dim>::var()
+{
+  Vector<dim> var;
+  for (int d = 0; d < dim; d++)
+  {
+    var[d] = m_covariance[d][d];
+  }
+  return var;
+}
+
+template<unsigned int dim>
 double Normal<dim>::sample_dim(const int d)
 {
     double u = (double)rand() / RAND_MAX;
     double z = sqrt(2.) * erfinv(2. * u - 1.);
     return m_mean[d] + sqrt(m_covariance[d][d]) * z;
 }
-
 

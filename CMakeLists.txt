@@ -27,11 +27,12 @@ add_library(mc ${mcfiles})
 add_executable(main main.cpp)
 add_executable(tests test.cpp)
 
+
 # Link libraries and include directories
 target_link_libraries(main PRIVATE mc eigen)
 target_link_libraries(mc PRIVATE eigen)
 target_include_directories(main PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR})
-target_link_libraries(tests gtest gtest)
+target_link_libraries(tests gtest gtest_main)
 
 # Add tests
 FOREACH(testfile ${testfiles})

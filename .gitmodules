@@ -2,3 +2,6 @@
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen.git
 	branch = master
+[submodule "gtest"]
+	path = gtest
+	url = https://github.com/google/googletest.git

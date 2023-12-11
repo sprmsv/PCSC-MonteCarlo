@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <memory>
 
 #include "vector.hpp"
 
@@ -12,7 +13,7 @@ class Distribution
 public:
   Distribution();
   ~Distribution();
-  std::vector<Vector<dim>>* samples(const int n = 1);
+  std::shared_ptr<std::vector<Vector<dim>>> samples(const int n = 1);
 
   virtual Vector<dim> mean() = 0;
   virtual Vector<dim> var() = 0;

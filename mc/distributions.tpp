@@ -21,10 +21,9 @@ Distribution<dim>::~Distribution()
 }
 
 template<unsigned int dim>
-std::vector<Vector<dim>>* Distribution<dim>::samples(const int n)
+std::shared_ptr<std::vector<Vector<dim>>> Distribution<dim>::samples(const int n)
 {
-  // TODO - this is a memory leak
-  std::vector<Vector<dim>>* samples = new std::vector<Vector<dim>>(n);
+  std::shared_ptr<std::vector<Vector<dim>>> samples (new std::vector<Vector<dim>>(n));
   for (int i = 0; i < n; i++)
   {
     Vector<dim>& sample = (*samples)[i];

@@ -14,7 +14,7 @@ template <unsigned int dim = 1>
 class MonteCarloApproximator {
 public:
   // Constructors and destructor
-  MonteCarloApproximator(std::vector<Vector<dim>>* samples);
+  MonteCarloApproximator(std::shared_ptr<std::vector<Vector<dim>>> samples);
   ~MonteCarloApproximator();
   // Moment
   Eigen::VectorXd moment(std::vector<unsigned int> &orders, std::string mode);
@@ -29,7 +29,7 @@ public:
 
 private:
   double moment_dim(unsigned int order, std::string mode, const Eigen::VectorXd& samples_dim);
-  std::vector<Vector<dim>>* m_samples;
+  std::shared_ptr<std::vector<Vector<dim>>> m_samples;
 };
 
 #include "sampler.tpp"

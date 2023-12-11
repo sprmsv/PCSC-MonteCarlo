@@ -1,7 +1,7 @@
 #include "sampler.hpp"
 
 template<unsigned int dim>
-MonteCarloApproximator<dim>::MonteCarloApproximator(std::vector<Vector<dim>>* samples)
+MonteCarloApproximator<dim>::MonteCarloApproximator(std::shared_ptr<std::vector<Vector<dim>>> samples)
   : m_samples(samples) {}
 
 template<unsigned int dim>

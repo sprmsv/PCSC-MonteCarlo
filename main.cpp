@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <memory>
 
 #include "distributions.hpp"
 #include "sampler.hpp"
 #include "functions.hpp"
 #include "vector.hpp"
 
-#include <chrono>
 
 // To make sure that everything works with both distributions
 void test_approximations() {
@@ -34,24 +34,24 @@ void test_approximations() {
   auto samples_normal = normal.samples(n);
 
   // Print sample approximations
-  MonteCarloApproximator<dim> app_uniform(samples_uniform);
-  std::cout << "Mean (Uniform)    : " << app_uniform.mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Uniform): " << app_uniform.var().reshaped(1, dim) << std::endl;
-  MonteCarloApproximator<dim> app_normal(samples_normal);
-  std::cout << "Mean (Normal)     : " << app_normal.mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Normal) : " << app_normal.var().reshaped(1, dim) << std::endl;
+  MonteCarloApproximator<dim> mca_uniform(samples_uniform);
+  std::cout << "Mean (Uniform)    : " << mca_uniform.mean().reshaped(1, dim) << std::endl;
+  std::cout << "Variance (Uniform): " << mca_uniform.var().reshaped(1, dim) << std::endl;
+  MonteCarloApproximator<dim> mca_normal(samples_normal);
+  std::cout << "Mean (Normal)     : " << mca_normal.mean().reshaped(1, dim) << std::endl;
+  std::cout << "Variance (Normal) : " << mca_normal.var().reshaped(1, dim) << std::endl;
 
   // Pass samples through a function
   Polynomial<dim, dim> poly("tests/data/poly.dat");
-  MonteCarloApproximator<dim>* mca_uniform = poly.mca(n, &uniform);
-  MonteCarloApproximator<dim>* mca_normal = poly.mca(n, &normal);
+  auto mca_poly_uniform = poly.mca(n, &uniform);
+  auto mca_poly_normal = poly.mca(n, &normal);
 
   // Print sample approximations
   // TODO: Which distributions should be used?
-  std::cout << "Mean (Polynomial)    : " << mca_uniform->mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_uniform->var().reshaped(1, dim) << std::endl;
-  std::cout << "Mean (Polynomial)    : " << mca_normal->mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_normal->var().reshaped(1, dim) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_uniform->mean().reshaped(1, dim) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_uniform->var().reshaped(1, dim) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_normal->mean().reshaped(1, dim) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_normal->var().reshaped(1, dim) << std::endl;
 }
 
 // Just to show the workflow can be short
@@ -64,7 +64,7 @@ void workflow() {
   Normal<dim> dist(0., 1.);
   // Pass samples through a function and define the approximator
   Polynomial<dim, dim> poly("tests/data/poly.dat");
-  MonteCarloApproximator<dim>* mca = poly.mca(n, &dist);
+  auto mca = poly.mca(n, &dist);
 
   // Print approximations
   std::cout << "Mean (Polynomial)    : " << mca->mean().reshaped(1, dim) << std::endl;
@@ -75,7 +75,7 @@ void workflow() {
 // TODO: Create plots from the errors vs. n (?)
 void ctl() {
   const int N = 10000;  // A large number for getting a close approximation
-  const int n = 100;  // A smaller number
+  const int n = 10;  // A smaller number
   const int dim = 1;
 
   // Define the distribution and the function
@@ -90,7 +90,7 @@ void ctl() {
   }
 
   // Formerly is_clt_valid
-  MonteCarloApproximator<dim> mca(&means);
+  MonteCarloApproximator<dim> mca(std::make_shared<std::vector<Vector<dim>>>(means));
   Vector<dim> mean_the = poly.mean(N, &dist);
   // TODO: What if the theoretical mean is zero?
   Vector<dim> mean_err = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
@@ -105,8 +105,9 @@ void ctl() {
 }
 
 int main(){
-  // test_approximations();
-  // workflow();
+  test_approximations();
+  workflow();
   ctl();
+
   return 0;
 }

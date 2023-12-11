@@ -13,7 +13,6 @@ public:
   Distribution();
   ~Distribution();
   std::vector<Vector<dim>>* samples(const int n = 1);
-  void set_time_seed(); // Set a new seed based on the current time (nanoseconds)
 
   virtual Vector<dim> mean() = 0;
   virtual Vector<dim> var() = 0;

@@ -118,7 +118,6 @@ std::vector<Vector<dim>> get_sample_means(unsigned int n_samples, unsigned int m
 
   // Sample m_means with n_samples each by c
   for(int i = 0; i < m_means; ++i){
-    dist->set_time_seed();
     sample_means[i] = dist->samples(n_samples);
   }
 

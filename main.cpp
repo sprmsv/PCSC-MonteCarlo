@@ -7,6 +7,8 @@
 #include "functions.hpp"
 #include "vector.hpp"
 
+#include <chrono>
+
 // To make sure that everything works with both distributions
 void test_approximations() {
 

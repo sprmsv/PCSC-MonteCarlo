@@ -1,9 +1,11 @@
 #include "distributions.hpp"
 #include "mathutils.hpp"
 
-#include <chrono>
+#include <ctime>
 
 #ifndef RAND_SEED
+// We can simply change this to time(0) if we do not want reproducibility
+// Can be a user-input
 #define RAND_SEED 42
 #endif
 
@@ -33,15 +35,6 @@ std::vector<Vector<dim>>* Distribution<dim>::samples(const int n)
     }
   }
   return samples;
-}
-
-template<unsigned int dim>
-void Distribution<dim>::set_time_seed()
-{
-  auto currentTime = std::chrono::high_resolution_clock::now();
-  auto nano = currentTime.time_since_epoch();
-
-  srand(static_cast<unsigned int>(nano.count()));
 }
 
 template<unsigned int dim>

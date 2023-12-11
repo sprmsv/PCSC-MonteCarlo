@@ -1,7 +1,6 @@
 # OUR TODO LIST
 
 5. Add other function classes:
-    - CombinedFunc: First implement the class, then possibly also an operators for Function::operator
     - Exponentials
     - Logarithms
 6. Add assertions and custom exceptions
@@ -10,6 +9,7 @@
 ?. Write output to files
     - Graphs
     - Output samples as CSV
+?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
 *. Write the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
 WEDNESDAY NIGHT
 *. Make some of the class members private/protected

@@ -1,7 +1,7 @@
 #include "sampler.hpp"
 
 template<unsigned int dim>
-MonteCarloApproximator<dim>::MonteCarloApproximator(std::vector<Vector<dim>>* samples)
+MonteCarloApproximater<dim>::MonteCarloApproximater(std::vector<Vector<dim>>* samples)
   : m_samples(samples) {}
 
 template<unsigned int dim>
@@ -92,4 +92,35 @@ Eigen::VectorXd MonteCarloApproximator<dim>::hyperskewness() {
 template <unsigned int dim>
 Eigen::VectorXd MonteCarloApproximator<dim>::hypertailedness() {
     return moment(6, "standardized");
+}
+
+template <unsigned int dim>
+bool MonteCarloApproximater<dim>::is_clt_valid(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist){
+  std::vector<Vector<dim>> sample_means = get_sample_means(n_samples, m_means, dist);
+
+  Eigen::VectorXd sample_means_mean = MonteCarloApproximater<dim>(&sample_means).mean();
+  Eigen::VectorXd sample_means_var = MonteCarloApproximater<dim>(&sample_means).var();
+
+  Eigen::VectorXd dist_mean = (dist->mean()).to_std_vector();
+  Eigen::VectorXd dist_var = (dist->var()).to_std_vector();
+  Eigen::VectorXd dist_sample_mean_var = dist_var / n_samples;
+
+  Eigen::VectorXd error = (sample_means_mean - dist_mean).array().abs() / dist_mean.array();
+
+  Eigen::VectorXd error_threshold = 1.96 * sqrt(dist_sample_mean_var.array() / m_means);
+
+  return (error.array() < error_threshold.array()).all();
+}
+
+template <unsigned int dim>
+std::vector<Vector<dim>> get_sample_means(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist) {
+  std::vector<Vector<dim>> sample_means(m_means);
+
+  // Sample m_means with n_samples each by c
+  for(int i = 0; i < m_means; ++i){
+    dist->set_time_seed();
+    sample_means[i] = dist->samples(n_samples);
+  }
+
+  return sample_means;
 }

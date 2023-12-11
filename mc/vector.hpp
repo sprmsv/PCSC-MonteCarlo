@@ -1,36 +1,46 @@
-#ifndef MC_VECTOR_HPP
-#define MC_VECTOR_HPP
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
 
 #include <iostream>
+#include <cmath>
+#include <vector>
 
-
-template<unsigned int dim>
-class Vector {
+template <unsigned int dim = 1>
+class Vector
+{
 public:
-  Vector();
-  Vector(const double& s);
-  Vector(const Vector<dim>& v);
-  ~Vector();
+    // Constructors and destructor
+    Vector();
+    Vector(const double& v);
+    Vector(const std::vector<double>& v);
+    Vector(const Vector<dim>& other);
+    ~Vector();
 
-  double& operator[](unsigned int idx);
-  const double& operator[](unsigned int idx) const;
-  Vector<dim>& operator=(const double& s);
-  Vector<dim>& operator=(const Vector<dim>& v);
+    // Operators
+    Vector& operator=(const Vector& other);
+    Vector& operator=(const double& v);
+    Vector& operator=(const std::vector<double>& v);
+    double& operator[](unsigned int idx); 
+    const double& operator[](unsigned int idx) const;
 
-  Vector<dim> operator-() const;
-  Vector<dim> operator+(const double& s) const;
-  Vector<dim> operator-(const double& s) const;
-  Vector<dim> operator*(const double& s) const;
-  Vector<dim> operator/(const double& s) const;
-  Vector<dim> operator+(const Vector<dim>& v) const;
-  Vector<dim> operator-(const Vector<dim>& v) const;
-  Vector<dim> operator*(const Vector<dim>& v) const;
-  Vector<dim> operator/(const Vector<dim>& v) const;
+    Vector<dim>& operator-() const;
+    Vector<dim>& operator+(const Vector<dim>& other) const;
+    Vector<dim>& operator-(const Vector<dim>& other) const;
+    Vector<dim>& operator*(const Vector<dim>& other) const;
+    void operator+=(const Vector<dim>& other);
+    void operator-=(const Vector<dim>& other);
+    void operator*=(const Vector<dim>& other);
+    void operator/=(const Vector<dim>& other);
+    Vector<dim>& operator+(const double& v);
+    Vector<dim>& operator-(const double& v);
+    Vector<dim>& operator*(const double& v);
+    Vector<dim>& operator/(const double& v);
+    Vector<dim>& operator^(unsigned int& d);
 
-  unsigned int size() {return m_dim;};
+    std::vector<double> to_std_vector() const;
 private:
-  unsigned int m_dim;
-  double m_elements[dim];
+    unsigned int m_dim;
+    double m_elements[dim];
 };
 
 #include "vector.tpp"

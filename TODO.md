@@ -21,7 +21,7 @@ WEDNESDAY NIGHT
 
 # Evaluation criteria and rules
 
-Deadline: Friday 15th December 2023, 12h
+Deadline: Friday 15th December 2023, 14h
 
 - CMake build system
 

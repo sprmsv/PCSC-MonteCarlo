@@ -14,20 +14,19 @@ Vector<dim_out> Function<dim_inp, dim_out>::operator()(const Vector<dim_inp>& x)
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
-std::vector<Vector<dim_out>>* Function<dim_inp, dim_out>::operator()(std::vector<Vector<dim_inp>>* xs) {
-  // TODO: Keep track of the samples and destroy them!!
-  std::vector<Vector<dim_out>>* outputs = new std::vector<Vector<dim_out>>(xs->size(), Vector<dim_out>());
-  for (int i = 0; i < xs->size(); ++i) {
-    outputs->at(i) = this->call(xs->at(i));
+std::vector<Vector<dim_out>>* Function<dim_inp, dim_out>::operator()(std::vector<Vector<dim_inp>>* x) {
+  std::vector<Vector<dim_out>>* y = new std::vector<Vector<dim_out>>(x->size());
+  for (int i = 0; i < x->size(); ++i) {
+    (*y)[i] = this->call((*x)[i]);
   }
-  return outputs;
+  return y;
 }
 
 template<unsigned int dim_inp, unsigned int dim_out>
 Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
-  // : Function<dim_inp, dim_out>(dist, n)
 {
   std::ifstream file(filepath);
+  std::cout << filepath << std::endl;
   assert(file.is_open());
 
   std::string line;
@@ -50,8 +49,12 @@ Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
 }
 
 template<unsigned int dim_inp, unsigned int dim_out>
+Polynomial<dim_inp, dim_out>::Polynomial(std::vector<double> &coeffs)
+  : Function<dim_inp, dim_out>(), m_coeffs(coeffs) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
 Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) {
-  Vector<dim_out> y(0);
+  Vector<dim_out> y = 0;
   Vector<dim_inp> x_powered = 1;
   for (int i = 0; i < m_coeffs.size(); ++i) {
     y = y + x_powered * m_coeffs[i];

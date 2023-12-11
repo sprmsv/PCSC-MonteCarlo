@@ -6,7 +6,6 @@
 
 #include "vector.hpp"
 
-
 template<unsigned int dim>
 class Distribution
 {
@@ -14,7 +13,10 @@ public:
   Distribution();
   ~Distribution();
   std::vector<Vector<dim>>* samples(const int n = 1);
+  void set_time_seed(); // Set a new seed based on the current time (nanoseconds)
 
+  virtual Vector<dim> mean() = 0;
+  virtual Vector<dim> var() = 0;
 private:
   virtual double sample_dim(const int d) = 0;
 };
@@ -33,6 +35,8 @@ public:
   std::vector<double> m_lower;
   std::vector<double> m_upper;
 
+  virtual Vector<dim> mean() override;
+  virtual Vector<dim> var() override;
 private:
   double sample_dim(const int d) override;
 };
@@ -50,6 +54,8 @@ public:
   std::vector<double> m_mean;
   std::vector<std::vector<double>> m_covariance;
 
+  virtual Vector<dim> mean() override;
+  virtual Vector<dim> var() override;
 private:
   double sample_dim(const int d) override;
 };

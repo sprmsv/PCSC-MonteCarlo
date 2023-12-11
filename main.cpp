@@ -104,10 +104,32 @@ void ctl() {
   std::cout << "Relative error (%) in the variance of approximated means: " << var_err * 100 << std::endl;
 }
 
-int main(){
-  test_approximations();
-  workflow();
-  ctl();
+void test_combinedfunctions() {
+  const int dim = 2;
+  Polynomial<dim, dim> p1("tests/data/poly.dat");
+  Polynomial<dim, dim> p2(p1);
+  Polynomial<dim, dim> p3(p1);
+
+  Vector<dim> x = 5.;
+
+  std::cout << p1(x) << std::endl;
+
+  std::cout << (p1 + p2 + p3)(x) << std::endl;
+
+  CombinedFunctionSum<dim, dim> s2(p1, p1, p1);
+  // TODO: Resolve this issue
+  // Segmentation fault when trying to reach m_f2->call(x) because m_f2 is a "const Function*"
+  // Need to store m_f2 as a "const CombinedFunction*" or "const CombinedFunctionSum*"
+  std::cout << s2(x) << std::endl;
+
+}
+
+int main() {
+  // test_approximations();
+  // workflow();
+  // ctl();
+
+  test_combinedfunctions();
 
   return 0;
 }

@@ -9,6 +9,12 @@ template <unsigned int dim_inp, unsigned int dim_out>
 Function<dim_inp, dim_out>::Function() {}
 
 template <unsigned int dim_inp, unsigned int dim_out>
+Function<dim_inp, dim_out>::Function(const Function<dim_inp, dim_out>& f) {}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+Function<dim_inp, dim_out>::~Function() {}
+
+template <unsigned int dim_inp, unsigned int dim_out>
 Vector<dim_out> Function<dim_inp, dim_out>::operator()(const Vector<dim_inp>& x) {
   return this->call(x);
 }
@@ -20,6 +26,12 @@ std::shared_ptr<std::vector<Vector<dim_out>>> Function<dim_inp, dim_out>::operat
     (*y)[i] = this->call((*x)[i]);
   }
   return y;
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSum<dim_inp, dim_out> Function<dim_inp, dim_out>::operator+(const Function<dim_inp, dim_out>& f) const {
+  CombinedFunctionSum<dim_inp, dim_out> out(*this, f);
+  return out;
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
@@ -43,8 +55,32 @@ Vector<dim_out> Function<dim_inp, dim_out>::var(unsigned int n, Distribution<dim
 }
 
 template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunction<dim_inp, dim_out>::CombinedFunction(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2)
+  : Function<dim_inp, dim_out>(), m_f1(&f1), m_f2(&f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunction<dim_inp, dim_out>::CombinedFunction(const CombinedFunction<dim_inp, dim_out>& f)
+  : Function<dim_inp, dim_out>(), m_f1(f.m_f1), m_f2(f.m_f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSum<dim_inp, dim_out>::CombinedFunctionSum(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2)
+  : CombinedFunction<dim_inp, dim_out>(f1, f2), m_f1(&f1), m_f2(&f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSum<dim_inp, dim_out>::CombinedFunctionSum(const CombinedFunctionSum<dim_inp, dim_out>& f)
+  : CombinedFunction<dim_inp, dim_out>(*f.m_f1, *f.m_f2), m_f1(f.m_f1), m_f2(f.m_f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> CombinedFunctionSum<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+  Vector<dim_out> out = 0.;
+  out += m_f1->call(x);
+  out += m_f2->call(x);
+  return out;
+}
+
+template<unsigned int dim_inp, unsigned int dim_out>
 Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
-{
+  : Function<dim_inp, dim_out>() {
   std::ifstream file(filepath);
   assert(file.is_open());
 
@@ -72,7 +108,11 @@ Polynomial<dim_inp, dim_out>::Polynomial(std::vector<double> &coeffs)
   : Function<dim_inp, dim_out>(), m_coeffs(coeffs) {}
 
 template<unsigned int dim_inp, unsigned int dim_out>
-Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) {
+Polynomial<dim_inp, dim_out>::Polynomial(const Polynomial<dim_inp, dim_out>& p)
+  : Function<dim_inp, dim_out>(), m_coeffs(p.m_coeffs) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
   Vector<dim_out> y = 0;
   Vector<dim_inp> x_powered = 1;
   for (int i = 0; i < m_coeffs.size(); ++i) {

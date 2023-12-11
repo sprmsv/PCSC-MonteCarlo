@@ -26,7 +26,6 @@ template<unsigned int dim_inp, unsigned int dim_out>
 Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
 {
   std::ifstream file(filepath);
-  std::cout << filepath << std::endl;
   assert(file.is_open());
 
   std::string line;

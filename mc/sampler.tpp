@@ -1,7 +1,7 @@
 #include "sampler.hpp"
 
 template<unsigned int dim>
-MonteCarloApproximater<dim>::MonteCarloApproximater(std::vector<Vector<dim>>* samples)
+MonteCarloApproximator<dim>::MonteCarloApproximator(std::vector<Vector<dim>>* samples)
   : m_samples(samples) {}
 
 template<unsigned int dim>
@@ -95,11 +95,11 @@ Eigen::VectorXd MonteCarloApproximator<dim>::hypertailedness() {
 }
 
 template <unsigned int dim>
-bool MonteCarloApproximater<dim>::is_clt_valid(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist){
+bool MonteCarloApproximator<dim>::is_clt_valid(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist){
   std::vector<Vector<dim>> sample_means = get_sample_means(n_samples, m_means, dist);
 
-  Eigen::VectorXd sample_means_mean = MonteCarloApproximater<dim>(&sample_means).mean();
-  Eigen::VectorXd sample_means_var = MonteCarloApproximater<dim>(&sample_means).var();
+  Eigen::VectorXd sample_means_mean = MonteCarloApproximator<dim>(&sample_means).mean();
+  Eigen::VectorXd sample_means_var = MonteCarloApproximator<dim>(&sample_means).var();
 
   Eigen::VectorXd dist_mean = (dist->mean()).to_std_vector();
   Eigen::VectorXd dist_var = (dist->var()).to_std_vector();

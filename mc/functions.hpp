@@ -26,6 +26,7 @@ class Polynomial : public Function<dim_inp, dim_out>
 {
 public:
   Polynomial(std::string filepath);
+  Polynomial(std::vector<double> &coeffs);
   std::vector<double> m_coeffs;
 
   Vector<dim_out> call(const Vector<dim_inp>& x) override;

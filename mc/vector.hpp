@@ -16,26 +16,40 @@ public:
     Vector(const Vector<dim>& other);
     ~Vector();
 
-    // Operators
-    Vector& operator=(const Vector& other);
-    Vector& operator=(const double& v);
-    Vector& operator=(const std::vector<double>& v);
-    double& operator[](unsigned int idx); 
+    // Assignment operators
+    Vector<dim>& operator=(const Vector<dim>& other);
+    Vector<dim>& operator=(const double& v);
+    Vector<dim>& operator=(const std::vector<double>& v);
+
+    // Access operators
+    double& operator[](unsigned int idx);
     const double& operator[](unsigned int idx) const;
 
-    Vector<dim>& operator-() const;
-    Vector<dim>& operator+(const Vector<dim>& other) const;
-    Vector<dim>& operator-(const Vector<dim>& other) const;
-    Vector<dim>& operator*(const Vector<dim>& other) const;
-    void operator+=(const Vector<dim>& other);
-    void operator-=(const Vector<dim>& other);
-    void operator*=(const Vector<dim>& other);
-    void operator/=(const Vector<dim>& other);
-    Vector<dim>& operator+(const double& v);
-    Vector<dim>& operator-(const double& v);
-    Vector<dim>& operator*(const double& v);
-    Vector<dim>& operator/(const double& v);
-    Vector<dim>& operator^(unsigned int& d);
+    // Self operators
+    Vector<dim> operator-() const;
+
+    // Arithmetic vector operators (element-wise)
+    Vector<dim> operator+(const Vector<dim>&) const;
+    Vector<dim> operator-(const Vector<dim>&) const;
+    Vector<dim> operator*(const Vector<dim>&) const;
+    Vector<dim> operator/(const Vector<dim>&) const;
+    // Combined arithmetic vector operators (element-wise)
+    Vector<dim>& operator+=(const Vector<dim>&);
+    Vector<dim>& operator-=(const Vector<dim>&);
+    Vector<dim>& operator*=(const Vector<dim>&);
+    Vector<dim>& operator/=(const Vector<dim>&);
+
+    // Arithmetic double operators
+    Vector<dim> operator+(const double&);
+    Vector<dim> operator-(const double&);
+    Vector<dim> operator*(const double&);
+    Vector<dim> operator/(const double&);
+    Vector<dim> operator^(const double&);
+    // Combined arithmetic double operators
+    Vector<dim>& operator+=(const double&);
+    Vector<dim>& operator-=(const double&);
+    Vector<dim>& operator*=(const double&);
+    Vector<dim>& operator/=(const double&);
 
     std::vector<double> to_std_vector() const;
 private:

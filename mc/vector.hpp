@@ -1,6 +1,8 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <Eigen/Core>
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -11,15 +13,16 @@ class Vector
 public:
     // Constructors and destructor
     Vector();
-    Vector(const double& v);
-    Vector(const std::vector<double>& v);
-    Vector(const Vector<dim>& other);
+    Vector(const double&);
+    Vector(const std::vector<double>&);
+    Vector(const Vector<dim>&);
+    Vector(const Eigen::VectorXd&);
     ~Vector();
 
     // Assignment operators
-    Vector<dim>& operator=(const Vector<dim>& other);
-    Vector<dim>& operator=(const double& v);
-    Vector<dim>& operator=(const std::vector<double>& v);
+    Vector<dim>& operator=(const Vector<dim>&);
+    Vector<dim>& operator=(const double&);
+    Vector<dim>& operator=(const std::vector<double>&);
 
     // Access operators
     double& operator[](unsigned int idx);
@@ -27,6 +30,7 @@ public:
 
     // Self operators
     Vector<dim> operator-() const;
+    Vector<dim> abs() const;
 
     // Arithmetic vector operators (element-wise)
     Vector<dim> operator+(const Vector<dim>&) const;

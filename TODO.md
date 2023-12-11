@@ -1,8 +1,5 @@
 # OUR TODO LIST
 
-4. Show the Central Limit Theorem
-    - A function for getting m samples of mean(n), then another function which uses this one and checks the variance
-    - Two tests: One for checking that mean(N) works as expected, one for checking the variance of samples from mean(n)
 5. Add other function classes:
     - CombinedFunc: First implement the class, then possibly also an operators for Function::operator
     - Exponentials
@@ -15,6 +12,7 @@
     - Output samples as CSV
 *. Write the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
 WEDNESDAY NIGHT
+*. Make some of the class members private/protected
 8. Add documentation
 9. Code check and cleaning on the main branch
 

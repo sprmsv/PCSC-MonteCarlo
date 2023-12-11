@@ -22,6 +22,26 @@ std::vector<Vector<dim_out>>* Function<dim_inp, dim_out>::operator()(std::vector
   return y;
 }
 
+template <unsigned int dim_inp, unsigned int dim_out>
+MonteCarloApproximator<dim_out>* Function<dim_inp, dim_out>::mca(unsigned int n, Distribution<dim_inp>* dist) {
+  std::vector<Vector<dim_inp>>* samples = dist->samples(n);
+  std::vector<Vector<dim_out>>* outputs = (*this)(samples);
+  MonteCarloApproximator<dim_out>* mca= new MonteCarloApproximator<dim_out>(outputs);
+  return mca;
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> Function<dim_inp, dim_out>::mean(unsigned int n, Distribution<dim_inp>* dist) {
+  MonteCarloApproximator<dim_out>* mca = this->mca(n, dist);
+  return Vector<dim_out>(mca->mean());
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> Function<dim_inp, dim_out>::var(unsigned int n, Distribution<dim_inp>* dist) {
+  MonteCarloApproximator<dim_out>* mca = this->mca(n, dist);
+  return Vector<dim_out>(mca->var());
+}
+
 template<unsigned int dim_inp, unsigned int dim_out>
 Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
 {

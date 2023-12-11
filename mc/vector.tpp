@@ -29,6 +29,14 @@ Vector<dim>::Vector(const Vector<dim>& v) {
   }
 }
 
+template <unsigned int dim>
+Vector<dim>::Vector(const Eigen::VectorXd& v) {
+  assert(v.size() == dim);
+  for(unsigned int i=0; i<dim; ++i) {
+    m_elements[i] = v[i];
+  }
+}
+
 //// Internal operators
 // Assignment operators
 
@@ -75,6 +83,16 @@ Vector<dim> Vector<dim>::operator-() const{
   Vector<dim> u(*this);
   for (int idx = 0; idx < dim; ++idx){
     u[idx] *= -1;
+  }
+  return u;
+}
+
+// Absolute function
+template <unsigned int dim>
+Vector<dim> Vector<dim>::abs() const{
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] = std::abs(u[idx]);
   }
   return u;
 }

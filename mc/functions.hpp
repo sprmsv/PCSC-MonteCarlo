@@ -19,10 +19,13 @@ public:
   Vector<dim_out> operator()(const Vector<dim_inp>& x);
   std::vector<Vector<dim_out>>* operator()(std::vector<Vector<dim_inp>>* x);
   virtual Vector<dim_out> call(const Vector<dim_inp>& x) = 0;
+  MonteCarloApproximator<dim_out>* mca(unsigned int n, Distribution<dim_inp>* dist);
+  Vector<dim_out> mean(unsigned int n, Distribution<dim_inp>* dist);
+  Vector<dim_out> var(unsigned int n, Distribution<dim_inp>* dist);
 };
 
 template <unsigned int dim_inp, unsigned int dim_out>
-class Polynomial : public Function<dim_inp, dim_out> 
+class Polynomial : public Function<dim_inp, dim_out>
 {
 public:
   Polynomial(std::string filepath);

@@ -5,7 +5,7 @@
 
 #ifndef RAND_SEED
 // We can simply change this to time(0) if we do not want reproducibility
-// Can be a user-input
+// TODO: Can be a user-input
 #define RAND_SEED 42
 #endif
 

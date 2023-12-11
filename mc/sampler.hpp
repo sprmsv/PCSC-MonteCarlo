@@ -7,7 +7,6 @@
 #include <Eigen/Core>
 
 #include "distributions.hpp"
-#include "functions.hpp"
 #include "vector.hpp"
 
 
@@ -27,18 +26,11 @@ public:
   Eigen::VectorXd kurtosis();
   Eigen::VectorXd hyperskewness();
   Eigen::VectorXd hypertailedness();
-  
-  // CLT 
-  bool is_clt_valid(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist);
-  
+
 private:
   double moment_dim(unsigned int order, std::string mode, const Eigen::VectorXd& samples_dim);
   std::vector<Vector<dim>>* m_samples;
 };
-
-// CLT
-template <unsigned int dim>
-std::vector<Vector<dim>> get_sample_means(unsigned int n_samples, unsigned int m_means, Distribution<dim>* dist);
 
 #include "sampler.tpp"
 

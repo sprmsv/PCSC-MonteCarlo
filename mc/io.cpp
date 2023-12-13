@@ -124,22 +124,22 @@ void ReaderCL::setup(){
             Workflow<1, 1> workflow(dir, stat, mode, k, dist, type, function);
             workflow.run();
         }
-        // TODO : Implement other dimensions
+        // TODO: Implement other dimensions
         // else if ((dim_inp == 1) && (dim_out == 2))
         // {
         //     Workflow<1, 2> workflow(dir, stat, mode, k, dist, type, function);
         //     workflow.run();
         // }
-        // else if ((dim_inp == 2) && (dim_out == 1))
-        // {
-        //     Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
-        //     workflow.run();
-        // }
-        else if ((dim_inp == 2) && (dim_out == 2))
+        else if ((dim_inp == 2) && (dim_out == 1))
         {
-            Workflow<2, 2> workflow(dir, stat, mode, k, dist, type, function);
+            Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
             workflow.run();
         }
+        // else if ((dim_inp == 2) && (dim_out == 2))
+        // {
+        //     Workflow<2, 2> workflow(dir, stat, mode, k, dist, type, function);
+        //     workflow.run();
+        // }
         else{
             std::cerr << "Error: Function dimension not supported yet\n";
             exit(1);
@@ -185,17 +185,16 @@ Workflow<dim_inp, dim_out>::Workflow(std::string dir, std::string stat, std::str
         exit(1);
     }
 
-    if ((ftype == "polynomial") && (dim_inp == dim_out))
+    if ((ftype == "polynomial") && (dim_out == 1))
     {
         std::cout << "Polynomial function\n";
-        f = new Polynomial<dim_inp, dim_out>(filepath);
+        f = new Polynomial<dim_inp>(filepath);
     }
     else
     {
         std::cerr << "Error: Function not supported yet\n";
         exit(1);
     }
-    
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>

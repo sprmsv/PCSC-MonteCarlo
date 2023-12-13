@@ -43,33 +43,36 @@ void test_approximations() {
   std::cout << "Variance (Normal) : " << mca_normal.var().reshaped(1, dim) << std::endl;
 
   // Pass samples through a function
-  Polynomial<dim, dim> poly("tests/data/poly.dat");
+  const int dim_inp = 3;
+  const int dim_out = 1;
+  Polynomial<dim_inp> poly("tests/data/poly.dat");
   auto mca_poly_uniform = poly.mca(n, &uniform);
   auto mca_poly_normal = poly.mca(n, &normal);
 
   // Print sample approximations
   // TODO: Which distributions should be used?
-  std::cout << "Mean (Polynomial)    : " << mca_poly_uniform->mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_poly_uniform->var().reshaped(1, dim) << std::endl;
-  std::cout << "Mean (Polynomial)    : " << mca_poly_normal->mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_poly_normal->var().reshaped(1, dim) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_uniform->mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_uniform->var().reshaped(1, dim_out) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_normal->mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_normal->var().reshaped(1, dim_out) << std::endl;
 }
 
 // Just to show the workflow can be short
 void workflow() {
   // Set parameters
   const int n = 1000;
-  const int dim = 3;
+  const int dim_inp = 3;
+  const int dim_out = 1;
 
   // Get samples from a distribution
-  Normal<dim> dist(0., 1.);
+  Normal<dim_inp> dist(0., 1.);
   // Pass samples through a function and define the approximator
-  Polynomial<dim, dim> poly("tests/data/poly.dat");
+  Polynomial<dim_inp> poly("tests/data/poly.dat");
   auto mca = poly.mca(n, &dist);
 
   // Print approximations
-  std::cout << "Mean (Polynomial)    : " << mca->mean().reshaped(1, dim) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca->var().reshaped(1, dim) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca->mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca->var().reshaped(1, dim_out) << std::endl;
 }
 
 // TODO: Create a test from each error
@@ -77,26 +80,27 @@ void workflow() {
 void ctl() {
   const int N = 10000;  // A large number for getting a close approximation
   const int n = 10;  // A smaller number
-  const int dim = 1;
+  const int dim_inp = 3;
+  const int dim_out = 1;
 
   // Define the distribution and the function
-  Normal<dim> dist(0., 1.);
-  Polynomial<dim, dim> poly("tests/data/poly.dat");
+  Normal<dim_inp> dist(0., 1.);
+  Polynomial<dim_inp> poly("tests/data/poly.dat");
 
   // Formerly get_sample_means
   const int m = 1000;  // A sufficiently large number to get the right distribution
-  std::vector<Vector<dim>> means(m);
+  std::vector<Vector<dim_out>> means(m);
   for(int i = 0; i < m; ++i){
     means[i] = poly.mean(n, &dist);
   }
 
   // Formerly is_clt_valid
-  MonteCarloApproximator<dim> mca(std::make_shared<std::vector<Vector<dim>>>(means));
-  Vector<dim> mean_the = poly.mean(N, &dist);
+  MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
+  Vector<dim_out> mean_the = poly.mean(N, &dist);
   // TODO: What if the theoretical mean is zero?
-  Vector<dim> mean_err = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
-  Vector<dim> var_the = poly.var(N, &dist) / n;
-  Vector<dim> var_err = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
+  Vector<dim_out> mean_err = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
+  Vector<dim_out> var_the = poly.var(N, &dist) / n;
+  Vector<dim_out> var_err = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
 
   // Set a threshold
   // error_threshold = 1.96 * sqrt(dist_sample_mean_var.array() / m_means);
@@ -107,34 +111,30 @@ void ctl() {
 
 void test_combinedfunctions() {
   const int dim = 2;
-  Polynomial<dim, dim> p1("tests/data/poly.dat");
-  Polynomial<dim, dim> p2(p1);
-  Polynomial<dim, dim> p3(p1);
+  Polynomial<dim> f1("tests/data/poly.dat");
+  SumExponential<dim> f2("tests/data/sumexp.dat");
+  SumLogarithm<dim> f3("tests/data/sumlog.dat");
 
   Vector<dim> x = 1.;
-  std::cout << p1(x) << std::endl;
+  std::cout << f1(x) << std::endl;
+  std::cout << f2(x) << std::endl;
+  std::cout << f3(x) << std::endl;
 
-  std::cout << "Sum = " << (p1 + p2 + p3)(x) << std::endl;
-  std::cout << "Sub = " << (p1 - p2 - p3)(x) << std::endl;
-  std::cout << "Mul = " << (p1 * p2 * p3)(x) << std::endl;
-  std::cout << "Div = " << (p1 / p2 / p3)(x) << std::endl;
+  std::cout << "Sum = " << (f1 + f2 + f3)(x) << std::endl;
+  std::cout << "Sub = " << (f1 - f2 - f3)(x) << std::endl;
+  std::cout << "Mul = " << (f1 * f2 * f3)(x) << std::endl;
+  std::cout << "Div = " << (f1 / f2 / f3)(x) << std::endl;
 
-  std::cout << "p1 + p2 * p3 = " << (p1 + p2 * p3)(x) << std::endl;
-  std::cout << "p1 + (p2 * p3) = " << (p1 + (p2 * p3))(x) << std::endl;
-  std::cout << "(p1 + p2) * p3 = " << ((p1 + p2) * p3)(x) << std::endl;
+  std::cout << "p1 + p2 * p3 = " << (f1 + f2 * f3)(x) << std::endl;
+  std::cout << "p1 + (p2 * p3) = " << (f1 + (f2 * f3))(x) << std::endl;
+  std::cout << "(p1 + p2) * p3 = " << ((f1 + f2) * f3)(x) << std::endl;
 }
 
 int main() {
   // test_approximations();
   // workflow();
   // ctl();
-  // test_combinedfunctions();
-
-  Vector<2> x = std::vector<double>({2., 1.});
-  SumExponential<2> sumexp("tests/data/sumexp.dat");
-  SumLogarithm<2> sumlog("tests/data/sumlog.dat");
-
-  std::cout << sumlog(x) << std::endl;
+  test_combinedfunctions();
 
   return 0;
 }

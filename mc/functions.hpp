@@ -92,17 +92,17 @@ public:
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
-template <unsigned int dim_inp, unsigned int dim_out>
-class Polynomial : public Function<dim_inp, dim_out>
+template <unsigned int dim_inp>
+class Polynomial : public Function<dim_inp, 1>
 {
 public:
   Polynomial(std::string filepath);
-  Polynomial(std::vector<double> &coeffs);
-  Polynomial(const Polynomial<dim_inp, dim_out>&);
+  Polynomial(std::vector<std::vector<double>> &coeffs);
+  Polynomial(const Polynomial<dim_inp>&);
   ~Polynomial() = default;
-  std::vector<double> m_coeffs;
+  std::vector<std::vector<double>> m_coeffs;
 
-  Vector<dim_out> call(const Vector<dim_inp>& x) const override;
+  Vector<1> call(const Vector<dim_inp>& x) const override;
 };
 
 template <unsigned int dim_inp>

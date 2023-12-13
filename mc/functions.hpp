@@ -18,7 +18,7 @@ class Function {
 public:
   // Constructors and destructors
   Function();
-  ~Function();
+  virtual ~Function();
   Function(const Function<dim_inp, dim_out>&);
   // Call operators
   Vector<dim_out> operator()(const Vector<dim_inp>& x);
@@ -70,6 +70,7 @@ public:
   Polynomial(std::string filepath);
   Polynomial(std::vector<double> &coeffs);
   Polynomial(const Polynomial<dim_inp, dim_out>&);
+  ~Polynomial() = default;
   std::vector<double> m_coeffs;
 
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;

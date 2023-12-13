@@ -85,6 +85,12 @@ Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
   assert(file.is_open());
 
   std::string line;
+
+  // Pass the first two lines (function type and dimension)
+  std::getline(file, line);
+  std::getline(file, line);
+
+  // Read the coefficients
   while (!file.eof()){
     std::getline(file, line);
     try{

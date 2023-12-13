@@ -2,12 +2,13 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <iterator>
 
 #include "distributions.hpp"
 #include "sampler.hpp"
 #include "functions.hpp"
 #include "vector.hpp"
-
+#include "io.hpp"
 
 // To make sure that everything works with both distributions
 void test_approximations() {
@@ -131,5 +132,29 @@ int main() {
 
   test_combinedfunctions();
 
+  return 0;
+}
+
+int main_args(int argc, char* argv[]){
+  std::string input_type;
+  // Check if the required number of arguments are provided
+    if ((argc < 14) || (argc > 6)) {
+        input_type = "CL";
+        ReaderCL ReaderCL(argc, argv);
+        ReaderCL.setup();
+    }
+    else if (argc == 1)
+    {
+        input_type = "online";
+        //TODO: Implement online version (user input directly)
+    }
+    else{
+      std::cerr << "Usage: " 
+                  << argv[0] 
+                  << " --dir \"value\" --stat \"value\"-k \"value\" --mode \"value\"--dist \"value\" --function \"value\"\n";
+        return 1;
+    }
+
+  //
   return 0;
 }

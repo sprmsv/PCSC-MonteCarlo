@@ -12,7 +12,7 @@ class Distribution
 {
 public:
   Distribution();
-  ~Distribution();
+  virtual ~Distribution();
   std::shared_ptr<std::vector<Vector<dim>>> samples(const int n = 1);
 
   virtual Vector<dim> mean() = 0;
@@ -30,7 +30,7 @@ public:
   Uniform(std::vector<double>& lower, std::vector<double>& upper);
   Uniform(const double& lower, const double& upper);
   // Destructor
-  ~Uniform();
+  ~Uniform() = default;
 
   std::vector<double> m_lower;
   std::vector<double> m_upper;
@@ -49,7 +49,7 @@ public:
   Normal(std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
   Normal(std::vector<double>& mean, std::vector<double>& variance);
   Normal(const double& mean, const double& variance);
-  ~Normal();
+  ~Normal() = default;
 
   std::vector<double> m_mean;
   std::vector<std::vector<double>> m_covariance;

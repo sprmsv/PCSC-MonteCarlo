@@ -180,7 +180,7 @@ Workflow<dim_inp, dim_out>::Workflow(std::string dir, std::string stat, std::str
         exit(1);
     }
 
-    if (ftype == "polynomial")
+    if ((ftype == "polynomial") && (dim_inp == dim_out))
     {
         std::cout << "Polynomial function\n";
         f = new Polynomial<dim_inp, dim_out>(filepath);
@@ -198,7 +198,7 @@ void Workflow<dim_inp, dim_out>::run()
 {
     std::cout << "Running workflow\n";
     int n = 10000;
-    auto samples = d.samples(n);
+    auto samples = d->samples(n);
     MonteCarloApproximator<dim_out> mc(samples);
     if (stat == "mean")
     {

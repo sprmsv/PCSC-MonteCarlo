@@ -30,7 +30,7 @@ public:
   Uniform(std::vector<double>& lower, std::vector<double>& upper);
   Uniform(const double& lower, const double& upper);
   // Destructor
-  ~Uniform() = default;
+  ~Uniform();
 
   std::vector<double> m_lower;
   std::vector<double> m_upper;
@@ -49,8 +49,8 @@ public:
   Normal(std::vector<double>& mean, std::vector<std::vector<double>>& covariance);
   Normal(std::vector<double>& mean, std::vector<double>& variance);
   Normal(const double& mean, const double& variance);
-  ~Normal() = default;
-
+  ~Normal();
+  
   std::vector<double> m_mean;
   std::vector<std::vector<double>> m_covariance;
 

@@ -25,23 +25,15 @@ add_subdirectory(${GTEST_SOURCE_DIR})
 # Add library and executables
 add_library(mc ${mcfiles})
 add_executable(main main.cpp)
-add_executable(tests test.cpp)
+add_executable(tests ${testfiles})
 
 
 # Link libraries and include directories
 target_link_libraries(main PRIVATE mc eigen)
 target_link_libraries(mc PRIVATE eigen)
 target_include_directories(main PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR})
-target_link_libraries(tests gtest gtest_main)
-
-# Add tests
-FOREACH(testfile ${testfiles})
-    get_filename_component(testname ${testfile} NAME_WLE)
-    add_executable(${testname} ${testfile})
-    target_link_libraries(${testname} PRIVATE mc eigen)
-    target_include_directories(${testname} PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR})
-    add_test(NAME ${testname} COMMAND $<TARGET_FILE:${testname}>)
-ENDFOREACH(testfile)
+target_link_libraries(tests PRIVATE mc eigen gtest gtest_main)
+target_include_directories(tests PRIVATE ${PROJECT_BINARY_DIR} ${MC_SOURCE_DIR} ${EIGEN_SOURCE_DIR} ${TESTS_SOURCE_DIR})
 
 # # How to add data file
 # file(COPY test.dat DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

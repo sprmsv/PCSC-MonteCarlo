@@ -10,6 +10,10 @@ ReaderCL::ReaderCL(int argc, char* argv[])
     this->parser();
 }
 
+ReaderCL::~ReaderCL()
+{
+}
+
 void ReaderCL::parser()
 {
     auto dirPos = std::find(commandLine.begin(), commandLine.end(), "--dir");
@@ -120,16 +124,17 @@ void ReaderCL::setup(){
             Workflow<1, 1> workflow(dir, stat, mode, k, dist, type, function);
             workflow.run();
         }
-        else if ((dim_inp == 1) && (dim_out == 2))
-        {
-            Workflow<1, 2> workflow(dir, stat, mode, k, dist, type, function);
-            workflow.run();
-        }
-        else if ((dim_inp == 2) && (dim_out == 1))
-        {
-            Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
-            workflow.run();
-        }
+        // TODO : Implement other dimensions
+        // else if ((dim_inp == 1) && (dim_out == 2))
+        // {
+        //     Workflow<1, 2> workflow(dir, stat, mode, k, dist, type, function);
+        //     workflow.run();
+        // }
+        // else if ((dim_inp == 2) && (dim_out == 1))
+        // {
+        //     Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
+        //     workflow.run();
+        // }
         else if ((dim_inp == 2) && (dim_out == 2))
         {
             Workflow<2, 2> workflow(dir, stat, mode, k, dist, type, function);
@@ -199,38 +204,38 @@ void Workflow<dim_inp, dim_out>::run()
     std::cout << "Running workflow\n";
     int n = 10000;
     auto samples = d->samples(n);
-    MonteCarloApproximator<dim_out> mc(samples);
+    auto mc = f->mca(n, d);
     if (stat == "mean")
     {
-        std::cout << "Mean: " << mc.mean().reshaped(1, dim_out) << std::endl;
+        std::cout << "Mean: " << mc->mean().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "variance")
     {
-        std::cout << "Variance: " << mc.var().reshaped(1, dim_out) << std::endl;
+        std::cout << "Variance: " << mc->var().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "moment")
     {
-        std::cout << "Moment: " << mc.moment(k, mode).reshaped(1, dim_out) << std::endl;
+        std::cout << "Moment: " << mc->moment(k, mode).reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "std")
     {
-        std::cout << "Standard deviation: " << mc.std().reshaped(1, dim_out) << std::endl;
+        std::cout << "Standard deviation: " << mc->std().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "skewness")
     {
-        std::cout << "Skewness: " << mc.skewness().reshaped(1, dim_out) << std::endl;
+        std::cout << "Skewness: " << mc->skewness().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "kurtosis")
     {
-        std::cout << "Kurtosis: " << mc.kurtosis().reshaped(1, dim_out) << std::endl;
+        std::cout << "Kurtosis: " << mc->kurtosis().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "hyperskewness")
     {
-        std::cout << "Hyperskewness: " << mc.hyperskewness().reshaped(1, dim_out) << std::endl;
+        std::cout << "Hyperskewness: " << mc->hyperskewness().reshaped(1, dim_out) << std::endl;
     }
     else if (stat == "hypertailedness")
     {
-        std::cout << "Hypertailedness: " << mc.hypertailedness().reshaped(1, dim_out) << std::endl;
+        std::cout << "Hypertailedness: " << mc->hypertailedness().reshaped(1, dim_out) << std::endl;
     }
     else
     {

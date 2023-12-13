@@ -1,9 +1,8 @@
 # OUR TODO LIST
 
 5. Add other function classes:
-    - Exponentials
-    - Logarithms
-    * Extend Polynomial to different dimensions
+    - Make Polynomial m->1 or m->m
+    - Add Linear (matrix)
 6. Add assertions and custom exceptions
 7. Add tests
 *. Use erf_inv from Boost and add a test for it + parameter

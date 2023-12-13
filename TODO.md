@@ -1,7 +1,7 @@
 # OUR TODO LIST
 
 5. Add other function classes:
-    - Fix the segmentation fault issue..
+    ?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
     - Add CombinedFunctionSub, CombinedFunctionMul, and CombinedFunctionDiv in the same way
     - Exponentials
     - Logarithms
@@ -12,8 +12,7 @@
 ?. Write output to files
     - Graphs
     - Output samples as CSV
-?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
-*. Write the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
+*. Extend the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
 WEDNESDAY NIGHT
 * Change unnecessary pointers to references + use smart pointers
 *. Make some of the class members private/protected

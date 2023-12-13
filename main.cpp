@@ -126,7 +126,7 @@ void test_combinedfunctions() {
 
 }
 
-int main() {
+int main_dev() {
   // test_approximations();
   // workflow();
   // ctl();
@@ -136,7 +136,7 @@ int main() {
   return 0;
 }
 
-int main_args(int argc, char* argv[]){
+int main(int argc, char* argv[]){
   std::string input_type;
   // Check if the required number of arguments are provided
     if ((argc < 14) || (argc > 6)) {

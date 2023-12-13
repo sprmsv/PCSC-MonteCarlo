@@ -3,18 +3,21 @@
 5. Add other function classes:
     - Exponentials
     - Logarithms
+    * Extend Polynomial to different dimensions
 6. Add assertions and custom exceptions
 7. Add tests
 *. Use erf_inv from Boost and add a test for it + parameter
 ?. Write output to files
     - Graphs
     - Output samples as CSV
-?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
-*. Write the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
+*. Extend the executable: mca --dir <> --stat "mean" -k 3 --mode "central" --dist "normal" ...
 WEDNESDAY NIGHT
+* Change unnecessary pointers to references + use smart pointers
 *. Make some of the class members private/protected
 8. Add documentation
 9. Code check and cleaning on the main branch
+?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
+    - I couldn't do it in the end. I used debugger and breakpoints but what happens is really weird. A reference suddenly changes its address when a Vector object is created! Let's drop this for now. It wouldn't affect our code at all.
 
 
 # Evaluation criteria and rules

@@ -116,30 +116,37 @@ void test_combinedfunctions() {
   SumLogarithm<dim> f3("tests/data/sumlog.dat");
 
   Vector<dim> x = 1.;
-  std::cout << f1(x) << std::endl;
-  std::cout << f2(x) << std::endl;
-  std::cout << f3(x) << std::endl;
+  std::cout << "f1(x) = " << f1(x) << std::endl;
+  std::cout << "f2(x) = " << f2(x) << std::endl;
+  std::cout << "f3(x) = " << f3(x) << std::endl;
 
   std::cout << "Sum = " << (f1 + f2 + f3)(x) << std::endl;
   std::cout << "Sub = " << (f1 - f2 - f3)(x) << std::endl;
   std::cout << "Mul = " << (f1 * f2 * f3)(x) << std::endl;
   std::cout << "Div = " << (f1 / f2 / f3)(x) << std::endl;
 
-  std::cout << "p1 + p2 * p3 = " << (f1 + f2 * f3)(x) << std::endl;
-  std::cout << "p1 + (p2 * p3) = " << (f1 + (f2 * f3))(x) << std::endl;
-  std::cout << "(p1 + p2) * p3 = " << ((f1 + f2) * f3)(x) << std::endl;
+  std::cout << "f1 + f2 * f3 = " << (f1 + f2 * f3)(x) << std::endl;
+  std::cout << "f1 + (f2 * f3) = " << (f1 + (f2 * f3))(x) << std::endl;
+  std::cout << "(f1 + f2) * f3 = " << ((f1 + f2) * f3)(x) << std::endl;
 }
 
-int main() {
-  // test_approximations();
-  // workflow();
-  // ctl();
+void test_linear() {
+  Linear<3, 4> l1("tests/data/linear.dat");
+  Vector<3> x(std::vector<double>({1., 0., 1.}));
+  std::cout << "Linear(x) = " << l1(x) << std::endl;
+}
+
+int main_dev() {
+  test_approximations();
+  workflow();
+  ctl();
   test_combinedfunctions();
+  test_linear();
 
   return 0;
 }
 
-int main_(int argc, char* argv[]){
+int main(int argc, char* argv[]){
   std::string input_type;
   // Check if the required number of arguments are provided
     if ((argc < 14) || (argc > 6)) {

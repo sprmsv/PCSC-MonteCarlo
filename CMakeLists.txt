@@ -52,3 +52,5 @@ ENDFOREACH(testfile)
 message(STATUS "")
 message(STATUS "Configured MC ${MC_VERSION_NUMBER}")
 message(STATUS "")
+
+install(TARGETS main DESTINATION bin)

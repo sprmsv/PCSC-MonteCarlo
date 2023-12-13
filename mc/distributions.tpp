@@ -79,7 +79,7 @@ template<unsigned int dim>
 double Uniform<dim>::sample_dim(const int d)
 {
   // Check that the dimension matches
-  assert((d >= 0) && (d < dim))
+  assert((d >= 0) && (d < dim));
   return m_lower[d] + (m_upper[d] - m_lower[d]) * (double)rand() / RAND_MAX;
 }
 
@@ -189,7 +189,7 @@ template<unsigned int dim>
 double Normal<dim>::sample_dim(const int d)
 {
     // Check that the dimension matches
-    assert((d >= 0) && (d < dim))
+    assert((d >= 0) && (d < dim));
 
     double u = (double)rand() / RAND_MAX;
     double z = sqrt(2.) * erfinv(2. * u - 1.);

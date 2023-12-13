@@ -15,7 +15,7 @@ set(GTEST_SOURCE_DIR ${PROJECT_SOURCE_DIR}/gtest)
 
 # Get source and test files
 file(GLOB mcfiles ${MC_SOURCE_DIR}/*.cpp ${MC_SOURCE_DIR}/*.hpp ${MC_SOURCE_DIR}/*.tpp)
-file(GLOB testfiles ${TESTS_SOURCE_DIR}/*.cpp)
+file(GLOB testfiles ${TESTS_SOURCE_DIR}/*.cpp ${TESTS_SOURCE_DIR}/*.hpp ${TESTS_SOURCE_DIR}/*.tpp)
 
 # Add subdirectories and libraries
 add_subdirectory(${EIGEN_SOURCE_DIR})

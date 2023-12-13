@@ -105,6 +105,32 @@ public:
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
+template <unsigned int dim_inp>
+class SumExponential : public Function<dim_inp, 1>
+{
+public:
+  SumExponential(std::string filepath);
+  SumExponential(std::vector<std::vector<double>> &coeffs);
+  SumExponential(const SumExponential<dim_inp>&);
+  ~SumExponential() = default;
+  std::vector<std::vector<double>> m_coeffs;
+
+  Vector<1> call(const Vector<dim_inp>& x) const override;
+};
+
+template <unsigned int dim_inp>
+class SumLogarithm : public Function<dim_inp, 1>
+{
+public:
+  SumLogarithm(std::string filepath);
+  SumLogarithm(std::vector<std::vector<double>> &coeffs);
+  SumLogarithm(const SumLogarithm<dim_inp>&);
+  ~SumLogarithm() = default;
+  std::vector<std::vector<double>> m_coeffs;
+
+  Vector<1> call(const Vector<dim_inp>& x) const override;
+};
+
 #include "functions.tpp"
 
 #endif

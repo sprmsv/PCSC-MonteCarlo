@@ -130,6 +130,12 @@ int main() {
   // ctl();
   // test_combinedfunctions();
 
+  Vector<2> x = std::vector<double>({2., 1.});
+  SumExponential<2> sumexp("tests/data/sumexp.dat");
+  SumLogarithm<2> sumlog("tests/data/sumlog.dat");
+
+  std::cout << sumlog(x) << std::endl;
+
   return 0;
 }
 

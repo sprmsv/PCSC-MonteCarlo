@@ -31,6 +31,8 @@ public:
     // Self operators
     Vector<dim> operator-() const;
     Vector<dim> abs() const;
+    Vector<dim> exp() const;
+    Vector<dim> log() const;
 
     // Arithmetic vector operators (element-wise)
     Vector<dim> operator+(const Vector<dim>&) const;
@@ -55,6 +57,7 @@ public:
     Vector<dim>& operator*=(const double&);
     Vector<dim>& operator/=(const double&);
 
+    double dot(const Vector<dim>&) const;
     std::vector<double> to_std_vector() const;
 private:
     double m_elements[dim];

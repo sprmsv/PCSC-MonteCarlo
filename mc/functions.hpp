@@ -38,27 +38,19 @@ class CombinedFunction : public Function<dim_inp, dim_out> {
 public:
   CombinedFunction(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2);
   CombinedFunction(const CombinedFunction<dim_inp, dim_out>& f);
-  virtual Vector<dim_out> call(const Vector<dim_inp>& x) const override = 0;
-
-  const Function<dim_inp, dim_out>* m_f1;
-  const Function<dim_inp, dim_out>* m_f2;
+  const Function<dim_inp, dim_out>& m_f1;
+  const Function<dim_inp, dim_out>& m_f2;
 };
 
 template <unsigned int dim_inp, unsigned int dim_out>
 class CombinedFunctionSum : public CombinedFunction<dim_inp, dim_out> {
 public:
   CombinedFunctionSum(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2);
-  // CombinedFunctionSum(const Function<dim_inp, dim_out>& f1, const CombinedFunctionSum<dim_inp, dim_out>& f2);  // NOTE: Needed to resolve the segmentation fault issue
   CombinedFunctionSum(const CombinedFunctionSum<dim_inp, dim_out>& f);
-  // CombinedFunctionSum(const Function<dim_inp, dim_out>& f);  // NOTE: Needed to resolve the segmentation fault issue
   // TODO: Don't want to repeat it for every class!!
   template <typename ...Args> CombinedFunctionSum(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2, const Args&... args)
     : CombinedFunctionSum<dim_inp, dim_out>(f1, CombinedFunctionSum<dim_inp, dim_out>(f2, args...)) {};
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
-
-  const Function<dim_inp, dim_out>* m_f1;
-  const Function<dim_inp, dim_out>* m_f2;
-  // const CombinedFunctionSum<dim_inp, dim_out>* m_f2;  // NOTE: Needed to resolve the segmentation fault issue
 };
 
 // TODO: Add CombinedFunctionSub, CombinedFunctionMul, and CombinedFunctionDiv in the same way

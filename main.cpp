@@ -121,7 +121,8 @@ void test_combinedfunctions() {
   // TODO: Resolve this issue
   // Segmentation fault when trying to reach m_f2->call(x) because m_f2 is a "const Function*"
   // Need to store m_f2 as a "const CombinedFunction*" or "const CombinedFunctionSum*"
-  std::cout << s2(x) << std::endl;
+  // std::cout << s2(x) << std::endl;
+  std::cout << s2.m_f2.call(x) << std::endl;
 
 }
 

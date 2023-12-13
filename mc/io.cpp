@@ -10,6 +10,8 @@ ReaderCL::ReaderCL(int argc, char* argv[])
     this->parser();
 }
 
+ReaderCL::~ReaderCL() {}
+
 void ReaderCL::parser()
 {
     auto dirPos = std::find(commandLine.begin(), commandLine.end(), "--dir");
@@ -120,16 +122,16 @@ void ReaderCL::setup(){
             Workflow<1, 1> workflow(dir, stat, mode, k, dist, type, function);
             workflow.run();
         }
-        else if ((dim_inp == 1) && (dim_out == 2))
-        {
-            Workflow<1, 2> workflow(dir, stat, mode, k, dist, type, function);
-            workflow.run();
-        }
-        else if ((dim_inp == 2) && (dim_out == 1))
-        {
-            Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
-            workflow.run();
-        }
+        // else if ((dim_inp == 1) && (dim_out == 2))
+        // {
+        //     Workflow<1, 2> workflow(dir, stat, mode, k, dist, type, function);
+        //     workflow.run();
+        // }
+        // else if ((dim_inp == 2) && (dim_out == 1))
+        // {
+        //     Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
+        //     workflow.run();
+        // }
         else if ((dim_inp == 2) && (dim_out == 2))
         {
             Workflow<2, 2> workflow(dir, stat, mode, k, dist, type, function);

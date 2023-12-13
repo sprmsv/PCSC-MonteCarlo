@@ -35,6 +35,24 @@ CombinedFunctionSum<dim_inp, dim_out> Function<dim_inp, dim_out>::operator+(cons
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSub<dim_inp, dim_out> Function<dim_inp, dim_out>::operator-(const Function<dim_inp, dim_out>& f) const {
+  CombinedFunctionSub<dim_inp, dim_out> out(*this, f);
+  return out;
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionMul<dim_inp, dim_out> Function<dim_inp, dim_out>::operator*(const Function<dim_inp, dim_out>& f) const {
+  CombinedFunctionMul<dim_inp, dim_out> out(*this, f);
+  return out;
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionDiv<dim_inp, dim_out> Function<dim_inp, dim_out>::operator/(const Function<dim_inp, dim_out>& f) const {
+  CombinedFunctionDiv<dim_inp, dim_out> out(*this, f);
+  return out;
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
 std::unique_ptr<MonteCarloApproximator<dim_out>> Function<dim_inp, dim_out>::mca(unsigned int n, Distribution<dim_inp>* dist) {
   auto samples = dist->samples(n);
   auto outputs = (*this)(samples);
@@ -73,6 +91,48 @@ CombinedFunctionSum<dim_inp, dim_out>::CombinedFunctionSum(const CombinedFunctio
 template<unsigned int dim_inp, unsigned int dim_out>
 Vector<dim_out> CombinedFunctionSum<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
   Vector<dim_out> out = this->m_f1.call(x) + this->m_f2.call(x);
+  return out;
+}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSub<dim_inp, dim_out>::CombinedFunctionSub(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2)
+  : CombinedFunction<dim_inp, dim_out>(f1, f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionSub<dim_inp, dim_out>::CombinedFunctionSub(const CombinedFunctionSub<dim_inp, dim_out>& f)
+  : CombinedFunction<dim_inp, dim_out>(f.m_f1, f.m_f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> CombinedFunctionSub<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+  Vector<dim_out> out = this->m_f1.call(x) - this->m_f2.call(x);
+  return out;
+}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionMul<dim_inp, dim_out>::CombinedFunctionMul(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2)
+  : CombinedFunction<dim_inp, dim_out>(f1, f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionMul<dim_inp, dim_out>::CombinedFunctionMul(const CombinedFunctionMul<dim_inp, dim_out>& f)
+  : CombinedFunction<dim_inp, dim_out>(f.m_f1, f.m_f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> CombinedFunctionMul<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+  Vector<dim_out> out = this->m_f1.call(x) * this->m_f2.call(x);
+  return out;
+}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionDiv<dim_inp, dim_out>::CombinedFunctionDiv(const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2)
+  : CombinedFunction<dim_inp, dim_out>(f1, f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+CombinedFunctionDiv<dim_inp, dim_out>::CombinedFunctionDiv(const CombinedFunctionDiv<dim_inp, dim_out>& f)
+  : CombinedFunction<dim_inp, dim_out>(f.m_f1, f.m_f2) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Vector<dim_out> CombinedFunctionDiv<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+  Vector<dim_out> out = this->m_f1.call(x) / this->m_f2.call(x);
   return out;
 }
 

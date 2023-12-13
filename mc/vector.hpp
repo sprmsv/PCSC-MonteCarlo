@@ -57,7 +57,6 @@ public:
 
     std::vector<double> to_std_vector() const;
 private:
-    unsigned int m_dim;
     double m_elements[dim];
 };
 

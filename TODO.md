@@ -1,8 +1,6 @@
 # OUR TODO LIST
 
 5. Add other function classes:
-    ?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
-    - Add CombinedFunctionSub, CombinedFunctionMul, and CombinedFunctionDiv in the same way
     - Exponentials
     - Logarithms
     * Extend Polynomial to different dimensions
@@ -18,6 +16,8 @@ WEDNESDAY NIGHT
 *. Make some of the class members private/protected
 8. Add documentation
 9. Code check and cleaning on the main branch
+?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
+    - I couldn't do it in the end. I used debugger and breakpoints but what happens is really weird. A reference suddenly changes its address when a Vector object is created! Let's drop this for now. It wouldn't affect our code at all.
 
 
 # Evaluation criteria and rules

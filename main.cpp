@@ -111,32 +111,29 @@ void test_combinedfunctions() {
   Polynomial<dim, dim> p2(p1);
   Polynomial<dim, dim> p3(p1);
 
-  Vector<dim> x = 5.;
-
+  Vector<dim> x = 1.;
   std::cout << p1(x) << std::endl;
 
-  std::cout << (p1 + p2 + p3)(x) << std::endl;
+  std::cout << "Sum = " << (p1 + p2 + p3)(x) << std::endl;
+  std::cout << "Sub = " << (p1 - p2 - p3)(x) << std::endl;
+  std::cout << "Mul = " << (p1 * p2 * p3)(x) << std::endl;
+  std::cout << "Div = " << (p1 / p2 / p3)(x) << std::endl;
 
-  CombinedFunctionSum<dim, dim> s2(p1, p1, p1);
-  // TODO: Resolve this issue
-  // Segmentation fault when trying to reach m_f2->call(x) because m_f2 is a "const Function*"
-  // Need to store m_f2 as a "const CombinedFunction*" or "const CombinedFunctionSum*"
-  // std::cout << s2(x) << std::endl;
-  std::cout << s2.m_f2.call(x) << std::endl;
-
+  std::cout << "p1 + p2 * p3 = " << (p1 + p2 * p3)(x) << std::endl;
+  std::cout << "p1 + (p2 * p3) = " << (p1 + (p2 * p3))(x) << std::endl;
+  std::cout << "(p1 + p2) * p3 = " << ((p1 + p2) * p3)(x) << std::endl;
 }
 
-int main_dev() {
+int main() {
   // test_approximations();
   // workflow();
   // ctl();
-
-  test_combinedfunctions();
+  // test_combinedfunctions();
 
   return 0;
 }
 
-int main(int argc, char* argv[]){
+int main_(int argc, char* argv[]){
   std::string input_type;
   // Check if the required number of arguments are provided
     if ((argc < 14) || (argc > 6)) {

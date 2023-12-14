@@ -1,15 +1,12 @@
 # OUR TODO LIST
 
-?. Write output to files
-    - Output samples as CSV
+*. CSVWriter header file + document
+*. Improve output files
 *. Set precision and formatting for the output streams
     - use std::cout.flush()
     - use ofstream.setf(std::ios::scientific)
     - use ofstream.setf(std::ios::showpos)
     - use ofstream.precision(4)
-
-!!. Document the code
-    - io.hpp
 
 !!. Fix the tests + check the tests
 

@@ -16,51 +16,71 @@
 #include <sys/stat.h>
 
 
-// Call from Command line
-class ArgParser {
+/// @brief Class for parsing the input arguments and storing them.
+class ArgParser
+{
 public:
-  // Constructor
+  /// @brief Construct a new ArgParser object
   ArgParser(int argc, char* argv[]);
-  // Path to function file
+
+  /// @brief Path to function file
   std::string function;
-  // Function type
+  /// @brief Function type
   std::string functype;
-  // Input dimension of the function
+  /// @brief Input dimension of the function
   unsigned int dim_inp;
-  // Output dimension of the function
+  /// @brief Output dimension of the function
   unsigned int dim_out;
-  // Moment order
+  /// @brief Moment order
   int order;
-  // Moment type
+  /// @brief Moment type
   std::string mode;
-  // Distribution name
+  /// @brief Distribution name
   std::string dist;
-  // Number of samples
+  /// @brief Number of samples
   int n_samples;
-  // Path to output directory
+  /// @brief Path to output directory
   std::string output;
-  // Whether to save plots
+  /// @brief Falg for saving plots
   bool plot;
-  // Whether to save clt outputs
+  /// @brief Flag for saving clt outputs
   bool clt;
+
 private:
-  // Parse arguments and initialize members
+  /// @brief Parse arguments and initialize members
   void parse();
-  // Arguments
+
+  /// @brief Arguments
   std::vector<std::string> args;
 };
 
+/// @brief Class for managing the main workflow of the program
+/// @tparam dim_inp Dimension of the input of the function
+/// @tparam dim_out Dimension of the output of the function
 template <unsigned int dim_inp, unsigned int dim_out>
-class Workflow {
+class Workflow
+{
 public:
+  /// @brief Construct a Workflow object based on the arguments in a parser.
   Workflow(const ArgParser& parser);
+
+  /// @brief Destroy the Workflow object.
   ~Workflow();
+
+  /// @brief Launch the main workflow.
   void launch();
+
+  /// @brief Launch the workflow for calculating errors of the central limit theorem.
   void clt(int n = 10);
+
 private:
+  /// @brief Argument parser.
   const ArgParser& m_parser;
+  /// @brief Function of interest.
   Function<dim_inp, dim_out>* m_function;
+  /// @brief Source distribution.
   Distribution<dim_inp>* m_distribution;
+  /// @brief Monte Carlo approximator.
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 

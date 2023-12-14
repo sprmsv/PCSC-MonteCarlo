@@ -111,7 +111,7 @@ void ctl() {
 }
 
 void test_combinedfunctions() {
-  const int dim = 2;
+  const int dim = 3;
   Polynomial<dim> f1("tests/data/poly.dat");
   SumExponential<dim> f2("tests/data/sumexp.dat");
   SumLogarithm<dim> f3("tests/data/sumlog.dat");
@@ -137,10 +137,10 @@ void test_linear() {
   std::cout << "Linear(x) = " << l1(x) << std::endl;
 }
 
-int main_dev() {
+int main() {
   test_approximations();
   workflow();
-  ctl();
+  // ctl();
   test_combinedfunctions();
   test_linear();
 
@@ -255,7 +255,7 @@ void launch_workflow(const ArgParser& parser) {
   }
 }
 
-int main(int argc, char** argv){
+int main_(int argc, char** argv){
 
   //TODO: Implement online version (user input directly)
   if (argc == 1) {

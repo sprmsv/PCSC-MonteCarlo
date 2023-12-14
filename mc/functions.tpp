@@ -1,9 +1,5 @@
 #include "functions.hpp"
 
-#include <cassert>
-#include <cmath>
-#include <fstream>
-#include <iostream>
 
 template <unsigned int dim_inp, unsigned int dim_out>
 Function<dim_inp, dim_out>::Function() {}
@@ -140,41 +136,34 @@ template<unsigned int dim_inp>
 Polynomial<dim_inp>::Polynomial(std::string filepath)
   : Function<dim_inp, 1>() {
 
+  // Instantiate the file and the line string
+  std::string line;
   std::ifstream file(filepath);
   assert(file.is_open());
 
-  std::string line;
-
-  // Check the function type
-  std::getline(file, line);
-  assert (line == "polynomial");
-  // Check the dimensions
-  std::getline(file, line);
-  unsigned int d_inp, d_out;
-  std::istringstream(line) >> d_inp >> d_out;
-  assert (d_inp == dim_inp);
-  assert (d_out == 1);
-  // Check the third line (empty)
-  std::getline(file, line);
-  assert (line == "");
-
-  // TODO: Avoid code repetition
-  // Read the coefficients row by row
-  while (!file.eof()){
+  try {
+    // Check the function type
     std::getline(file, line);
-    std::istringstream linestream(line);
-    try{
-      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
-      if (row.size() > 0) {
-        assert (row.size() == dim_inp);
-        m_coeffs.push_back(row);
-      }
-    }
-    catch (std::invalid_argument &e){
-      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
-    }
-  }
+    if (line != "polynomial") throw InvalidInputException();
+    // Check the dimensions
+    std::getline(file, line);
+    unsigned int d_inp, d_out, k;
+    std::istringstream(line) >> d_inp >> d_out >> k;
+    if (d_inp != dim_inp) throw InvalidInputException();
+    if (d_out != 1) throw InvalidInputException();
+    // Check the third line (empty)
+    std::getline(file, line);
+    if (!line.empty()) throw InvalidInputException();
 
+    // Read the following k rows as coefficients
+    m_coeffs = read_matrix(file, k, d_inp);
+  }
+  catch (const Exception& e) {
+    std::cout << "Failed to read the file." << std::endl;
+    std::cout << e.what() << std::endl;
+    file.close();
+    throw e;
+  }
   file.close();
 }
 
@@ -201,41 +190,34 @@ template<unsigned int dim_inp>
 SumExponential<dim_inp>::SumExponential(std::string filepath)
   : Function<dim_inp, 1>() {
 
+  // Instantiate the file and the line string
+  std::string line;
   std::ifstream file(filepath);
   assert(file.is_open());
 
-  std::string line;
-
-  // Check the function type
-  std::getline(file, line);
-  assert (line == "sumexponential");
-  // Check the dimensions
-  std::getline(file, line);
-  unsigned int d_inp, d_out;
-  std::istringstream(line) >> d_inp >> d_out;
-  assert (d_inp == dim_inp);
-  assert (d_out == 1);
-  // Check the third line (empty)
-  std::getline(file, line);
-  assert (line == "");
-
-  // TODO: Avoid code repetition
-  // Read the coefficients row by row
-  while (!file.eof()){
+  try {
+    // Check the function type
     std::getline(file, line);
-    std::istringstream linestream(line);
-    try{
-      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
-      if (row.size() > 0) {
-        assert (row.size() == dim_inp);
-        m_coeffs.push_back(row);
-      }
-    }
-    catch (std::invalid_argument &e){
-      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
-    }
-  }
+    if (line != "sumexponential") throw InvalidInputException();
+    // Check the dimensions
+    std::getline(file, line);
+    unsigned int d_inp, d_out, k;
+    std::istringstream(line) >> d_inp >> d_out >> k;
+    if (d_inp != dim_inp) throw InvalidInputException();
+    if (d_out != 1) throw InvalidInputException();
+    // Check the third line (empty)
+    std::getline(file, line);
+    if (!line.empty()) throw InvalidInputException();
 
+    // Read the following k rows as coefficients
+    m_coeffs = read_matrix(file, k, d_inp);
+  }
+  catch (const Exception& e) {
+    std::cout << "Failed to read the file." << std::endl;
+    std::cout << e.what() << std::endl;
+    file.close();
+    throw e;
+  }
   file.close();
 }
 
@@ -258,43 +240,36 @@ Vector<1> SumExponential<dim_inp>::call(const Vector<dim_inp>& x) const {
 
 template<unsigned int dim_inp>
 SumLogarithm<dim_inp>::SumLogarithm(std::string filepath)
-  : Function<dim_inp, 1>() {
-
+  : Function<dim_inp, 1>()
+{
+  // Instantiate the file and the line string
+  std::string line;
   std::ifstream file(filepath);
   assert(file.is_open());
 
-  std::string line;
-
-  // Check the function type
-  std::getline(file, line);
-  assert (line == "sumlogarithm");
-  // Check the dimensions
-  std::getline(file, line);
-  unsigned int d_inp, d_out;
-  std::istringstream(line) >> d_inp >> d_out;
-  assert (d_inp == dim_inp);
-  assert (d_out == 1);
-  // Check the third line (empty)
-  std::getline(file, line);
-  assert (line == "");
-
-  // TODO: Avoid code repetition
-  // Read the coefficients row by row
-  while (!file.eof()){
+  try {
+    // Check the function type
     std::getline(file, line);
-    std::istringstream linestream(line);
-    try{
-      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
-      if (row.size() > 0) {
-        assert (row.size() == dim_inp);
-        m_coeffs.push_back(row);
-      }
-    }
-    catch (std::invalid_argument &e){
-      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
-    }
-  }
+    if (line != "sumlogarithm") throw InvalidInputException();
+    // Check the dimensions
+    std::getline(file, line);
+    unsigned int d_inp, d_out, k;
+    std::istringstream(line) >> d_inp >> d_out >> k;
+    if (d_inp != dim_inp) throw InvalidInputException();
+    if (d_out != 1) throw InvalidInputException();
+    // Check the third line (empty)
+    std::getline(file, line);
+    if (!line.empty()) throw InvalidInputException();
 
+    // Read the following k rows as coefficients
+    m_coeffs = read_matrix(file, k, d_inp);
+  }
+  catch (const Exception& e) {
+    std::cout << "Failed to read the file." << std::endl;
+    std::cout << e.what() << std::endl;
+    file.close();
+    throw e;
+  }
   file.close();
 }
 
@@ -317,53 +292,45 @@ Vector<1> SumLogarithm<dim_inp>::call(const Vector<dim_inp>& x) const {
 
 template<unsigned int dim_inp, unsigned int dim_out>
 Linear<dim_inp, dim_out>::Linear(std::string filepath)
-  : Function<dim_inp, dim_out>(){
-
+  : Function<dim_inp, dim_out>()
+{
+  // Instantiate the file and the line string
+  std::string line;
   std::ifstream file(filepath);
   assert(file.is_open());
 
-  std::string line;
+  try {
+    // Check the function type
+    std::getline(file, line);
+    if (line != "linear") throw InvalidInputException();
+    // Check the dimensions
+    std::getline(file, line);
+    unsigned int d_inp, d_out;
+    std::istringstream(line) >> d_inp >> d_out;
+    if (d_inp != dim_inp) throw InvalidInputException();
+    if (d_out != dim_out) throw InvalidInputException();
+    // Check the third line (empty)
+    std::getline(file, line);
+    if (!line.empty()) throw InvalidInputException();
 
-  // Check the function type
-  std::getline(file, line);
-  assert (line == "linear");
-  // Check the dimensions
-  std::getline(file, line);
-  unsigned int d_inp, d_out;
-  std::istringstream(line) >> d_inp >> d_out;
-  assert (d_inp == dim_inp);
-  assert (d_out == dim_out);
-  // Check the third line (empty)
-  std::getline(file, line);
-  assert (line == "");
-
-  // Store the biases
-  std::getline(file, line);
-  std::istringstream linestream(line);
-  std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
-  assert (row.size() == dim_out);
-  m_biases = row;
-  // Check the fifth line (empty)
-  std::getline(file, line);
-  assert (line == "");
-
-  // TODO: Avoid code repetition
-  // Read the coefficients row by row
-  while (!file.eof()){
+    // Store the biases
     std::getline(file, line);
     std::istringstream linestream(line);
-    try{
-      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
-      if (row.size() > 0) {
-        assert (row.size() == dim_inp);
-        m_weights.push_back(row);
-      }
-    }
-    catch (std::invalid_argument &e){
-      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
-    }
-  }
+    m_biases = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+    if (m_biases.size() != dim_out) InvalidInputException();
+    // Check the fifth line (empty)
+    std::getline(file, line);
+    if (!line.empty()) throw InvalidInputException();
 
+    // Store the weights
+    m_weights = read_matrix(file, d_out, d_inp);
+  }
+  catch (const Exception& e) {
+    std::cout << "Failed to read the file." << std::endl;
+    std::cout << e.what() << std::endl;
+    file.close();
+    throw e;
+  }
   file.close();
 }
 

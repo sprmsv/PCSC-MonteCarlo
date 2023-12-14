@@ -4,12 +4,17 @@
 #include "sampler.hpp"
 #include "distributions.hpp"
 #include "vector.hpp"
+#include "exceptions.hpp"
 
 #include <Eigen/Core>
 
 #include <string>
 #include <vector>
 #include <memory>
+#include <cassert>
+#include <cmath>
+#include <fstream>
+#include <iostream>
 
 template <unsigned int dim_inp, unsigned int dim_out> class CombinedFunctionSum;
 template <unsigned int dim_inp, unsigned int dim_out> class CombinedFunctionSub;

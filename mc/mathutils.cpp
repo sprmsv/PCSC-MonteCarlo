@@ -1,8 +1,6 @@
 #include "mathutils.hpp"
+#include "exceptions.hpp"
 
-#include <cmath>
-#include <cfloat>
-#include <map>
 
 bool isequal(double a, double b) {
     if (abs(a - b) < DBL_EPSILON) {
@@ -11,6 +9,37 @@ bool isequal(double a, double b) {
     else{
       return false;
     }
+}
+
+std::vector<std::vector<double>> read_matrix(std::ifstream& fstream, int rows, int cols) {
+  // Initialize the matrix and line string
+  std::vector<std::vector<double>> mat(rows, std::vector<double>(cols));
+  std::string line;
+
+  // Write to the matrix row by row
+  for (int i = 0; i < rows; ++i) {
+    // Check the file and read one line
+    if (fstream.eof()) {
+      std::string msg = "Unexpectedly reached end of file while reading a matrix of size ("
+        + std::to_string(rows) + ", " + std::to_string(cols) + ").";
+      throw InvalidInputException(msg);
+    }
+    std::getline(fstream, line);
+    std::istringstream linestream(line);
+    // Try reading the row and pushing it to the matrix
+    try{
+      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+      if (row.size() != cols) {
+        throw InvalidInputException("Expected " + std::to_string(cols) + " columns, got " + std::to_string(row.size()) + ".");
+      }
+      mat[i] = row;
+    }
+    catch (std::invalid_argument &e){
+      throw InvalidInputException("Cannot parse \"" + std::string(line.c_str()) + "\" as a row of coefficients.");
+    }
+  }
+
+  return mat;
 }
 
 // NOTE: Increasing accuracy makes the code slower

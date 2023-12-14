@@ -11,6 +11,8 @@
 #include "io.hpp"
 #include "exceptions.hpp"
 
+#define DEBUG
+
 // To make sure that everything works with both distributions
 void test_approximations() {
 
@@ -259,6 +261,12 @@ void launch_workflow(const ArgParser& parser) {
 }
 
 int main(int argc, char** argv){
+
+// TODO: REMOVE THIS
+#ifdef DEBUG
+  main_dev();
+  return 0;
+#endif
 
   //TODO: Implement online version (user input directly)
   if (argc == 1) {

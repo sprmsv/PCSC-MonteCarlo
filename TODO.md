@@ -1,6 +1,6 @@
 # OUR TODO LIST
 
-8. Add documentation
+!!. Document the code
 
 ?. Write output to files
     - Graphs
@@ -9,59 +9,45 @@
 * Change unnecessary pointers to references + use smart pointers
 *. Make some of the class members private/protected
 *. Set precision and formatting for the output streams
+    - use std::cout.flush()
+    - use ofstream.setf(std::ios::scientific)
+    - use ofstream.setf(std::ios::showpos)
+    - use ofstream.precision(4)
+*. Features not used:
+    - function pointers and std::function
+    - private members and friend classes/functions
+    - Copy the pointer or copy the content when copying another object??
+    - (non-pure) virtual methods and calling them from the daughter classes
+    - ...
 
 *. Add more tests
 
-9. Code check and cleaning on the main branch:
+!!. Code check and cleaning on the main branch:
     - Remove extra comments
     - Consistent spacing
     - Add more assertions if related
     - Remove trailing whitespaces
 
-10. Proof-read the readme and the documentation
+!!. Proof-read the readme and the documentation
 
-LET'S DROP THESE:
+## LET'S DROP THESE:
 ?. Use erf_inv from Boost and add a test for it + parameter
 ?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
     - I couldn't do it in the end. I used debugger and breakpoints but what happens is really weird. A reference suddenly changes its address when a Vector object is created! Let's drop this for now. It wouldn't affect our code at all.
 
 
-# Evaluation criteria and rules
-
-Deadline: Friday 15th December 2023, 14h
-
-- CMake build system
-
-- One central executable that reads input
-
-- Inline documentation of your code (Doxygen)
-
-- Create Doxygen documentation
-
-- Test suite
+# REPORT:
 
 - Make a report delivered as an extended README:
     - how to compile the program
     - typical program execution (the flow) and usage
     - List of features & tests
     - TODOs and perspectives
+    1. the implementation in a consise way
+    2. the validating tests
+    3. the limitations and problems
 
 - Make one oral presentation per student
     - the structure of the program
     - list of features
     - limitations and problems
-
-
-# Evaluation
-- The code
-    1. must be compiling
-    2. different options are inputs (no need to recompile to change behavior)
-    3. should be clean (coding convention)
-    4. should have inline comments (and Doxygen)
-    5. must pass tests
-    6. The git log entries/comments must be understandable
-
-- The report should describe:
-    1. the implementation in a consise way
-    2. the validating tests
-    3. the limitations and problems

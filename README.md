@@ -2,6 +2,15 @@
 
 This library deals with the statistical study of non-linear operators by approximating expectations and statistical moments using Monte Carlo methods.
 
+All the following instructions presume that the current working directory is the project's root directory.
+
+First, make sure that [Doxygen](https://www.doxygen.nl/manual/install.html) and [Graphviz](https://graphviz.org/download/) are installed:
+```bash
+doxygen --version
+dot --version
+```
+If not, please install them.
+
 To build the project:
 ```bash
 cmake -S . -B ./build
@@ -21,6 +30,11 @@ build/main ...
 To see the input arguments:
 ```bash
 build/main --help
+```
+
+To open the documentation:
+```bash
+open build/documentation/html/index.html
 ```
 
 # Contributions

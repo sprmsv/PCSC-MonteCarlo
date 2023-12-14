@@ -60,7 +60,6 @@ if (DOXYGEN_FOUND)
         doc_doxygen ALL
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        VERBATIM
     )
 else (DOXYGEN_FOUND)
   message("Doxygen was not found. Please install Doxygen and build again.")

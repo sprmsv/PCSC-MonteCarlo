@@ -31,4 +31,9 @@ struct FileNotFoundException : public ArgumentParseException {
     : ArgumentParseException(argname, mesg) {};
 };
 
+struct FunctionNotSupported : public Exception {
+  FunctionNotSupported(const std::string &mesg = "")
+    : Exception(mesg) {};
+};
+
 #endif

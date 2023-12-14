@@ -153,7 +153,6 @@ void print_usage(std::ostream& stream, char* name) {
   stream << "USAGE: "
   << name
   << " --function <input-function-file>"
-  << " --stat <statistic>"
   << " [-k <order>]"
   << " [--mode <moment-mode>]"
   << " [--dist <sample-distribution>]"
@@ -164,26 +163,63 @@ void print_usage(std::ostream& stream, char* name) {
   << std::endl;
 }
 
-// TODO: Fill up help
 void print_help(std::ostream& stream) {
   stream << "--function <input-function-file>" << std::endl;
   stream << "\t Path to the input file that defines the function" << std::endl;
-  stream << "--stat <statistic>" << std::endl;
-  stream << "\t *Optional* Statistical measure (Default: \"moment\")" << std::endl;
   stream << "[-k <order>]" << std::endl;
-  stream << "\t *Optional* Moment order, obligatory when calculating moment, ignored otherwise" << std::endl;
+  stream << "\t *Optional* Moment order" << std::endl;
   stream << "[--mode <moment-mode>]" << std::endl;
-  stream << "\t *Optional* Moment type, obligatory when calculating moment, ignored otherwise" << std::endl;
+  stream << "\t *Optional* Moment type (Default: \"standardized\")" << std::endl;
   stream << "[--dist <sample-distribution>]" << std::endl;
   stream << "\t *Optional* Source sample distribution (Default: \"normal\")" << std::endl;
   stream << "[--n <n-samples>]" << std::endl;
-  stream << "\t Number of samples" << std::endl;
+  stream << "\t *Optional* Number of samples (Default: 1000)" << std::endl;
   stream << "[--output <output-directory>]" << std::endl;
   stream << "\t *Optional* Path to output directory" << std::endl;
   stream << "[--plot <plot-samples>]" << std::endl;
   stream << "\t *Optional* Whether to save plots of samples" << std::endl;
   stream << "[--clt <show-clt-convergence>]" << std::endl;
   stream << "\t *Optional* Whether to save CLT outputs" << std::endl;
+}
+
+void launch_workflow(const ArgParser& parser) {
+  // TODO: Automize with boost/preprocessor.hpp
+  if ((parser.dim_inp == 1) && (parser.dim_out == 1)) {
+    Workflow<1, 1> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 1) && (parser.dim_out == 2)) {
+    Workflow<1, 2> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 1) && (parser.dim_out == 3)) {
+    Workflow<1, 3> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 2) && (parser.dim_out == 1)) {
+    Workflow<2, 1> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 2) && (parser.dim_out == 2)) {
+    Workflow<2, 2> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 2) && (parser.dim_out == 3)) {
+    Workflow<2, 3> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 3) && (parser.dim_out == 1)) {
+    Workflow<3, 1> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 3) && (parser.dim_out == 2)) {
+    Workflow<3, 2> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 3) && (parser.dim_out == 3)) {
+    Workflow<3, 3> workflow(parser);
+    workflow.launch();
+  }
 }
 
 int main(int argc, char** argv){
@@ -201,8 +237,8 @@ int main(int argc, char** argv){
   // Set up arguments from the command line inputs
   else if (argc < 19) {
     try{
-      ArgParser Parser(argc, argv);
-      // Parser.setup();
+      ArgParser parser(argc, argv);
+      launch_workflow(parser);
     }
     catch (const ArgumentParseException& e) {
       std::cout << e.what() << std::endl;

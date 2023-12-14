@@ -8,38 +8,42 @@
 
 #include <string>
 #include <vector>
+#include <set>
+#include <map>
+#include <sys/types.h>
+#include <sys/stat.h>
 
-
-class Reader {
-protected:
-  Reader();
-  virtual void setup() = 0;
-};
 
 // Call from Command line
-class ArgParser: public Reader {
+class ArgParser {
 public:
+  // Constructor
   ArgParser(int argc, char* argv[]);
-  void parse();
-  virtual void setup() override;
   // Path to function file
   std::string function;
-  // Statistic
-  std::string stat;
+  // Function type
+  std::string functype;
+  // Input dimension of the function
+  unsigned int dim_inp;
+  // Output dimension of the function
+  unsigned int dim_out;
   // Moment order
-  int k;
+  int order;
   // Moment type
   std::string mode;
   // Distribution name
   std::string dist;
   // Number of samples
-  int n;
+  int n_samples;
   // Path to output directory
   std::string output;
   // Whether to save plots
   bool plot;
   // Whether to save clt outputs
   bool clt;
+private:
+  // Parse arguments and initialize members
+  void parse();
   // Arguments
   std::vector<std::string> args;
 };
@@ -47,19 +51,11 @@ public:
 template <unsigned int dim_inp, unsigned int dim_out>
 class Workflow {
 public:
-  Workflow();
-  ~Workflow();
-
-  Workflow(std::string dir, std::string stat, std::string mode, int k, std::string dist, std::string ftype, std::string filepath);
-  void run();
+  Workflow(const ArgParser& parser);
+  void launch();
 private:
-  std::string mode;
-  std::string stat;
-  std::string dir;
-  int k;
-  Function<dim_inp, dim_out>* f;
-  Distribution<dim_inp>* d;
-  MonteCarloApproximator<dim_out>* mc;
+  const ArgParser& m_parser;
+  std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 
 #endif

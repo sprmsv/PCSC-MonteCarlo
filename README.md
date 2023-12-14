@@ -11,6 +11,12 @@ dot --version
 ```
 If not, please install them.
 
+Initialize the submodules:
+```bash
+git submodule update --init eigen
+git submodule update --init gtest
+```
+
 To build the project:
 ```bash
 cmake -S . -B ./build

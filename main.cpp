@@ -110,26 +110,7 @@ void ctl() {
   std::cout << "Relative error (%) in the variance of approximated means: " << var_err * 100 << std::endl;
 }
 
-void test_combinedfunctions() {
-  const int dim = 2;
-  Polynomial<dim> f1("tests/data/poly.dat");
-  SumExponential<dim> f2("tests/data/sumexp.dat");
-  SumLogarithm<dim> f3("tests/data/sumlog.dat");
 
-  Vector<dim> x = 1.;
-  std::cout << "f1(x) = " << f1(x) << std::endl;
-  std::cout << "f2(x) = " << f2(x) << std::endl;
-  std::cout << "f3(x) = " << f3(x) << std::endl;
-
-  std::cout << "Sum = " << (f1 + f2 + f3)(x) << std::endl;
-  std::cout << "Sub = " << (f1 - f2 - f3)(x) << std::endl;
-  std::cout << "Mul = " << (f1 * f2 * f3)(x) << std::endl;
-  std::cout << "Div = " << (f1 / f2 / f3)(x) << std::endl;
-
-  std::cout << "f1 + f2 * f3 = " << (f1 + f2 * f3)(x) << std::endl;
-  std::cout << "f1 + (f2 * f3) = " << (f1 + (f2 * f3))(x) << std::endl;
-  std::cout << "(f1 + f2) * f3 = " << ((f1 + f2) * f3)(x) << std::endl;
-}
 
 void test_linear() {
   Linear<3, 4> l1("tests/data/linear.dat");
@@ -141,7 +122,6 @@ int main_dev() {
   test_approximations();
   workflow();
   ctl();
-  test_combinedfunctions();
   test_linear();
 
   return 0;

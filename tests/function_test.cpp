@@ -4,143 +4,188 @@
 
 #include "functions.hpp"
 
-// namespace{
+namespace{
 
-// class FunctionTest : public ::testing::Test {
-// protected:
-//     // Define the function
-//     Function<5, 5>* f;
+#define dim 2
 
-//     virtual void SetUp() = 0;
-//     virtual void TearDown() = 0;
-// };
+class PolynomialTest : public ::testing::Test {
+protected:
+    Polynomial<dim>* f;
 
-// class PolynomialTest : public FunctionTest {
-// protected:
-//     // Define the coefficients of the polynomial
-//     std::vector<double>* coeffs;
+    virtual void SetUp() override{
+        f = new Polynomial<dim>("data/poly.dat");
+    };
+    virtual void TearDown() override{
+        delete f;
+    };
+};
 
-//     virtual void SetUp() override{
-//         coeffs = new std::vector<double> {4., 3., 2., 1.};
-//         f = new Polynomial<5, 5>(*coeffs);
-//     };
-//     virtual void TearDown() override{
-//         delete f;
-//         delete coeffs;
-//     };
-// };
+class LinearTest : public ::testing::Test {
+protected:
+    Linear<3, 4>* f;
 
-// class CombinationTest : public FunctionTest {
-// protected:
-//     // Define the coefficients of the polynomial
-//     std::vector<double>* coeffs;
-//     Function<5, 5>* f2;
+    virtual void SetUp() override{
+        f = new Linear<dim, dim>("data/linear.dat");
+      };
+    virtual void TearDown() override{
+        delete f;
+    };
+};
 
-//     virtual void SetUp() override{
-//         coeffs = new std::vector<double> {4., 3., 2., 1.};
-//         f = new Polynomial<5, 5>(*coeffs);
-//         f2 = new Polynomial<5, 5>(*coeffs);    
-//     };
-//     virtual void TearDown() override{
-//         delete f;
-//         delete f2;
-//         delete coeffs;
-//     };
-// };
+class SumExponentialTest : public ::testing::Test {
+protected:
+    SumExponential<dim>* f;
 
-// TEST_F(PolynomialTest, PolynomialEval)
-// {
-//     // Check that the polynomial is evaluated correctly
-//     for (double i = 0.; i < 2.; i+=0.1) {
-//         // Define the input vector
-//         Vector<5> x = std::vector<double>{i, i + 1, i + 2, i + 3, i + 4};
-//         // Evaluate the polynomial
-//         Vector<5> y = f->call(x);
-//         // Evaluate the polynomial manually
-//         Vector<5> y_manual = 0.;
-//         for (int j = 0; j < coeffs->size(); ++j) {
-//             y_manual += (*coeffs)[j] * (x ^ j);
-//         }
-//         for (int j = 0; j < 5; ++j) {
-//             EXPECT_DOUBLE_EQ(y[j], y_manual[j]);
-//         }
-//     }
-// }
+    virtual void SetUp() override{
+        f = new SumExponential<dim>("data/sumexp.dat");
+    };
+    virtual void TearDown() override{
+        delete f;
+    };
+};
 
-// TEST_F(CombinationTest, CombinedSum){
-//     // Check that the sum of two functions is evaluated correctly
-//     for (double i = 0.; i < 2.; i+=0.1) {
-//         // Define the input vector
-//         Vector<5> x = std::vector<double>{i, i + 1, i + 2, i + 3, i + 4};
-//         // Evaluate the polynomial
-//         auto f3 = (*f) + (*f2);
-//         Vector<5> y = f3(x);
-//         // Evaluate the polynomial manually
-//         Vector<5> y_manual = 0.;
-//         for (int j = 0; j < coeffs->size(); ++j) {
-//             y_manual += (*coeffs)[j] * (x ^ j);
-//         }
-//         for (int j = 0; j < 5; ++j) {
-//             EXPECT_DOUBLE_EQ(y[j], 2*y_manual[j]);
-//         }
-//     }
-// }
+class SumLogarithmTest : public ::testing::Test {
+protected:
+    SumLogarithm<dim>* f;
 
-// TEST_F(CombinationTest, CombinedDiff){
-//     // Check that the difference of two functions is evaluated correctly
-//     for (double i = 0.; i < 2.; i+=0.1) {
-//         // Define the input vector
-//         Vector<5> x = std::vector<double>{i, i + 1, i + 2, i + 3, i + 4};
-//         // Evaluate the polynomial
-//         auto f3 = (*f) - (*f2);
-//         Vector<5> y = f3(x);
-//         // Evaluate the polynomial manually
-//         Vector<5> y_manual = 0.;
-//         for (int j = 0; j < coeffs->size(); ++j) {
-//             y_manual += (*coeffs)[j] * (x ^ j);
-//         }
-//         for (int j = 0; j < 5; ++j) {
-//             EXPECT_DOUBLE_EQ(y[j], 0.);
-//         }
-//     }
-// }
+    virtual void SetUp() override{
+        f = new SumLogarithm<dim>("data/sumlog.dat");
+    };
+    virtual void TearDown() override{
+        delete f;
+    };
+};
 
-// TEST_F(CombinationTest, CombinedProd){
-//     // Check that the product of two functions is evaluated correctly
-//     for (double i = 0.; i < 2.; i+=0.1) {
-//         // Define the input vector
-//         Vector<5> x = std::vector<double>{i, i + 1, i + 2, i + 3, i + 4};
-//         // Evaluate the polynomial
-//         auto f3 = (*f) * (*f2);
-//         Vector<5> y = f3(x);
-//         // Evaluate the polynomial manually
-//         Vector<5> y_manual = 0.;
-//         for (int j = 0; j < coeffs->size(); ++j) {
-//             y_manual += (*coeffs)[j] * (x ^ j);
-//         }
-//         for (int j = 0; j < 5; ++j) {
-//             EXPECT_DOUBLE_EQ(y[j], y_manual[j]*y_manual[j]);
-//         }
-//     }
-// }
+class CombinationTest : public ::testing::Test {
+protected:
+    Polynomial<dim>* f1;
+    SumExponential<dim>* f2;
+    SumLogarithm<dim>* f3;
 
-// TEST_F(CombinationTest, CombinedDiv){
-//     // Check that the division of two functions is evaluated correctly
-//     for (double i = 0.; i < 2.; i+=0.1) {
-//         // Define the input vector
-//         Vector<5> x = std::vector<double>{i, i + 1, i + 2, i + 3, i + 4};
-//         // Evaluate the polynomial
-//         auto f3 = (*f) / (*f2);
-//         Vector<5> y = f3(x);
-//         // Evaluate the polynomial manually
-//         Vector<5> y_manual = 0.;
-//         for (int j = 0; j < coeffs->size(); ++j) {
-//             y_manual += (*coeffs)[j] * (x ^ j);
-//         }
-//         for (int j = 0; j < 5; ++j) {
-//             EXPECT_DOUBLE_EQ(y[j], 1.);
-//         }
-//     }
-// }
+    virtual void SetUp() override{
+        f1 = new Polynomial<dim>("data/poly.dat");
+        f2 = new SumExponential<dim>("data/sumexp.dat");
+        f3 = new SumLogarithm<dim>("data/sumlog.dat");
+    };
+    virtual void TearDown() override{
+        delete f1;
+        delete f2;
+        delete f3;
+    };
+};
 
-// }
+TEST_F(PolynomialTest, PolynomialEval)
+{
+    Vector<dim> x = 1.;
+    double y = (*f)(x)[0];
+    EXPECT_DOUBLE_EQ(y, 14.540000);
+}
+
+TEST_F(LinearTest, LinearEval)
+{
+    Vector<3> x(std::vector<double>({1., 0., 1.}));
+    Vector<4> y = (*f)(x);
+
+    // [7.2 1.2 4.5 3.5]
+    EXPECT_DOUBLE_EQ(y[0], 7.2);
+    EXPECT_DOUBLE_EQ(y[1], 1.2);
+    EXPECT_DOUBLE_EQ(y[2], 4.5);
+    EXPECT_DOUBLE_EQ(y[3], 3.5);
+}
+
+TEST_F(SumExponentialTest, SumExponentialEval)
+{
+    Vector<dim> x = 1.;
+    double y = (*f)(x)[0];
+    EXPECT_DOUBLE_EQ(y, 38.040295);
+}
+
+TEST_F(SumLogarithmTest, SumLogarithmEval)
+{
+    Vector<dim> x = 1.;
+    double y = (*f)(x)[0];
+    EXPECT_DOUBLE_EQ(y, 6.068425);
+}
+
+TEST_F(CombinationTest, CombinedSum){
+    // Check that the sum of two functions is evaluated correctly
+    Vector<dim> x = 1.;
+    double y12 = ((*f1) + (*f2))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, 52.580295);
+    double y13 = ((*f1) + (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y13, 20.608425);
+    double y23 = ((*f2) + (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y23, 44.108425);
+    double y123 = ((*f1) + (*f2) + (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y123, 62.148425);
+
+    // Check commutativity
+    double y21 = ((*f2) + (*f1))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, y21);
+}
+
+TEST_F(CombinationTest, CombinedDiff){
+    // Check that the difference of two functions is evaluated correctly
+    Vector<dim> x = 1.;
+    double y12 = ((*f1) - (*f2))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, -23.500295);
+    double y13 = ((*f1) - (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y13, 7.471575);
+    double y23 = ((*f2) - (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y23, -16.028575);
+    double y123 = ((*f1) - (*f2) - (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y123, -34.068575);
+
+    // Check commutativity
+    double y21 = ((*f2) - (*f1))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, -y21);
+}
+
+TEST_F(CombinationTest, CombinedProd){
+    // Check that the product of two functions is evaluated correctly
+    Vector<dim> x = 1.;
+    double y12 = ((*f1) * (*f2))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, 553.680000);
+    double y13 = ((*f1) * (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y13, 88.080000);
+    double y23 = ((*f2) * (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y23, 418.080000);
+    double y123 = ((*f1) * (*f2) * (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y123, 4680.960000);
+
+    // Check commutativity
+    double y21 = ((*f2) * (*f1))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, y21);
+}
+
+TEST_F(CombinationTest, CombinedDiv){
+    // Check that the division of two functions is evaluated correctly
+    Vector<dim> x = 1.;
+    double y12 = ((*f1) / (*f2))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, 0.383333);
+    double y13 = ((*f1) / (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y13, 2.400000);
+    double y23 = ((*f2) / (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y23, 0.133333);
+    double y123 = ((*f1) / (*f2) / (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y123, 0.016667);
+
+    // Check commutativity
+    double y21 = ((*f2) / (*f1))(x)[0];
+    EXPECT_DOUBLE_EQ(y12, 1/y21);
+}
+
+TEST_F(CombinationTest, ComplexCombination){
+// std::cout << "f1 + f2 * f3 = " << (f1 + f2 * f3)(x) << std::endl;
+// std::cout << "f1 + (f2 * f3) = " << (f1 + (f2 * f3))(x) << std::endl;
+// std::cout << "(f1 + f2) * f3 = " << ((f1 + f2) * f3)(x) << std::endl;
+    Vector<dim> x = 1.;
+    double y1 = ((*f1) + (*f2) * (*f3))(x)[0];
+    double y2 = ((*f1) + ((*f2) * (*f3)))(x)[0];
+    double y3 = (((*f1) + (*f2)) * (*f3))(x)[0];
+    EXPECT_DOUBLE_EQ(y1, 245.3844869839);
+    EXPECT_DOUBLE_EQ(y2, 245.3844869839);
+    EXPECT_DOUBLE_EQ(y3, 319.0795766854);
+}
+
+}

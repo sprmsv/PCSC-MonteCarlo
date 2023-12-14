@@ -76,54 +76,9 @@ void workflow() {
   std::cout << "Variance (Polynomial): " << mca->var().reshaped(1, dim_out) << std::endl;
 }
 
-// TODO: Create a test from each error
-// TODO: Create plots from the errors vs. n (?)
-void ctl() {
-  const int N = 10000;  // A large number for getting a close approximation
-  const int n = 10;  // A smaller number
-  const int dim_inp = 3;
-  const int dim_out = 1;
-
-  // Define the distribution and the function
-  Normal<dim_inp> dist(0., 1.);
-  Polynomial<dim_inp> poly("tests/data/poly.dat");
-
-  // Formerly get_sample_means
-  const int m = 1000;  // A sufficiently large number to get the right distribution
-  std::vector<Vector<dim_out>> means(m);
-  for(int i = 0; i < m; ++i){
-    means[i] = poly.mean(n, &dist);
-  }
-
-  // Formerly is_clt_valid
-  MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
-  Vector<dim_out> mean_the = poly.mean(N, &dist);
-  // TODO: What if the theoretical mean is zero?
-  Vector<dim_out> mean_err = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
-  Vector<dim_out> var_the = poly.var(N, &dist) / n;
-  Vector<dim_out> var_err = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
-
-  // Set a threshold
-  // error_threshold = 1.96 * sqrt(dist_sample_mean_var.array() / m_means);
-
-  std::cout << "Relative error (%) in the mean of approximated means    : " << mean_err * 100 << std::endl;
-  std::cout << "Relative error (%) in the variance of approximated means: " << var_err * 100 << std::endl;
-}
-
-
-
-void test_linear() {
-  Linear<3, 4> l1("tests/data/linear.dat");
-  Vector<3> x(std::vector<double>({1., 0., 1.}));
-  std::cout << "Linear(x) = " << l1(x) << std::endl;
-}
-
 int main_dev() {
   test_approximations();
   workflow();
-  ctl();
-  test_linear();
-
   return 0;
 }
 

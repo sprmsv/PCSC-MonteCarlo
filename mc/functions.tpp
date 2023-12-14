@@ -378,8 +378,8 @@ Linear<dim_inp, dim_out>::Linear(const Linear<dim_inp, dim_out>& f)
 template<unsigned int dim_inp, unsigned int dim_out>
 Vector<dim_out> Linear<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
   Vector<dim_out> y = m_biases;
-  for (std::vector<double> weight : m_weights) {
-    y += x.dot(weight);
+  for (int i = 0; i < m_weights.size(); ++i) {
+    y[i] += x.dot(m_weights[i]);
   }
   return y;
 }

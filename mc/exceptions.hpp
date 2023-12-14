@@ -36,4 +36,9 @@ struct FunctionNotSupported : public Exception {
     : Exception(mesg) {};
 };
 
+struct DimensionNotSupported : public Exception {
+  DimensionNotSupported(const std::string &mesg = "")
+    : Exception(mesg) {};
+};
+
 #endif

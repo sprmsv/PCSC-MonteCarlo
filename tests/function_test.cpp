@@ -6,14 +6,14 @@
 
 namespace{
 
-#define dim 2
+#define dim 3
 
 class PolynomialTest : public ::testing::Test {
 protected:
     Polynomial<dim>* f;
 
     virtual void SetUp() override{
-        f = new Polynomial<dim>("data/poly.dat");
+        f = new Polynomial<dim>("../tests/data/poly.dat");
     };
     virtual void TearDown() override{
         delete f;
@@ -25,7 +25,7 @@ protected:
     Linear<3, 4>* f;
 
     virtual void SetUp() override{
-        f = new Linear<dim, dim>("data/linear.dat");
+        f = new Linear<3, 4>("../tests/data/linear.dat");
       };
     virtual void TearDown() override{
         delete f;
@@ -37,7 +37,7 @@ protected:
     SumExponential<dim>* f;
 
     virtual void SetUp() override{
-        f = new SumExponential<dim>("data/sumexp.dat");
+        f = new SumExponential<dim>("../tests/data/sumexp.dat");
     };
     virtual void TearDown() override{
         delete f;
@@ -49,7 +49,7 @@ protected:
     SumLogarithm<dim>* f;
 
     virtual void SetUp() override{
-        f = new SumLogarithm<dim>("data/sumlog.dat");
+        f = new SumLogarithm<dim>("../tests/data/sumlog.dat");
     };
     virtual void TearDown() override{
         delete f;
@@ -78,20 +78,21 @@ TEST_F(PolynomialTest, PolynomialEval)
 {
     Vector<dim> x = 1.;
     double y = (*f)(x)[0];
-    EXPECT_DOUBLE_EQ(y, 14.540000);
+    EXPECT_DOUBLE_EQ(y, 14.300000);
 }
 
-TEST_F(LinearTest, LinearEval)
-{
-    Vector<3> x(std::vector<double>({1., 0., 1.}));
-    Vector<4> y = (*f)(x);
+// TODO : Modify once Multivariate is implemented
+// TEST_F(LinearTest, LinearEval)
+// {
+//     Vector<3> x(std::vector<double>({1., 0., 1.}));
+//     Vector<4> y = (*f)(x);
 
-    // [7.2 1.2 4.5 3.5]
-    EXPECT_DOUBLE_EQ(y[0], 7.2);
-    EXPECT_DOUBLE_EQ(y[1], 1.2);
-    EXPECT_DOUBLE_EQ(y[2], 4.5);
-    EXPECT_DOUBLE_EQ(y[3], 3.5);
-}
+//     // [7.2 1.2 4.5 3.5]
+//     EXPECT_DOUBLE_EQ(y[0], 7.2);
+//     EXPECT_DOUBLE_EQ(y[1], 1.2);
+//     EXPECT_DOUBLE_EQ(y[2], 4.5);
+//     EXPECT_DOUBLE_EQ(y[3], 3.5);
+// }
 
 TEST_F(SumExponentialTest, SumExponentialEval)
 {

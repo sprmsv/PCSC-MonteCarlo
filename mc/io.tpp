@@ -285,4 +285,3 @@ void Workflow<dim_inp, dim_out>::clt(int n) {
   std::cout << "Mean (Polynomial)    : " << relative_error[0] << std::endl;
   std::cout << "Variance (Polynomial): " << relative_error[1] << std::endl;
 }
-

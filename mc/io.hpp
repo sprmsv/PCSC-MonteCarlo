@@ -5,13 +5,15 @@
 #include "distributions.hpp"
 #include "sampler.hpp"
 #include "exceptions.hpp"
-#include "output.cpp"
 
 #include <string>
 #include <vector>
 #include <set>
 #include <map>
 #include <memory>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -84,6 +86,29 @@ private:
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 
+/**
+ * @brief Class for writing a set of vectors to a CSV file.
+ * @tparam dim The dimension of the vectors.
+ */
+template <unsigned int dim>
+class CSVWriter
+{
+public:
+  /// @brief Construct a CSVWriter object.
+  /// @param dir Directory of the output
+  /// @param filename Filename.
+  CSVWriter(const std::string& dir, const std::string& filename);
+
+  /// @brief Write the data to the file
+  /// @param data 
+  /// @return True if writing to the file has been successful.
+  bool writeCSV(const std::vector<Vector<dim>>& data);
+private:
+  std::string outputDir;
+  std::string filename;
+};
+
 #include "io.tpp"
+#include "csvwriter.tpp"
 
 #endif

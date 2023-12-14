@@ -10,6 +10,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <memory>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -52,9 +53,13 @@ template <unsigned int dim_inp, unsigned int dim_out>
 class Workflow {
 public:
   Workflow(const ArgParser& parser);
+  ~Workflow();
   void launch();
+  void clt(int n = 10);
 private:
   const ArgParser& m_parser;
+  Function<dim_inp, dim_out>* m_function;
+  Distribution<dim_inp>* m_distribution;
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 

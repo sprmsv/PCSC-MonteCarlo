@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cfloat>
 #include <map>
+#include <vector>
 #include <fstream>
 #include <string>
 #include <sstream>

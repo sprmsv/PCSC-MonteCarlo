@@ -145,9 +145,8 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   // Construct the function dynamically
   // TODO: Specialize for dim_out and add other functions
   // TODO: Separate this part in another method and only specialize that method
-  Function<dim_inp, dim_out>* f;
   if ((m_parser.functype == "linear")) {
-    f = new Linear<dim_inp, dim_out>(m_parser.function);
+    m_function = new Linear<dim_inp, dim_out>(m_parser.function);
   }
   // TODO: Add other function types (some of them only with dim_out = 1 specialization)
   else {
@@ -157,20 +156,23 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   // Construct the distibution and MCA
   // TODO: Parameterize mean and variance
   if (m_parser.dist == "uniform") {
-    Uniform<dim_inp> dist(0., 1.);
-    m_mca = f->mca(m_parser.n_samples, &dist);
+    m_distribution = new Uniform<dim_inp>(0., 1.);
+    m_mca = m_function->mca(m_parser.n_samples, m_distribution);
   }
   // TODO: Parameterize mean and variance
   else if (m_parser.dist == "normal") {
-    Normal<dim_inp> dist(0., 1.);
-    m_mca = f->mca(m_parser.n_samples, &dist);
+    m_distribution = new Normal<dim_inp>(0., 1.);
+    m_mca = m_function->mca(m_parser.n_samples, m_distribution);
   }
   else {
     throw InvalidArgumentException("--dist");
   }
 
-  // Destruct the function on heap memory
-  delete f;
+  std::cout << "Number of samples: " << m_parser.n_samples << std::endl;
+
+  if (m_parser.clt){
+    (*this).clt(10);
+  }
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
@@ -221,8 +223,53 @@ void Workflow<dim_inp, dim_out>::launch() {
 
     // TODO: Plot CLT convergence and save it
     if (m_parser.clt) {
-      // ...
     }
 
   }
 }
+
+template <unsigned int dim_inp, unsigned int dim_out>
+Workflow<dim_inp, dim_out>::~Workflow() {
+  delete m_function;
+  delete m_distribution;
+}
+
+// replace clt() with run()
+template<unsigned int dim_inp, unsigned int dim_out>
+void Workflow<dim_inp, dim_out>::clt(int n) {
+  int N = 1000;  // Number of samples to use for the CLT
+
+  std::vector<Vector<dim_out>> relative_error(2);
+  // Formerly get_sample_means
+  const int m = 1000;  // A sufficiently large number to get the right distribution
+  std::vector<Vector<dim_out>> means(m);
+  for(int i = 0; i < m; ++i){
+    means[i] = m_function->mean(n, m_distribution);
+    if (i % 100 == 0) {
+    }
+  }
+  // Formerly is_clt_valid
+  MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
+
+  Vector<dim_out> mean_the = m_function->mean(N, m_distribution);
+  // Handle the case where the theoretical mean is zero
+  for (int i = 0; i < dim_out; ++i) {
+    if (mean_the[i] < 1.e-10) {
+      mean_the[i] = 1.e-10;
+    }
+  }
+  relative_error[0] = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
+  
+  Vector<dim_out> var_the = m_function->var(N, m_distribution) / n;
+  // Handle the case where the theoretical variance is zero
+  for (int i = 0; i < dim_out; ++i) {
+    if (var_the[i] < 1.e-10) {
+      var_the[i] = 1.e-10;
+    }
+  }
+  relative_error[1] = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
+
+  std::cout << "Mean (Polynomial)    : " << relative_error[0] << std::endl;
+  std::cout << "Variance (Polynomial): " << relative_error[1] << std::endl;
+}
+

@@ -225,8 +225,6 @@ public:
   Vector<1> call(const Vector<dim_inp>& x) const override;
 };
 
-
-
 /**
  * @brief Functor class for a parameterized summation over element-wise exponential functions.
  * The output dimension is always 1.

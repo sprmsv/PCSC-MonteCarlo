@@ -30,7 +30,10 @@ double MonteCarloApproximator<dim>::moment_dim(unsigned int k, std::string mode,
 
 template<unsigned int dim>
 Eigen::VectorXd MonteCarloApproximator<dim>::moment(std::vector<unsigned int> &orders, std::string mode) {
-  // TODO: Assert mode is in "raw", "central", "standardized"
+  if (mode != "raw" && mode != "central" && mode != "standardized") {
+    std::string msg = "The requested mode is not supported: \"" + mode + "\".";
+    throw InvalidInputException(msg);
+  }
 
   // Build mapped matrix from the samples
   Eigen::MatrixXd samples(m_samples->size(), dim);

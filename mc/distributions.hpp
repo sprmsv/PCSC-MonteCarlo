@@ -1,11 +1,15 @@
 #ifndef MC_DISTRIBUTIONS_HPP
 #define MC_DISTRIBUTIONS_HPP
 
+#include "mathutils.hpp"
+#include "exceptions.hpp"
+#include "vector.hpp"
+
 #include <cstdlib>
 #include <vector>
 #include <memory>
+#include <ctime>
 
-#include "vector.hpp"
 
 template<unsigned int dim>
 class Distribution

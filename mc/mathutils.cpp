@@ -48,7 +48,10 @@ std::vector<std::vector<double>> read_matrix(std::ifstream& fstream, int rows, i
 #define ERFINV_MAX 10.  // Sets the included standard deviations in the resulting normal distribution
 
 double erfinv(double v) {
-  // TODO: Assert v \in (-1, +1)
+  if (v <= -1 || v >= +1) {
+    std::string msg = "Cannot determine erfinv of " + std::to_string(v) + ".";
+    throw InvalidInputException(msg);
+  }
 
   // CHECK: Is it okay to just write them here? Any better ideas?
   const std::map<double, double> ERFINV_CACHED {

@@ -139,7 +139,9 @@ Polynomial<dim_inp>::Polynomial(std::string filepath)
   // Instantiate the file and the line string
   std::string line;
   std::ifstream file(filepath);
-  assert(file.is_open());
+  if (!file.is_open()) {
+    throw InvalidInputException("Could not open file: " + filepath + ".");
+  }
 
   try {
     // Check the function type
@@ -193,7 +195,9 @@ SumExponential<dim_inp>::SumExponential(std::string filepath)
   // Instantiate the file and the line string
   std::string line;
   std::ifstream file(filepath);
-  assert(file.is_open());
+  if (!file.is_open()) {
+    throw InvalidInputException("Could not open file: " + filepath + ".");
+  }
 
   try {
     // Check the function type
@@ -245,7 +249,9 @@ SumLogarithm<dim_inp>::SumLogarithm(std::string filepath)
   // Instantiate the file and the line string
   std::string line;
   std::ifstream file(filepath);
-  assert(file.is_open());
+  if (!file.is_open()) {
+    throw InvalidInputException("Could not open file: " + filepath + ".");
+  }
 
   try {
     // Check the function type
@@ -297,7 +303,9 @@ MultivariatePolynomial<dim_inp, dim_out, order>::MultivariatePolynomial(std::str
   // Instantiate the file and the line string
   std::string line;
   std::ifstream file(filepath);
-  assert(file.is_open());
+  if (!file.is_open()) {
+    throw InvalidInputException("Could not open file: " + filepath + ".");
+  }
 
   try {
     // Check the function type

@@ -41,5 +41,4 @@ struct InvalidInputException : public Exception {
     : Exception(mesg) {};
 };
 
-
 #endif

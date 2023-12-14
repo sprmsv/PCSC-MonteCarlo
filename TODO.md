@@ -1,17 +1,26 @@
 # OUR TODO LIST
 
-WEDNESDAY NIGHT
-*. Add more assertions and custom exceptions
-*. Add more tests
-* Change unnecessary pointers to references + use smart pointers
-*. Make some of the class members private/protected
 8. Add documentation
-9. Code check and cleaning on the main branch
 
 ?. Write output to files
     - Graphs
     - Output samples as CSV
 
+* Change unnecessary pointers to references + use smart pointers
+*. Make some of the class members private/protected
+*. Set precision and formatting for the output streams
+
+*. Add more tests
+
+9. Code check and cleaning on the main branch:
+    - Remove extra comments
+    - Consistent spacing
+    - Add more assertions if related
+    - Remove trailing whitespaces
+
+10. Proof-read the readme and the documentation
+
+LET'S DROP THESE:
 ?. Use erf_inv from Boost and add a test for it + parameter
 ?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
     - I couldn't do it in the end. I used debugger and breakpoints but what happens is really weird. A reference suddenly changes its address when a Vector object is created! Let's drop this for now. It wouldn't affect our code at all.

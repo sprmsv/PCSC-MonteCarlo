@@ -169,6 +169,12 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
     throw InvalidArgumentException("--dist");
   }
 
+  if (m_parser.clt){
+    std::cout << "CLT" << std::endl;
+    m_clt = CLT<dim_inp, dim_out>(m_parser);
+    std::cout << "CLT" << std::endl;
+  }
+
   // Destruct the function on heap memory
   delete f;
 }
@@ -221,8 +227,89 @@ void Workflow<dim_inp, dim_out>::launch() {
 
     // TODO: Plot CLT convergence and save it
     if (m_parser.clt) {
-      // ...
     }
 
   }
+}
+template<int dim_inp, int dim_out>
+CLT<dim_inp, dim_out>::CLT(const ArgParser& parser) : m_parser(parser){
+
+  Function<dim_inp, dim_out>* func;
+  Distribution<dim_inp>* dist;
+
+  // Construct the function dynamically
+  if ((m_parser.functype == "linear")) {
+    func = new Linear<dim_inp, dim_out>(m_parser.function);
+  }
+  else if ((m_parser.functype == "multipoly")) {
+    // TODO : Adapt from degree passed
+    func = new MultivariatePolynomial<dim_inp, dim_out, 2>(m_parser.function);
+  }
+  else {
+    throw FunctionNotSupported("--function");
+  }
+
+  std::cout << "OK" << std::endl;
+
+  // Construct the distibution and MCA
+  // TODO: Parameterize mean and variance
+  if (m_parser.dist == "uniform") {
+    dist = new Uniform<dim_inp>(0., 1.);
+  }
+  // TODO: Parameterize mean and variance
+  else if (m_parser.dist == "normal") {
+    dist = new Normal<dim_inp>(0., 1.);
+  }
+  else {
+    throw InvalidArgumentException("--dist");
+  }
+  
+  auto return_clt = (*this).run(10000, 10, func, dist);
+  (*this).output(return_clt);
+}
+
+template<int dim_inp, int dim_out>
+CLT<dim_inp, dim_out>::~CLT() {
+}
+
+// replace clt() with run()
+template<int dim_inp, int dim_out>
+std::vector<Vector<dim_out>> CLT<dim_inp, dim_out>::run(int N, int n, Function<dim_inp, dim_out>* func, Distribution<dim_inp>* dist) {
+
+  std::vector<Vector<dim_out>> clt_return(2);
+  // Formerly get_sample_means
+  const int m = 1000;  // A sufficiently large number to get the right distribution
+  std::vector<Vector<dim_out>> means(m);
+  for(int i = 0; i < m; ++i){
+    means[i] = func->mean(n, dist);
+  }
+
+  // Formerly is_clt_valid
+  MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
+
+  Vector<dim_out> mean_the = func->mean(N, dist);
+  // Handle the case where the theoretical mean is zero
+  for (int i = 0; i < dim_out; ++i) {
+    if (mean_the[i] < 1.e-10) {
+      mean_the[i] = 1.e-10;
+    }
+  }
+  clt_return[0] = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
+  
+  Vector<dim_out> var_the = func->var(N, dist) / n;
+  // Handle the case where the theoretical variance is zero
+  for (int i = 0; i < dim_out; ++i) {
+    if (var_the[i] < 1.e-10) {
+      var_the[i] = 1.e-10;
+    }
+  }
+  clt_return[1] = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
+
+  return clt_return;
+}
+
+template<int dim_inp, int dim_out>
+void CLT<dim_inp, dim_out>::output(std::vector<Vector<dim_out>> clt_return, std::ostream& os) const {
+  os << "Mean (Polynomial)    : " << clt_return[0] << std::endl;
+  os << "Variance (Polynomial): " << clt_return[1] << std::endl;
 }

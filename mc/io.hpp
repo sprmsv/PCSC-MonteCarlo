@@ -48,6 +48,23 @@ private:
   std::vector<std::string> args;
 };
 
+template<int dim_inp, int dim_out>
+class CLT {
+public:
+    CLT(){};
+    ~CLT();
+    CLT(const CLT<dim_inp, dim_out>& clt){
+        m_parser = clt.m_parser;
+    };
+    CLT(const ArgParser& parser);
+
+    const ArgParser& m_parser;
+
+    std::vector<Vector<dim_out>> run(int N, int n, Function<dim_inp, dim_out>* func, Distribution<dim_inp>* dist);
+    void output(std::vector<Vector<dim_out>> return_clt, std::ostream& os = std::cout) const;
+};
+
+
 template <unsigned int dim_inp, unsigned int dim_out>
 class Workflow {
 public:
@@ -56,6 +73,7 @@ public:
 private:
   const ArgParser& m_parser;
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
+  CLT<dim_inp, dim_out> m_clt;
 };
 
 #include "io.tpp"

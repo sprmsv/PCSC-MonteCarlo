@@ -81,7 +81,7 @@ void test_multipoly() {
   Linear<3, 4> l1("tests/data/linear.dat");
   MultivariatePolynomial<3, 4, 2> mp1("tests/data/multipoly.dat");
 
-  Vector<3> x(std::vector<double>({2., 0., 1.}));
+  Vector<3> x = 1.;
   std::cout << "Linear(x) = " << l1(x) << std::endl;
   std::cout << "MultivariatePolynomial(x) = " << mp1(x) << std::endl;
 }
@@ -203,12 +203,6 @@ void launch_workflow(const ArgParser& parser) {
 }
 
 int main(int argc, char** argv){
-
-// TODO: REMOVE THIS
-#ifdef DEBUG
-  main_dev();
-  return 0;
-#endif
 
   //TODO: Implement online version (user input directly)
   if (argc == 1) {

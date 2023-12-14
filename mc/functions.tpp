@@ -155,8 +155,8 @@ Polynomial<dim_inp>::Polynomial(std::string filepath)
     std::getline(file, line);
     if (!line.empty()) throw InvalidInputException();
 
-    // Read the following k rows as coefficients
-    m_coeffs = read_matrix(file, k, d_inp);
+    // Read the following k+1 rows as coefficients
+    m_coeffs = read_matrix(file, k+1, d_inp);
   }
   catch (const Exception& e) {
     std::cout << "Failed to read the file." << std::endl;
@@ -209,8 +209,8 @@ SumExponential<dim_inp>::SumExponential(std::string filepath)
     std::getline(file, line);
     if (!line.empty()) throw InvalidInputException();
 
-    // Read the following k rows as coefficients
-    m_coeffs = read_matrix(file, k, d_inp);
+    // Read the following k+1 rows as coefficients
+    m_coeffs = read_matrix(file, k+1, d_inp);
   }
   catch (const Exception& e) {
     std::cout << "Failed to read the file." << std::endl;
@@ -261,8 +261,8 @@ SumLogarithm<dim_inp>::SumLogarithm(std::string filepath)
     std::getline(file, line);
     if (!line.empty()) throw InvalidInputException();
 
-    // Read the following k rows as coefficients
-    m_coeffs = read_matrix(file, k, d_inp);
+    // Read the following k+1 rows as coefficients
+    m_coeffs = read_matrix(file, k+1, d_inp);
   }
   catch (const Exception& e) {
     std::cout << "Failed to read the file." << std::endl;

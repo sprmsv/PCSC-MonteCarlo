@@ -136,31 +136,231 @@ Vector<dim_out> CombinedFunctionDiv<dim_inp, dim_out>::call(const Vector<dim_inp
   return out;
 }
 
-template<unsigned int dim_inp, unsigned int dim_out>
-Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
-  : Function<dim_inp, dim_out>() {
+template<unsigned int dim_inp>
+Polynomial<dim_inp>::Polynomial(std::string filepath)
+  : Function<dim_inp, 1>() {
+
   std::ifstream file(filepath);
   assert(file.is_open());
 
   std::string line;
 
-  // Pass the first two lines (function type and dimension)
+  // Check the function type
   std::getline(file, line);
+  assert (line == "polynomial");
+  // Check the dimensions
   std::getline(file, line);
+  unsigned int d_inp, d_out;
+  std::istringstream(line) >> d_inp >> d_out;
+  assert (d_inp == dim_inp);
+  assert (d_out == 1);
+  // Check the third line (empty)
+  std::getline(file, line);
+  assert (line == "");
 
-  // Read the coefficients
+  // TODO: Avoid code repetition
+  // Read the coefficients row by row
   while (!file.eof()){
     std::getline(file, line);
+    std::istringstream linestream(line);
     try{
-      m_coeffs.push_back(std::stod(line));
+      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+      if (row.size() > 0) {
+        assert (row.size() == dim_inp);
+        m_coeffs.push_back(row);
+      }
     }
     catch (std::invalid_argument &e){
-      if (line == ""){
-        m_coeffs.push_back(0.);
+      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
+    }
+  }
+
+  file.close();
+}
+
+template<unsigned int dim_inp>
+Polynomial<dim_inp>::Polynomial(std::vector<std::vector<double>> &coeffs)
+  : Function<dim_inp, 1>(), m_coeffs(coeffs) {}
+
+template<unsigned int dim_inp>
+Polynomial<dim_inp>::Polynomial(const Polynomial<dim_inp>& p)
+  : Function<dim_inp, 1>(), m_coeffs(p.m_coeffs) {}
+
+template<unsigned int dim_inp>
+Vector<1> Polynomial<dim_inp>::call(const Vector<dim_inp>& x) const {
+  Vector<1> y = 0;
+  Vector<dim_inp> x_powered = 1;
+  for (int i = 0; i < m_coeffs.size(); ++i) {
+    y = y + x_powered.dot(m_coeffs[i]);
+    x_powered *= x;
+  }
+  return y;
+}
+
+template<unsigned int dim_inp>
+SumExponential<dim_inp>::SumExponential(std::string filepath)
+  : Function<dim_inp, 1>() {
+
+  std::ifstream file(filepath);
+  assert(file.is_open());
+
+  std::string line;
+
+  // Check the function type
+  std::getline(file, line);
+  assert (line == "sumexponential");
+  // Check the dimensions
+  std::getline(file, line);
+  unsigned int d_inp, d_out;
+  std::istringstream(line) >> d_inp >> d_out;
+  assert (d_inp == dim_inp);
+  assert (d_out == 1);
+  // Check the third line (empty)
+  std::getline(file, line);
+  assert (line == "");
+
+  // TODO: Avoid code repetition
+  // Read the coefficients row by row
+  while (!file.eof()){
+    std::getline(file, line);
+    std::istringstream linestream(line);
+    try{
+      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+      if (row.size() > 0) {
+        assert (row.size() == dim_inp);
+        m_coeffs.push_back(row);
       }
-      else {
-        printf("Warning: Cannot parse \"%s\" as a coefficient.\n", line.c_str());
+    }
+    catch (std::invalid_argument &e){
+      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
+    }
+  }
+
+  file.close();
+}
+
+template<unsigned int dim_inp>
+SumExponential<dim_inp>::SumExponential(std::vector<std::vector<double>> &coeffs)
+  : Function<dim_inp, 1>(), m_coeffs(coeffs) {}
+
+template<unsigned int dim_inp>
+SumExponential<dim_inp>::SumExponential(const SumExponential<dim_inp>& f)
+  : Function<dim_inp, 1>(), m_coeffs(f.m_coeffs) {}
+
+template<unsigned int dim_inp>
+Vector<1> SumExponential<dim_inp>::call(const Vector<dim_inp>& x) const {
+  Vector<1> y = 0;
+  for (int i = 0; i < m_coeffs.size(); ++i) {
+    y += (i * x).exp().dot(m_coeffs[i]);
+  }
+  return y;
+}
+
+template<unsigned int dim_inp>
+SumLogarithm<dim_inp>::SumLogarithm(std::string filepath)
+  : Function<dim_inp, 1>() {
+
+  std::ifstream file(filepath);
+  assert(file.is_open());
+
+  std::string line;
+
+  // Check the function type
+  std::getline(file, line);
+  assert (line == "sumlogarithm");
+  // Check the dimensions
+  std::getline(file, line);
+  unsigned int d_inp, d_out;
+  std::istringstream(line) >> d_inp >> d_out;
+  assert (d_inp == dim_inp);
+  assert (d_out == 1);
+  // Check the third line (empty)
+  std::getline(file, line);
+  assert (line == "");
+
+  // TODO: Avoid code repetition
+  // Read the coefficients row by row
+  while (!file.eof()){
+    std::getline(file, line);
+    std::istringstream linestream(line);
+    try{
+      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+      if (row.size() > 0) {
+        assert (row.size() == dim_inp);
+        m_coeffs.push_back(row);
       }
+    }
+    catch (std::invalid_argument &e){
+      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
+    }
+  }
+
+  file.close();
+}
+
+template<unsigned int dim_inp>
+SumLogarithm<dim_inp>::SumLogarithm(std::vector<std::vector<double>> &coeffs)
+  : Function<dim_inp, 1>(), m_coeffs(coeffs) {}
+
+template<unsigned int dim_inp>
+SumLogarithm<dim_inp>::SumLogarithm(const SumLogarithm<dim_inp>& f)
+  : Function<dim_inp, 1>(), m_coeffs(f.m_coeffs) {}
+
+template<unsigned int dim_inp>
+Vector<1> SumLogarithm<dim_inp>::call(const Vector<dim_inp>& x) const {
+  Vector<1> y = 0;
+  for (int i = 0; i < m_coeffs.size(); ++i) {
+    y += ((i+1) * x).log().dot(m_coeffs[i]);
+  }
+  return y;
+}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Linear<dim_inp, dim_out>::Linear(std::string filepath)
+  : Function<dim_inp, dim_out>(){
+
+  std::ifstream file(filepath);
+  assert(file.is_open());
+
+  std::string line;
+
+  // Check the function type
+  std::getline(file, line);
+  assert (line == "linear");
+  // Check the dimensions
+  std::getline(file, line);
+  unsigned int d_inp, d_out;
+  std::istringstream(line) >> d_inp >> d_out;
+  assert (d_inp == dim_inp);
+  assert (d_out == dim_out);
+  // Check the third line (empty)
+  std::getline(file, line);
+  assert (line == "");
+
+  // Store the biases
+  std::getline(file, line);
+  std::istringstream linestream(line);
+  std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+  assert (row.size() == dim_out);
+  m_biases = row;
+  // Check the fifth line (empty)
+  std::getline(file, line);
+  assert (line == "");
+
+  // TODO: Avoid code repetition
+  // Read the coefficients row by row
+  while (!file.eof()){
+    std::getline(file, line);
+    std::istringstream linestream(line);
+    try{
+      std::vector<double> row = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
+      if (row.size() > 0) {
+        assert (row.size() == dim_inp);
+        m_weights.push_back(row);
+      }
+    }
+    catch (std::invalid_argument &e){
+      printf("Warning: Cannot parse \"%s\" as a row of coefficients.\n", line.c_str());
     }
   }
 
@@ -168,20 +368,18 @@ Polynomial<dim_inp, dim_out>::Polynomial(std::string filepath)
 }
 
 template<unsigned int dim_inp, unsigned int dim_out>
-Polynomial<dim_inp, dim_out>::Polynomial(std::vector<double> &coeffs)
-  : Function<dim_inp, dim_out>(), m_coeffs(coeffs) {}
+Linear<dim_inp, dim_out>::Linear(std::vector<std::vector<double>> &weights, std::vector<double> &biases)
+  : Function<dim_inp, dim_out>(), m_weights(weights), m_biases(biases) {}
 
 template<unsigned int dim_inp, unsigned int dim_out>
-Polynomial<dim_inp, dim_out>::Polynomial(const Polynomial<dim_inp, dim_out>& p)
-  : Function<dim_inp, dim_out>(), m_coeffs(p.m_coeffs) {}
+Linear<dim_inp, dim_out>::Linear(const Linear<dim_inp, dim_out>& f)
+  : Function<dim_inp, dim_out>(), m_weights(f.weights), m_biases(f.biases) {}
 
 template<unsigned int dim_inp, unsigned int dim_out>
-Vector<dim_out> Polynomial<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
-  Vector<dim_out> y = 0;
-  Vector<dim_inp> x_powered = 1;
-  for (int i = 0; i < m_coeffs.size(); ++i) {
-    y = y + x_powered * m_coeffs[i];
-    x_powered = x_powered * x;
+Vector<dim_out> Linear<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+  Vector<dim_out> y = m_biases;
+  for (std::vector<double> weight : m_weights) {
+    y += x.dot(weight);
   }
   return y;
 }

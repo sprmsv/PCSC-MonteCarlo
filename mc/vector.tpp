@@ -97,6 +97,33 @@ Vector<dim> Vector<dim>::abs() const{
   return u;
 }
 
+// Exponential function (element-wise)
+template <unsigned int dim>
+Vector<dim> Vector<dim>::exp() const{
+  Vector<dim> u(*this);
+  for (int idx = 0; idx < dim; ++idx){
+    u[idx] = std::exp(u[idx]);
+  }
+  return u;
+}
+
+// Logarithm function (element-wise)
+template <unsigned int dim>
+Vector<dim> Vector<dim>::log() const{
+  Vector<dim> u(*this);
+  bool warn = false;
+  for (int idx = 0; idx < dim; ++idx){
+    if (u[idx] <= 0) {
+      warn = true;
+    }
+    u[idx] = std::log(u[idx]);
+  }
+  if (warn) {
+    std::cout << "Warning: Logarithm of a non-positive value does not exist (v = [" << *this << "])" << std::endl;
+  }
+  return u;
+}
+
 // Arithmetic vector operators
 template <unsigned int dim>
 Vector<dim> Vector<dim>::operator+(const Vector<dim>& v) const{
@@ -306,4 +333,13 @@ std::vector<double> Vector<dim>::to_std_vector() const {
     v[i] = m_elements[i];
   }
   return v;
+}
+
+template <unsigned int dim>
+double Vector<dim>::dot(const Vector<dim>& v) const {
+  double product = 0;
+  for(unsigned int i=0; i<dim; ++i) {
+    product += v[i] * m_elements[i];
+  }
+  return product;
 }

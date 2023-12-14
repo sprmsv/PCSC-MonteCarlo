@@ -6,12 +6,21 @@ To build the project:
 ```bash
 cmake -S . -B ./build
 cmake --build ./build
-build/main
 ```
 
 To run the tests:
 ```bash
-ctest --test-dir ./build
+build/tests
+```
+
+To run the code:
+```bash
+build/main ...
+```
+
+To see the input arguments:
+```bash
+build/main --help
 ```
 
 # Contributions

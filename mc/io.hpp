@@ -5,6 +5,7 @@
 #include "distributions.hpp"
 #include "sampler.hpp"
 #include "exceptions.hpp"
+#include "output.cpp"
 
 #include <string>
 #include <vector>

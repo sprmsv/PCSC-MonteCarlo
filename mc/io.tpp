@@ -173,6 +173,7 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   if (m_parser.clt){
     (*this).clt(10);
   }
+
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
@@ -211,7 +212,19 @@ void Workflow<dim_inp, dim_out>::launch() {
     // ...
 
     // TODO: Write stats to an output file
-    // ...
+    CSVWriter<dim_out> csv(m_parser.output, "stats");
+    std::vector<Vector<dim_out>> stats_vec;
+    for (std::pair<std::string, Eigen::VectorXd> pair : stats) {
+      auto& stat = pair.first;
+      auto& value = pair.second;
+      Vector<dim_out> row;
+      for (int i = 0; i < dim_out; ++i) {
+        row[i] = value[i];
+      }
+      stats_vec.push_back(row);
+    }
+    csv.writeCSV(stats_vec);
+
 
     // TODO: Write mca->m_samples to an output file
     // ...

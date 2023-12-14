@@ -9,6 +9,7 @@
 #include "functions.hpp"
 #include "vector.hpp"
 #include "io.hpp"
+#include "exceptions.hpp"
 
 // To make sure that everything works with both distributions
 void test_approximations() {
@@ -146,26 +147,73 @@ int main_dev() {
   return 0;
 }
 
-int main(int argc, char* argv[]){
-  std::string input_type;
-  // Check if the required number of arguments are provided
-    if ((argc < 14) || (argc > 6)) {
-        input_type = "CL";
-        ReaderCL ReaderCL(argc, argv);
-        ReaderCL.setup();
-    }
-    else if (argc == 1)
-    {
-        input_type = "online";
-        //TODO: Implement online version (user input directly)
-    }
-    else{
-      std::cerr << "Usage: " 
-                  << argv[0] 
-                  << " --dir \"value\" --stat \"value\"-k \"value\" --mode \"value\"--dist \"value\" --function \"value\"\n";
-        return 1;
-    }
+// MAIN
 
-  //
+void print_usage(std::ostream& stream, char* name) {
+  stream << "USAGE: "
+  << name
+  << " --function <input-function-file>"
+  << " --stat <statistic>"
+  << " [-k <order>]"
+  << " [--mode <moment-mode>]"
+  << " [--dist <sample-distribution>]"
+  << " [--n <n-samples>]"
+  << " [--output <output-directory>]"
+  << " [--plot <plot-samples>]"
+  << " [--clt <show-clt-convergence>]"
+  << std::endl;
+}
+
+// TODO: Fill up help
+void print_help(std::ostream& stream) {
+  stream << "--function <input-function-file>" << std::endl;
+  stream << "\t Path to the input file that defines the function" << std::endl;
+  stream << "--stat <statistic>" << std::endl;
+  stream << "\t *Optional* Statistical measure (Default: \"moment\")" << std::endl;
+  stream << "[-k <order>]" << std::endl;
+  stream << "\t *Optional* Moment order, obligatory when calculating moment, ignored otherwise" << std::endl;
+  stream << "[--mode <moment-mode>]" << std::endl;
+  stream << "\t *Optional* Moment type, obligatory when calculating moment, ignored otherwise" << std::endl;
+  stream << "[--dist <sample-distribution>]" << std::endl;
+  stream << "\t *Optional* Source sample distribution (Default: \"normal\")" << std::endl;
+  stream << "[--n <n-samples>]" << std::endl;
+  stream << "\t Number of samples" << std::endl;
+  stream << "[--output <output-directory>]" << std::endl;
+  stream << "\t *Optional* Path to output directory" << std::endl;
+  stream << "[--plot <plot-samples>]" << std::endl;
+  stream << "\t *Optional* Whether to save plots of samples" << std::endl;
+  stream << "[--clt <show-clt-convergence>]" << std::endl;
+  stream << "\t *Optional* Whether to save CLT outputs" << std::endl;
+}
+
+int main(int argc, char** argv){
+
+  //TODO: Implement online version (user input directly)
+  if (argc == 1) {
+    std::cout << "Online mode is not implemented yet." << std::endl;
+    print_usage(std::cout, argv[0]);
+  }
+  else if (argc == 2 && !strcmp(argv[1], "--help")) {
+    print_usage(std::cout, argv[0]);
+    std::cout << std::endl;
+    print_help(std::cout);
+  }
+  // Set up arguments from the command line inputs
+  else if (argc < 19) {
+    try{
+      ArgParser Parser(argc, argv);
+      // Parser.setup();
+    }
+    catch (const ArgumentParseException& e) {
+      std::cout << e.what() << std::endl;
+      return 1;
+    }
+  }
+  // Print usage and return
+  else {
+    print_usage(std::cerr, argv[0]);
+    return 1;
+  }
+
   return 0;
 }

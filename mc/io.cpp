@@ -1,96 +1,136 @@
 #include "io.hpp"
 
-Reader::Reader()
-{
+#include <set>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+Reader::Reader() {}
+
+ArgParser::ArgParser(int argc, char* argv[])
+  : Reader(), args(std::vector<std::string>(argv, argv + argc)) {
+    this->parse();
 }
 
-ReaderCL::ReaderCL(int argc, char* argv[])
+void ArgParser::parse()
 {
-    commandLine = std::vector<std::string>(argv, argv + argc);
-    this->parser();
+  auto pos_function = std::find(args.begin(), args.end(), "--function");
+  auto pos_stat = std::find(args.begin(), args.end(), "--stat");
+  auto pos_k = std::find(args.begin(), args.end(), "-k");
+  auto pos_mode = std::find(args.begin(), args.end(), "--mode");
+  auto pos_dist = std::find(args.begin(), args.end(), "--dist");
+  auto pos_n = std::find(args.begin(), args.end(), "-n");
+  auto pos_output = std::find(args.begin(), args.end(), "--output");
+  auto pos_plot = std::find(args.begin(), args.end(), "--plot");
+  auto pos_clt = std::find(args.begin(), args.end(), "--clt");
+
+  // Set the function file
+  if (pos_function != args.end()) {
+    function = *(pos_function + 1);
+    if (!std::filesystem::is_regular_file(function)) {
+      throw FileNotFoundException("--function", "Could not find file \"" + function + "\".");
+    }
+
+  }
+  else {
+    throw ArgumentMissingException("--function", "Function file must be provided.");
+  }
+
+  // Set the statistic
+  std::set<std::string> allowed_stats = {
+    "moment", "mean", "variance", "var", "std",
+    "skewness", "kurtosis", "hyperskewness", "hypertailedness"
+  };
+  if (pos_stat != args.end()) {
+    stat = *(pos_stat + 1);
+    if (std::find(allowed_stats.begin(), allowed_stats.end(), stat) == allowed_stats.end()) {
+      throw InvalidArgumentException("--stat", "Statistic \"" + stat + "\" is not supported.");
+    }
+  }
+  else {
+    stat = "moment";
+  }
+
+  // Set the moment order (k)
+  if (pos_k != args.end()) {
+    try {
+      k = std::stoi(*(pos_k + 1));
+    }
+    catch (std::invalid_argument &e){
+      throw InvalidArgumentException("-k", "Moment order (k) must be an integer (\"" + *(pos_k + 1) + "\").");
+    }
+  }
+  else {
+    if (stat == "moment") {
+      throw ArgumentMissingException("-k", "Moment order (k) has to be passed.");
+    }
+    k = 0;
+  }
+
+  // Set the moment type
+  std::set<std::string> allowed_modes = {"raw", "central", "standardized"};
+  if (pos_mode != args.end()) {
+    mode = *(pos_mode + 1);
+    if (std::find(allowed_modes.begin(), allowed_modes.end(), mode) == allowed_modes.end()) {
+      throw InvalidArgumentException("--mode", "Moment type \"" + mode + "\" is not supported.");
+    }
+  }
+  else {
+    if (stat == "moment") {
+      throw ArgumentMissingException("--mode", "Moment type has to be passed.");
+    }
+    mode = "raw";
+  }
+
+  // Set the distribution
+  std::set<std::string> allowed_dists = {"normal", "uniform"};
+  if (pos_dist != args.end()) {
+    dist = *(pos_dist + 1);
+    if (std::find(allowed_dists.begin(), allowed_dists.end(), dist) == allowed_dists.end()) {
+      throw InvalidArgumentException("--dist", "Distribution \"" + dist + "\" is not supported.");
+    }
+  }
+  else {
+    dist = "normal";
+  }
+
+  // Set the output file
+  if (pos_output != args.end()) {
+    output = *(pos_output + 1);
+    if (!std::filesystem::is_directory(output)) {
+      throw FileNotFoundException("--output", "Could not find directory \"" + output + "\".");
+    }
+  }
+  else {
+    output = "";
+  }
+
+  // Set the plotting argument
+  if (pos_plot != args.end()) {
+    if (*(pos_plot + 1) != "0" && *(pos_plot + 1) != "1") {
+      throw InvalidArgumentException("--plot", "Plot argument must be 0 or 1.");
+    }
+    plot = (*(pos_plot + 1) == "1");
+  }
+  else {
+    plot = false;
+  }
+
+  // Set the clt argument
+  if (pos_clt != args.end()) {
+    if (*(pos_clt + 1) != "0" && *(pos_clt + 1) != "1") {
+      throw InvalidArgumentException("clt", "CLT argument must be 0 or 1.");
+    }
+    clt = (*(pos_clt + 1) == "1");
+  }
+  else {
+    clt = false;
+  }
 }
 
-ReaderCL::~ReaderCL()
-{
-}
-
-void ReaderCL::parser()
-{
-    auto dirPos = std::find(commandLine.begin(), commandLine.end(), "--dir");
-    auto statPos = std::find(commandLine.begin(), commandLine.end(), "--stat");
-    auto kPos = std::find(commandLine.begin(), commandLine.end(), "-k");
-    auto modePos = std::find(commandLine.begin(), commandLine.end(), "--mode");
-    auto distPos = std::find(commandLine.begin(), commandLine.end(), "--dist");
-    auto functionPos = std::find(commandLine.begin(), commandLine.end(), "--function");
-
-    if (dirPos != commandLine.end())
-    {
-        dir = *(dirPos + 1);
-    }
-    else
-    {
-        dir = "./";
-        std::cout << "No directory provided, using default: " << dir << std::endl;
-    }
-
-    if (statPos != commandLine.end())
-    {
-        stat = *(statPos + 1);
-    }
-    else
-    {
-        stat = "mean";
-        std::cout << "No statistic provided, using default: " << stat << std::endl;
-    }
-
-    if (kPos != commandLine.end())
-    {
-        k = std::stoi(*(kPos + 1));
-    }
-    else
-    {
-        k = 1;
-        std::cout << "No k provided, using default: " << k << std::endl;
-    }
-
-    if (modePos != commandLine.end())
-    {
-        mode = *(modePos + 1);
-    }
-    else
-    {
-        mode = "central";
-        std::cout << "No mode provided, using default: " << mode << std::endl;
-    }
-
-    if (distPos != commandLine.end())
-    {
-        dist = *(distPos + 1);
-    }
-    else
-    {
-        dist = "uniform";
-        std::cout << "No distribution provided, using default: " << dist << std::endl;
-    }
-
-    if (functionPos != commandLine.end())
-    {
-        function = *(functionPos + 1);
-    }
-    else
-    {
-        function = "online";
-        std::cout << "No function provided, using default: " << function << std::endl;
-    }
-    this->setup();
-}
-
-void ReaderCL::setup(){
+void ArgParser::setup(){
     // Check if the file exists otherwise use online definition
     if (function.find(".txt") != std::string::npos)
     {
-        std::cout << "Function file provided: " << function << std::endl;
-        
         std::ifstream file(function);
         if (!file.is_open())
         {
@@ -121,7 +161,7 @@ void ReaderCL::setup(){
             exit(1);
         }
         else if ((dim_inp == 1) && (dim_out == 1)){
-            Workflow<1, 1> workflow(dir, stat, mode, k, dist, type, function);
+            Workflow<1, 1> workflow("./", stat, mode, k, dist, type, function);
             workflow.run();
         }
         // TODO: Implement other dimensions
@@ -132,7 +172,7 @@ void ReaderCL::setup(){
         // }
         else if ((dim_inp == 2) && (dim_out == 1))
         {
-            Workflow<2, 1> workflow(dir, stat, mode, k, dist, type, function);
+            Workflow<2, 1> workflow("./", stat, mode, k, dist, type, function);
             workflow.run();
         }
         // else if ((dim_inp == 2) && (dim_out == 2))

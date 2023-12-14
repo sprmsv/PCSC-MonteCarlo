@@ -13,9 +13,14 @@ To run the tests:
 build/tests
 ```
 
-To run the ode:
+To run the code:
 ```bash
-build/main --dir "./" --stat "mean" -k 3 --mode "central" --dist  "uniform" --function "input.txt"
+build/main ...
+```
+
+To see the input arguments:
+```bash
+build/main --help
 ```
 
 # Contributions

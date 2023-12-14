@@ -290,9 +290,9 @@ Vector<1> SumLogarithm<dim_inp>::call(const Vector<dim_inp>& x) const {
   return y;
 }
 
-template<unsigned int dim_inp, unsigned int dim_out>
-Linear<dim_inp, dim_out>::Linear(std::string filepath)
-  : Function<dim_inp, dim_out>()
+template<unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+MultivariatePolynomial<dim_inp, dim_out, order>::MultivariatePolynomial(std::string filepath)
+  : Function<dim_inp, dim_out>(), m_weights(order)
 {
   // Instantiate the file and the line string
   std::string line;
@@ -302,11 +302,11 @@ Linear<dim_inp, dim_out>::Linear(std::string filepath)
   try {
     // Check the function type
     std::getline(file, line);
-    if (line != "linear") throw InvalidInputException();
+    if (line != "multivariatepolynomial" && line != "linear") throw InvalidInputException();
     // Check the dimensions
     std::getline(file, line);
-    unsigned int d_inp, d_out;
-    std::istringstream(line) >> d_inp >> d_out;
+    unsigned int d_inp, d_out, k;
+    std::istringstream(line) >> d_inp >> d_out >> k;
     if (d_inp != dim_inp) throw InvalidInputException();
     if (d_out != dim_out) throw InvalidInputException();
     // Check the third line (empty)
@@ -318,12 +318,15 @@ Linear<dim_inp, dim_out>::Linear(std::string filepath)
     std::istringstream linestream(line);
     m_biases = {std::istream_iterator<double>(linestream), std::istream_iterator<double>()};
     if (m_biases.size() != dim_out) InvalidInputException();
-    // Check the fifth line (empty)
-    std::getline(file, line);
-    if (!line.empty()) throw InvalidInputException();
 
-    // Store the weights
-    m_weights = read_matrix(file, d_out, d_inp);
+    for (int i = 0; i < k; ++i) {
+      // Check the preceeding line (empty)
+      std::getline(file, line);
+      if (!line.empty()) throw InvalidInputException();
+      // Store the weights
+      m_weights[i] = read_matrix(file, d_out, d_inp);
+    }
+
   }
   catch (const Exception& e) {
     std::cout << "Failed to read the file." << std::endl;
@@ -334,19 +337,37 @@ Linear<dim_inp, dim_out>::Linear(std::string filepath)
   file.close();
 }
 
-template<unsigned int dim_inp, unsigned int dim_out>
-Linear<dim_inp, dim_out>::Linear(std::vector<std::vector<double>> &weights, std::vector<double> &biases)
+template<unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+MultivariatePolynomial<dim_inp, dim_out, order>::MultivariatePolynomial(std::vector<std::vector<std::vector<double>>> &weights, std::vector<double> &biases)
   : Function<dim_inp, dim_out>(), m_weights(weights), m_biases(biases) {}
 
-template<unsigned int dim_inp, unsigned int dim_out>
-Linear<dim_inp, dim_out>::Linear(const Linear<dim_inp, dim_out>& f)
-  : Function<dim_inp, dim_out>(), m_weights(f.weights), m_biases(f.biases) {}
+template<unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+MultivariatePolynomial<dim_inp, dim_out, order>::MultivariatePolynomial(const MultivariatePolynomial<dim_inp, dim_out, order>& f)
+  : Function<dim_inp, dim_out>(), m_weights(f.weights), m_biases(f.m_biases) {}
 
-template<unsigned int dim_inp, unsigned int dim_out>
-Vector<dim_out> Linear<dim_inp, dim_out>::call(const Vector<dim_inp>& x) const {
+template<unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+Vector<dim_out> MultivariatePolynomial<dim_inp, dim_out, order>::call(const Vector<dim_inp>& x) const {
   Vector<dim_out> y = m_biases;
-  for (std::vector<double> weight : m_weights) {
-    y += x.dot(weight);
+  Vector<dim_inp> x_powered(x);
+
+  for (std::vector<std::vector<double>> weight : m_weights) {
+    int i = 0;
+    for (std::vector<double> row : weight) {
+      y[i++] += x_powered.dot(row);
+    }
+    x_powered *= x;
   }
   return y;
 }
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Linear<dim_inp, dim_out>::Linear(std::vector<std::vector<double>> &weights, std::vector<double> &biases)
+  : MultivariatePolynomial<dim_inp, dim_out, 1>(std::vector<std::vector<std::vector<double>>>(1, weights), biases) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Linear<dim_inp, dim_out>::Linear(const Linear<dim_inp, dim_out>& f)
+  : MultivariatePolynomial<dim_inp, dim_out, 1>(f) {}
+
+template<unsigned int dim_inp, unsigned int dim_out>
+Linear<dim_inp, dim_out>::Linear(std::string filepath)
+  : MultivariatePolynomial<dim_inp, dim_out, 1>(filepath) {}

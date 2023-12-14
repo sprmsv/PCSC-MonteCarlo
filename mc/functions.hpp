@@ -136,18 +136,28 @@ public:
   Vector<1> call(const Vector<dim_inp>& x) const override;
 };
 
+template <unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+class MultivariatePolynomial : public Function<dim_inp, dim_out>
+{
+public:
+  MultivariatePolynomial(std::string filepath);
+  MultivariatePolynomial(std::vector<std::vector<std::vector<double>>> &weights, std::vector<double> &biases);
+  MultivariatePolynomial(const MultivariatePolynomial<dim_inp, dim_out, order>&);
+  ~MultivariatePolynomial() = default;
+  std::vector<std::vector<std::vector<double>>> m_weights;
+  std::vector<double> m_biases;
+
+  virtual Vector<dim_out> call(const Vector<dim_inp>& x) const override;
+};
+
 template <unsigned int dim_inp, unsigned int dim_out>
-class Linear : public Function<dim_inp, dim_out>
+class Linear : public MultivariatePolynomial<dim_inp, dim_out, 1>
 {
 public:
   Linear(std::string filepath);
   Linear(std::vector<std::vector<double>> &weights, std::vector<double> &biases);
   Linear(const Linear<dim_inp, dim_out>&);
   ~Linear() = default;
-  std::vector<std::vector<double>> m_weights;
-  std::vector<double> m_biases;
-
-  Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
 #include "functions.tpp"

@@ -131,18 +131,21 @@ void test_combinedfunctions() {
   std::cout << "(f1 + f2) * f3 = " << ((f1 + f2) * f3)(x) << std::endl;
 }
 
-void test_linear() {
+void test_multipoly() {
   Linear<3, 4> l1("tests/data/linear.dat");
-  Vector<3> x(std::vector<double>({1., 0., 1.}));
+  MultivariatePolynomial<3, 4, 2> mp1("tests/data/multipoly.dat");
+
+  Vector<3> x(std::vector<double>({2., 0., 1.}));
   std::cout << "Linear(x) = " << l1(x) << std::endl;
+  std::cout << "MultivariatePolynomial(x) = " << mp1(x) << std::endl;
 }
 
-int main() {
+int main_dev() {
   test_approximations();
   workflow();
   // ctl();
   test_combinedfunctions();
-  test_linear();
+  test_multipoly();
 
   return 0;
 }
@@ -255,7 +258,7 @@ void launch_workflow(const ArgParser& parser) {
   }
 }
 
-int main_(int argc, char** argv){
+int main(int argc, char** argv){
 
   //TODO: Implement online version (user input directly)
   if (argc == 1) {

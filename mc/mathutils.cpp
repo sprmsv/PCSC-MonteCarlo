@@ -42,18 +42,12 @@ std::vector<std::vector<double>> read_matrix(std::ifstream& fstream, int rows, i
   return mat;
 }
 
-// NOTE: Increasing accuracy makes the code slower
-// NOTE: However, with more cached values, the speed can be maintained
-#define ERFINV_TOL 1e-05  // Sets the accuracy of the resulting samples
-#define ERFINV_MAX 10.  // Sets the included standard deviations in the resulting normal distribution
-
 double erfinv(double v) {
   if (v <= -1 || v >= +1) {
     std::string msg = "Cannot determine erfinv of " + std::to_string(v) + ".";
     throw InvalidInputException(msg);
   }
 
-  // CHECK: Is it okay to just write them here? Any better ideas?
   const std::map<double, double> ERFINV_CACHED {
     {-1., -ERFINV_MAX},
     {-0.997997997997998, -2.184914100111402},

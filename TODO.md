@@ -1,18 +1,24 @@
 # OUR TODO LIST
 
 !!. Document the code
+    - io.hpp
+    - tests/*
+    - Extended readme
 
 ?. Write output to files
     - Graphs
     - Output samples as CSV
 
 * Change unnecessary pointers to references + use smart pointers
+
 *. Make some of the class members private/protected
+
 *. Set precision and formatting for the output streams
     - use std::cout.flush()
     - use ofstream.setf(std::ios::scientific)
     - use ofstream.setf(std::ios::showpos)
     - use ofstream.precision(4)
+
 *. Features not used:
     - function pointers and std::function
     - private members and friend classes/functions
@@ -29,11 +35,6 @@
     - Remove trailing whitespaces
 
 !!. Proof-read the readme and the documentation
-
-## LET'S DROP THESE:
-?. Use erf_inv from Boost and add a test for it + parameter
-?. Resolve the segmentation fault issue for CombinedFunctionSum and add other operators..
-    - I couldn't do it in the end. I used debugger and breakpoints but what happens is really weird. A reference suddenly changes its address when a Vector object is created! Let's drop this for now. It wouldn't affect our code at all.
 
 
 # REPORT:

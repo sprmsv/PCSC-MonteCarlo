@@ -1,6 +1,7 @@
 #include "vector.hpp"
 
 // Constructors and destructor
+
 template <unsigned int dim>
 Vector<dim>::Vector() {}
 
@@ -45,7 +46,6 @@ Vector<dim>::Vector(const Eigen::VectorXd& v) {
   }
 }
 
-//// Internal operators
 // Assignment operators
 
 template <unsigned int dim>
@@ -90,6 +90,7 @@ const double& Vector<dim>::operator[](unsigned int idx) const {
 }
 
 // Opposite operator
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::operator-() const{
   Vector<dim> u(*this);
@@ -100,6 +101,7 @@ Vector<dim> Vector<dim>::operator-() const{
 }
 
 // Absolute function
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::abs() const{
   Vector<dim> u(*this);
@@ -110,6 +112,7 @@ Vector<dim> Vector<dim>::abs() const{
 }
 
 // Exponential function (element-wise)
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::exp() const{
   Vector<dim> u(*this);
@@ -120,6 +123,7 @@ Vector<dim> Vector<dim>::exp() const{
 }
 
 // Logarithm function (element-wise)
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::log() const{
   Vector<dim> u(*this);
@@ -137,6 +141,7 @@ Vector<dim> Vector<dim>::log() const{
 }
 
 // Arithmetic vector operators
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::operator+(const Vector<dim>& v) const{
   Vector<dim> u(*this);
@@ -174,6 +179,7 @@ Vector<dim> Vector<dim>::operator/(const Vector<dim>& v) const{
 }
 
 // Arithmetic reassignment operators
+
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator+=(const Vector<dim>& v) {
   for(unsigned int i=0; i<dim; ++i) {
@@ -206,8 +212,8 @@ Vector<dim>& Vector<dim>::operator/=(const Vector<dim>& v) {
   return *this;
 }
 
-
 // Arithmetic scalar operators
+
 template <unsigned int dim>
 Vector<dim> Vector<dim>::operator+(const double& s) {
   Vector<dim> u(*this);
@@ -253,7 +259,8 @@ Vector<dim> Vector<dim>::operator^(const double& s) {
   return u;
 }
 
-// Arithmetic reassignment operators with doubles
+// Arithmetic reassignment operators with scalars
+
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator+=(const double& s) {
   for(unsigned int i=0; i<dim; ++i) {
@@ -287,6 +294,7 @@ Vector<dim>& Vector<dim>::operator/=(const double& s) {
 }
 
 // Display operator
+
 template<unsigned int dim>
 std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
     for (int idx = 0; idx < dim; ++idx){
@@ -299,43 +307,7 @@ std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
    return stream;
 }
 
-//// External operators
-// Arithmetic scalar operators
-template <unsigned int dim>
-Vector<dim> operator+(const double& s, const Vector<dim>& u) {
-  Vector<dim> v(u);
-  for(unsigned int i=0; i<dim; ++i) {
-    v[i] += s;
-  }
-  return v;
-}
-
-template <unsigned int dim>
-Vector<dim> operator-(const double& s, const Vector<dim>& u) {
-  Vector<dim> v(u);
-  for(unsigned int i=0; i<dim; ++i) {
-    v[i] -= s;
-  }
-  return v;
-}
-
-template <unsigned int dim>
-Vector<dim> operator*(const double& s, const Vector<dim>& u) {
-  Vector<dim> v(u);
-  for(unsigned int i=0; i<dim; ++i) {
-    v[i] *= s;
-  }
-  return v;
-}
-
-template <unsigned int dim>
-Vector<dim> operator/(const double& s, const Vector<dim>& u) {
-  Vector<dim> v(u);
-  for(unsigned int i=0; i<dim; ++i) {
-    v[i] /= s;
-  }
-  return v;
-}
+// Conversion methods
 
 template <unsigned int dim>
 std::vector<double> Vector<dim>::to_std_vector() const {
@@ -350,6 +322,8 @@ std::vector<double> Vector<dim>::to_std_vector() const {
   return v;
 }
 
+// Dot product method
+
 template <unsigned int dim>
 double Vector<dim>::dot(const Vector<dim>& v) const {
   double product = 0;
@@ -357,4 +331,46 @@ double Vector<dim>::dot(const Vector<dim>& v) const {
     product += v[i] * m_elements[i];
   }
   return product;
+}
+
+// External arithmetic scalar operators
+
+/// @brief External summation operator with a scalar
+template <unsigned int dim>
+Vector<dim> operator+(const double& s, const Vector<dim>& u) {
+  Vector<dim> v(u);
+  for(unsigned int i=0; i<dim; ++i) {
+    v[i] += s;
+  }
+  return v;
+}
+
+/// @brief External subtraction operator with a scalar
+template <unsigned int dim>
+Vector<dim> operator-(const double& s, const Vector<dim>& u) {
+  Vector<dim> v(u);
+  for(unsigned int i=0; i<dim; ++i) {
+    v[i] -= s;
+  }
+  return v;
+}
+
+/// @brief External multiplication operator with a scalar
+template <unsigned int dim>
+Vector<dim> operator*(const double& s, const Vector<dim>& u) {
+  Vector<dim> v(u);
+  for(unsigned int i=0; i<dim; ++i) {
+    v[i] *= s;
+  }
+  return v;
+}
+
+/// @brief External division operator with a scalar
+template <unsigned int dim>
+Vector<dim> operator/(const double& s, const Vector<dim>& u) {
+  Vector<dim> v(u);
+  for(unsigned int i=0; i<dim; ++i) {
+    v[i] /= s;
+  }
+  return v;
 }

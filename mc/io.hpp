@@ -58,4 +58,6 @@ private:
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 
+#include "io.tpp"
+
 #endif

@@ -143,12 +143,15 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
 : m_parser(parser)
 {
   // Construct the function dynamically
+  // TODO: Specialize for dim_out and add other functions
+  // TODO: Separate this part in another method and only specialize that method
   Function<dim_inp, dim_out>* f;
-  if ((m_parser.functype == "polynomial")) {
-    f = new Polynomial<dim_inp>(m_parser.function);
+  if ((m_parser.functype == "linear")) {
+    f = new Linear<dim_inp, dim_out>(m_parser.function);
   }
+  // TODO: Add other function types (some of them only with dim_out = 1 specialization)
   else {
-    throw InvalidArgumentException("--function");
+    throw FunctionNotSupported("--function");
   }
 
   // Construct the distibution and MCA
@@ -186,7 +189,7 @@ void Workflow<dim_inp, dim_out>::launch() {
     {"hypertailedness", m_mca->hypertailedness()}
   };
   if (m_parser.order > 0) {
-    stats.insert({"moment (" + m_parser.order + ", " + m_parser.mode + ")", m_mca->moment(m_parser.order, m_parser.mode)});
+    stats.insert({"moment ({" + std::to_string(m_parser.order) + "}, {" + m_parser.mode + "})", m_mca->moment(m_parser.order, m_parser.mode)});
   }
 
   // TODO: Separate the following steps in other methods

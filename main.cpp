@@ -196,6 +196,10 @@ void launch_workflow(const ArgParser& parser) {
     Workflow<1, 3> workflow(parser);
     workflow.launch();
   }
+  else if ((parser.dim_inp == 1) && (parser.dim_out == 4)) {
+    Workflow<1, 4> workflow(parser);
+    workflow.launch();
+  }
   else if ((parser.dim_inp == 2) && (parser.dim_out == 1)) {
     Workflow<2, 1> workflow(parser);
     workflow.launch();
@@ -206,6 +210,10 @@ void launch_workflow(const ArgParser& parser) {
   }
   else if ((parser.dim_inp == 2) && (parser.dim_out == 3)) {
     Workflow<2, 3> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 2) && (parser.dim_out == 4)) {
+    Workflow<2, 4> workflow(parser);
     workflow.launch();
   }
   else if ((parser.dim_inp == 3) && (parser.dim_out == 1)) {
@@ -219,6 +227,31 @@ void launch_workflow(const ArgParser& parser) {
   else if ((parser.dim_inp == 3) && (parser.dim_out == 3)) {
     Workflow<3, 3> workflow(parser);
     workflow.launch();
+  }
+  else if ((parser.dim_inp == 3) && (parser.dim_out == 4)) {
+    Workflow<3, 4> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 4) && (parser.dim_out == 1)) {
+    Workflow<4, 1> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 4) && (parser.dim_out == 2)) {
+    Workflow<4, 2> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 4) && (parser.dim_out == 3)) {
+    Workflow<4, 3> workflow(parser);
+    workflow.launch();
+  }
+  else if ((parser.dim_inp == 4) && (parser.dim_out == 4)) {
+    Workflow<4, 4> workflow(parser);
+    workflow.launch();
+  }
+  else {
+    std::string msg = "Dimensions of the function are not supported: "
+      + std::to_string(parser.dim_inp) + ", " + std::to_string(parser.dim_out);
+    throw FunctionNotSupported(msg);
   }
 }
 
@@ -241,6 +274,11 @@ int main(int argc, char** argv){
       launch_workflow(parser);
     }
     catch (const ArgumentParseException& e) {
+      std::cout << e.what() << std::endl;
+      print_usage(std::cerr, argv[0]);
+      return 1;
+    }
+    catch (const Exception& e) {
       std::cout << e.what() << std::endl;
       return 1;
     }

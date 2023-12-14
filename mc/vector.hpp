@@ -1,11 +1,14 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include "exceptions.hpp"
+
 #include <Eigen/Core>
 
 #include <iostream>
 #include <cmath>
 #include <vector>
+
 
 template <unsigned int dim = 1>
 class Vector

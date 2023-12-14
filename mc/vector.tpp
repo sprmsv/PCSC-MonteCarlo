@@ -16,7 +16,11 @@ Vector<dim>::Vector(const double& s) {
 
 template <unsigned int dim>
 Vector<dim>::Vector(const std::vector<double>& v) {
-  assert(v.size() == dim);
+  if (v.size() != dim) {
+    std::string msg = "Cannot construt Vector<" + std::to_string(dim)
+      + "> from std::vector<double>(" + std::to_string(v.size()) + ").";
+    throw InvalidInputException(msg);
+  }
   for(unsigned int i=0; i<dim; ++i) {
     m_elements[i] = v[i];
   }
@@ -31,7 +35,11 @@ Vector<dim>::Vector(const Vector<dim>& v) {
 
 template <unsigned int dim>
 Vector<dim>::Vector(const Eigen::VectorXd& v) {
-  assert(v.size() == dim);
+  if (v.size() != dim) {
+    std::string msg = "Cannot construt Vector<" + std::to_string(dim)
+      + "> from Eigen::VectorXd(" + std::to_string(v.size()) + ").";
+    throw InvalidInputException(msg);
+  }
   for(unsigned int i=0; i<dim; ++i) {
     m_elements[i] = v[i];
   }
@@ -58,7 +66,11 @@ Vector<dim>& Vector<dim>::operator=(const double& s) {
 
 template <unsigned int dim>
 Vector<dim>& Vector<dim>::operator=(const std::vector<double>& v) {
-  assert(v.size() == dim);
+  if (v.size() != dim) {
+    std::string msg = "Cannot assign Vector<" + std::to_string(dim)
+      + "> to std::vector<double>(" + std::to_string(v.size()) + ")";
+    throw InvalidInputException(msg);
+  }
   for(unsigned int i=0; i<dim; ++i) {
     m_elements[i] = v[i];
   }
@@ -327,7 +339,10 @@ Vector<dim> operator/(const double& s, const Vector<dim>& u) {
 
 template <unsigned int dim>
 std::vector<double> Vector<dim>::to_std_vector() const {
-  assert(dim > 0);
+  if (dim <= 0) {
+    std::string msg = "Cannot construt std::vector from Vector<" + std::to_string(dim) + ">.";
+    throw InvalidInputException(msg);
+  }
   std::vector<double> v(dim);
   for(unsigned int i=0; i<dim; ++i) {
     v[i] = m_elements[i];

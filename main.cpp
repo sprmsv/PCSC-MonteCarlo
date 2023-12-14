@@ -11,6 +11,8 @@
 #include "io.hpp"
 #include "exceptions.hpp"
 
+#define DEBUG
+
 // To make sure that everything works with both distributions
 void test_approximations() {
 
@@ -75,10 +77,20 @@ void workflow() {
   std::cout << "Mean (Polynomial)    : " << mca->mean().reshaped(1, dim_out) << std::endl;
   std::cout << "Variance (Polynomial): " << mca->var().reshaped(1, dim_out) << std::endl;
 }
+void test_multipoly() {
+  Linear<3, 4> l1("tests/data/linear.dat");
+  MultivariatePolynomial<3, 4, 2> mp1("tests/data/multipoly.dat");
+
+  Vector<3> x(std::vector<double>({2., 0., 1.}));
+  std::cout << "Linear(x) = " << l1(x) << std::endl;
+  std::cout << "MultivariatePolynomial(x) = " << mp1(x) << std::endl;
+}
 
 int main_dev() {
   test_approximations();
   workflow();
+  test_multipoly();
+
   return 0;
 }
 
@@ -191,6 +203,12 @@ void launch_workflow(const ArgParser& parser) {
 }
 
 int main(int argc, char** argv){
+
+// TODO: REMOVE THIS
+#ifdef DEBUG
+  main_dev();
+  return 0;
+#endif
 
   //TODO: Implement online version (user input directly)
   if (argc == 1) {

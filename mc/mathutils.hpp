@@ -1,6 +1,8 @@
 #ifndef MC_MATHUTILS_HPP
 #define MC_MATHUTILS_HPP
 
+#include "exceptions.hpp"
+
 #include <cmath>
 #include <cfloat>
 #include <map>

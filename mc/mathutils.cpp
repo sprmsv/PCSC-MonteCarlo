@@ -1,5 +1,4 @@
 #include "mathutils.hpp"
-#include "exceptions.hpp"
 
 
 bool isequal(double a, double b) {

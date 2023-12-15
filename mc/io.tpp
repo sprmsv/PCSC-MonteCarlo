@@ -16,12 +16,12 @@ void write_csv(std::ostream& stream, const std::vector<Vector<dim>>& data) {
 }
 
 ArgParser::ArgParser(int argc, char* argv[])
-  : args(std::vector<std::string>(argv, argv + argc)) {
+  : args(std::vector<std::string>(argv, argv + argc))
+{
     this->parse();
 }
 
-void ArgParser::parse()
-{
+void ArgParser::parse() {
   auto pos_function = std::find(args.begin(), args.end(), "--function");
   auto pos_order = std::find(args.begin(), args.end(), "-k");
   auto pos_mode = std::find(args.begin(), args.end(), "--mode");
@@ -154,7 +154,7 @@ void ArgParser::parse()
 
 template <unsigned int dim_inp, unsigned int dim_out>
 Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
-: m_parser(parser)
+  : m_parser(parser)
 {
   // Construct the function dynamically
   if ((m_parser.functype == "linear")) {
@@ -270,8 +270,7 @@ void Workflow<dim_inp, dim_out>::launch() {
 
 template <unsigned int dim_inp, unsigned int dim_out>
 void Workflow<dim_inp, dim_out>::write_report(
-  std::ostream& stream, const std::map<std::string, Eigen::VectorXd>& stats)
-{
+  std::ostream& stream, const std::map<std::string, Eigen::VectorXd>& stats) {
   // Set parameters
   int w_title = 20;
   int w_line = 80;

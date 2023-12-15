@@ -1,13 +1,13 @@
 #ifndef MC_SAMPLER_HPP
 #define MC_SAMPLER_HPP
 
-#include <functional>
-#include <string>
+#include "distributions.hpp"
+#include "vector.hpp"
 
 #include <Eigen/Core>
 
-#include "distributions.hpp"
-#include "vector.hpp"
+#include <functional>
+#include <string>
 
 
 /**

@@ -65,28 +65,24 @@ TEST_F(SamplerTest, Moment4){
 TEST_F(SamplerTest, Skewness){
   Eigen::VectorXd expected_skewness(2);
   expected_skewness << 0.3140652553488, 0.6894953146694;
-  std::cout << mca->skewness() << std::endl;
   EXPECT_TRUE(mca->skewness().isApprox(expected_skewness));
 }
 
 TEST_F(SamplerTest, Kurtosis){
   Eigen::VectorXd expected_kurtosis(2);
   expected_kurtosis << 1.8458905652557, 2.2464457891970;
-  std::cout << mca->kurtosis() << std::endl;
   EXPECT_TRUE(mca->kurtosis().isApprox(expected_kurtosis));
 }
 
 TEST_F(SamplerTest, Hyperskewness){
   Eigen::VectorXd expected_hyperskewness(2);
   expected_hyperskewness << 1.3935649003221, 2.8648065866564;
-  std::cout << mca->hyperskewness() << std::endl;
   EXPECT_TRUE(mca->hyperskewness().isApprox(expected_hyperskewness));
 }
 
 TEST_F(SamplerTest, Hypertailedness){
   Eigen::VectorXd expected_hypertailedness(2);
   expected_hypertailedness << 3.9614845940708, 6.0915113577404;
-  std::cout << mca->hypertailedness() << std::endl;
   EXPECT_TRUE(mca->hypertailedness().isApprox(expected_hypertailedness));
 }
 

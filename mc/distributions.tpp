@@ -8,9 +8,7 @@ Distribution<dim>::Distribution()
 }
 
 template<unsigned int dim>
-Distribution<dim>::~Distribution()
-{
-}
+Distribution<dim>::~Distribution() {}
 
 template<unsigned int dim>
 std::shared_ptr<std::vector<Vector<dim>>> Distribution<dim>::samples(const int n)
@@ -61,9 +59,7 @@ Uniform<dim>::Uniform(const double& lower, const double& upper):
 }
 
 template<unsigned int dim>
-Uniform<dim>::~Uniform()
-{
-}
+Uniform<dim>::~Uniform() {}
 
 template<unsigned int dim>
 double Uniform<dim>::sample_dim(const int d)
@@ -164,9 +160,7 @@ Normal<dim>::Normal(const double& mean, const double& variance):
 }
 
 template<unsigned int dim>
-Normal<dim>::~Normal()
-{
-}
+Normal<dim>::~Normal() {}
 
 template<unsigned int dim>
 Vector<dim> Normal<dim>::mean()

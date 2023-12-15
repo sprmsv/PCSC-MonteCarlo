@@ -11,9 +11,6 @@
 #include <ctime>
 
 
-// TODO: Can be a user-input
-// We can simply change it to time(0) if we do not want reproducibility
-
 #ifndef RAND_SEED
 /// @brief Seed for random number generation.
 #define RAND_SEED 42

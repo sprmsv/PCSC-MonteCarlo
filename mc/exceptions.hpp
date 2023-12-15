@@ -66,13 +66,4 @@ struct InvalidInputException : public Exception
     : Exception(mesg) {};
 };
 
-// TODO: Remove? Not used anywhere?
-/// @brief Exception for handling the cases when a requested dimension is not supported.
-struct DimensionNotSupported : public Exception
-{
-  /// @brief construct an exception object.
-  DimensionNotSupported(const std::string &mesg = "")
-    : Exception(mesg) {};
-};
-
 #endif

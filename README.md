@@ -69,7 +69,7 @@ The distribution of the random variable $X$ is defined by the user. The followin
 
 This library deals with the statistical study of non-linear operators by approximating expectations and statistical moments using Monte Carlo methods.
 
-All the following instructions presume that the current working directory is the project's root directory.
+All the following instructions presume that the repository is cloned and the current working directory is the project's root directory.
 
 First, make sure that [Doxygen](https://www.doxygen.nl/manual/install.html) and [Graphviz](https://graphviz.org/download/) are installed:
 ```bash
@@ -84,31 +84,30 @@ git submodule update --init eigen
 git submodule update --init gtest
 ```
 
-To build the project:
+To build the project, run the following commands:
 ```bash
 cmake -S . -B ./build
 cmake --build ./build
 ```
 
-To open the documentation:
+The documentation is also automatically built, provided that Doxygen is installed. To open the documentation, you can use the following command:
 ```bash
 open build/documentation/html/index.html
 ```
 
 ## Main features
 
-Typical usage:
+Typical usage of the program is:
 ```bash
 mkdir out
 build/main --function tests/data/linear.dat --output ./out
 ```
 
-## Tests
+Running this command will print approximations of statistical moments of the provided finction and also stores the report and the samples of the function to an output directory. However, generating the output files is optional. The methods used in the approximations (e.g., number of samples, source distribution, additional moment, etc.) can be configured using additional input arguments. A full list is available in the following sections.
 
-To run the tests:
-```bash
-build/tests
-```
+Another functionality is testing the Central Limit Theorem for the provided function. This can be achieved by passin `--clt 1`. Doing this, in addition to the statistical moments, the Central Limit Theorem is also performed and relative errors (empirical vs. approximated theoretical mean and variance) will be printed out for 10, 50, and 90 samples.
+
+## Tests
 
 Implemented tests:
 
@@ -134,6 +133,13 @@ Implemented tests:
 
 The tests are implemented using the Google Test library. The tests are located in the `tests` directory. Each test is built assuming previous correct tests (VectorSum assumes VectorSize works properly).
 
+
+You can run all the tests using the following command:
+```bash
+build/tests
+```
+
+
 ## Command-line interface
 
 | Argument    | Description | Required |
@@ -147,14 +153,14 @@ The tests are implemented using the Google Test library. The tests are located i
 | --plot | Whether to save plots of samples | No (default: none) |
 | --clt | Whether to print the central limit theorem output| No (default: 0) |
 
-To see the input arguments:
+To see the full list of input arguments you can use the following command:
 ```bash
 build/main --help
 ```
 
 To run the code:
 ```bash
-build/main ...
+build/main --function <path-to-input-function> [options]
 ```
 
 ## Limitations

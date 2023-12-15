@@ -46,6 +46,9 @@ public:
   /// @brief Destroy the object.
   ~MonteCarloApproximator();
 
+  /// @brief Return the underlying data.
+  std::vector<Vector<dim>>& data();
+
   /**
    * @brief Calculate an approximated moment of the samples.
    * @param orders The moment order in each dimension.

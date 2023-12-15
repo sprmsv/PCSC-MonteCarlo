@@ -1,13 +1,5 @@
 # OUR TODO LIST
 
-*. CSVWriter header file + document
-*. Improve output files
-*. Set precision and formatting for the output streams
-    - use std::cout.flush()
-    - use ofstream.setf(std::ios::scientific)
-    - use ofstream.setf(std::ios::showpos)
-    - use ofstream.precision(4)
-
 !!. Fix the tests + check the tests
 
 * Change unnecessary pointers to references + use smart pointers

@@ -1,6 +1,20 @@
 #include "io.hpp"
 
 
+void write_line(std::ostream& stream, char symbol, int width) {
+  for (int i=0; i < width; ++i) {
+    stream << symbol;
+  }
+  stream << std::endl;
+}
+
+template <unsigned int dim>
+void write_csv(std::ostream& stream, const std::vector<Vector<dim>>& data) {
+  for (const auto& vec : data) {
+    stream << vec << std::endl;
+  }
+}
+
 ArgParser::ArgParser(int argc, char* argv[])
   : args(std::vector<std::string>(argv, argv + argc)) {
     this->parse();
@@ -150,7 +164,7 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   }
   // TODO: Add other function types (some of them only with dim_out = 1 specialization)
   else {
-    throw FunctionNotSupported("--function");
+    throw FunctionNotSupported(m_parser.functype + " is not supported.");
   }
 
   // Construct the distibution and MCA
@@ -167,20 +181,10 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   else {
     throw InvalidArgumentException("--dist");
   }
-
-  std::cout << "Number of samples: " << m_parser.n_samples << std::endl;
-
-  if (m_parser.clt){
-    (*this).clt(10);
-  }
-
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
 void Workflow<dim_inp, dim_out>::launch() {
-
-  // TODO: Measure time and report
-
   // Calculate the statistics
   std::map<std::string, Eigen::VectorXd> stats {
     {"mean", m_mca->mean()},
@@ -192,53 +196,101 @@ void Workflow<dim_inp, dim_out>::launch() {
     {"hypertailedness", m_mca->hypertailedness()}
   };
   if (m_parser.order > 0) {
-    stats.insert({"moment ({" + std::to_string(m_parser.order) + "}, {" + m_parser.mode + "})", m_mca->moment(m_parser.order, m_parser.mode)});
+    stats.insert(
+        {"moment ({" + std::to_string(m_parser.order) + "}, {" + m_parser.mode + "})",
+        m_mca->moment(m_parser.order, m_parser.mode)}
+    );
   }
 
-  // TODO: Separate the following steps in other methods
+  // Print the statistics to standard output
+  write_report(std::cout, stats);
 
-  // TODO: Write info about the parser to stdout
-  // ...
-  // Write stats to standard output
-  for (std::pair<std::string, Eigen::VectorXd> pair : stats) {
-    auto& stat = pair.first;
-    auto& value = pair.second;
-    std::cout << stat << ": " << value.reshaped(1, m_parser.dim_out) << std::endl;
-  }
-
-  // Output file
-  if (!m_parser.output.empty()) {
-    // TODO: Write info about the parser to an output file
-    // ...
-
-    // TODO: Write stats to an output file
-    CSVWriter<dim_out> csv(m_parser.output, "stats");
-    std::vector<Vector<dim_out>> stats_vec;
-    for (std::pair<std::string, Eigen::VectorXd> pair : stats) {
-      auto& stat = pair.first;
-      auto& value = pair.second;
-      Vector<dim_out> row;
-      for (int i = 0; i < dim_out; ++i) {
-        row[i] = value[i];
-      }
-      stats_vec.push_back(row);
+  // Generate clt convergence results
+  if (m_parser.clt) {
+    int w_line = 80;
+    write_line(std::cout, '-', w_line);
+    std::cout << "CENTRAL LIMIT THEOREM" << std::endl;
+    write_line(std::cout, '-', w_line);
+    for (int n = 10; n < 100; n += 40) {
+      auto errors = clt(n);
+      std::cout << std::left << std::setw(20) << "n = " + std::to_string(n) << std::endl;
+      std::cout << std::right << std::setw(20) << "err_rel_mean" << ": " << errors.first << std::endl;
+      std::cout << std::right << std::setw(20) << "err_rel_var" << ": " << errors.second << std::endl;
     }
-    csv.writeCSV(stats_vec);
+    std::cout << std::endl;
+  }
 
+  // Write to output directory
+  if (!m_parser.output.empty()) {
+    // Open a report file in the output directory and write report
+    std::string reportfile = m_parser.output + "/" + "report.out";
+    std::ofstream reportstream(reportfile);
+    if (reportstream.is_open()) {
+      write_report(reportstream, stats);
+      reportstream.close();
+      std::cout << "Report is stored in \"" + reportfile + "\"." << std::endl;
+    }
+    else {
+      std::cerr << "Error opening file: \"" << reportfile << "\"." << std::endl;
+    }
 
-    // TODO: Write mca->m_samples to an output file
-    // ...
+    // Open a csv file in the output directory and export the samples
+    std::string samplesfile = m_parser.output + "/" + "samples.csv";
+    std::ofstream samplesstream(samplesfile);
+    if (samplesstream.is_open()) {
+      write_csv(samplesstream, m_mca->data());
+      samplesstream.close();
+      std::cout << "Samples are exported to \"" + samplesfile + "\"." << std::endl;
+    }
+    else {
+      std::cerr << "Error opening file: \"" << samplesfile << "\"." << std::endl;
+    }
 
     // TODO: Plot mca->samples and save it
     if (m_parser.plot) {
       // ...
     }
-
-    // TODO: Plot CLT convergence and save it
-    if (m_parser.clt) {
-    }
-
   }
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+void Workflow<dim_inp, dim_out>::write_report(
+  std::ostream& stream, const std::map<std::string, Eigen::VectorXd>& stats)
+{
+  // Set parameters
+  int w_title = 20;
+  int w_line = 80;
+
+  // Write info about the approximations
+  write_line(stream, '-', w_line);
+  stream << "INFO" << std::endl;
+  write_line(stream, '-', w_line);
+  stream << std::left << std::setw(w_title) << "function file" << ": " << m_parser.function << std::endl;
+  stream << std::left << std::setw(w_title) << "function type" << ": " << m_parser.functype << std::endl;
+  stream << std::left << std::setw(w_title) << "input dimension" << ": " << m_parser.dim_inp << std::endl;
+  stream << std::left << std::setw(w_title) << "output dimension" << ": " << m_parser.dim_out << std::endl;
+  stream << std::left << std::setw(w_title) << "srouce distribution" << ": " << m_parser.dist << std::endl;
+  stream << std::left << std::setw(w_title) << "number of samples" << ": " << m_parser.n_samples << std::endl;
+  stream << std::left << std::setw(w_title) << "output directory" << ": " << m_parser.output << std::endl;
+  stream << std::endl;
+
+  // Set the numeric output settings
+  stream.setf(std::ios::scientific);
+  stream.setf(std::ios::showpos);
+  stream.precision(4);
+
+  // Write the statistics
+  write_line(stream, '-', w_line);
+  stream << "APPROXIMATED STATISTICS" << std::endl;
+  write_line(stream, '-', w_line);
+  for (std::pair<std::string, Eigen::VectorXd> pair : stats) {
+    auto& stat = pair.first;
+    auto& value = pair.second;
+    stream << std::left << std::setw(w_title) << stat.c_str() << ": ";
+    stream << value.reshaped(1, m_parser.dim_out) << std::endl;
+  }
+  stream << std::endl;
+  stream.flush();
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
@@ -249,39 +301,25 @@ Workflow<dim_inp, dim_out>::~Workflow() {
 
 // replace clt() with run()
 template<unsigned int dim_inp, unsigned int dim_out>
-void Workflow<dim_inp, dim_out>::clt(int n) {
-  int N = 1000;  // Number of samples to use for the CLT
+std::pair<Vector<dim_out>, Vector<dim_out>> Workflow<dim_inp, dim_out>::clt(int n) {
 
-  std::vector<Vector<dim_out>> relative_error(2);
-  // Formerly get_sample_means
-  const int m = 1000;  // A sufficiently large number to get the right distribution
-  std::vector<Vector<dim_out>> means(m);
-  for(int i = 0; i < m; ++i){
-    means[i] = m_function->mean(n, m_distribution);
-    if (i % 100 == 0) {
-    }
-  }
-  // Formerly is_clt_valid
+  std::pair<Vector<dim_out>, Vector<dim_out>> relative_error;
+
+  // Get samples from the approximated mean distribution ($\mu_n$)
+  std::vector<Vector<dim_out>> means(m_parser.n_samples);
+  std::for_each(means.begin(), means.end(),
+    [this, n](auto& mean){mean = this->m_function->mean(n, this->m_distribution);});
+
+  // Get MC approximator from the means
   MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
 
-  Vector<dim_out> mean_the = m_function->mean(N, m_distribution);
-  // Handle the case where the theoretical mean is zero
-  for (int i = 0; i < dim_out; ++i) {
-    if (mean_the[i] < 1.e-10) {
-      mean_the[i] = 1.e-10;
-    }
-  }
-  relative_error[0] = (mean_the - mca.mean()).abs() / mean_the;  // theoretical mean vs. Mean of means
-  
-  Vector<dim_out> var_the = m_function->var(N, m_distribution) / n;
-  // Handle the case where the theoretical variance is zero
-  for (int i = 0; i < dim_out; ++i) {
-    if (var_the[i] < 1.e-10) {
-      var_the[i] = 1.e-10;
-    }
-  }
-  relative_error[1] = (var_the - mca.var()).abs() / var_the;  // theoretical variance vs. Variance of means
+  // Get the theoretical mean using a more accurate approximation
+  Vector<dim_out> mean_the = m_function->mean(m_parser.n_samples, m_distribution);
+  relative_error.first = (mean_the - mca.mean()).abs() / mean_the;
 
-  std::cout << "Mean (Polynomial)    : " << relative_error[0] << std::endl;
-  std::cout << "Variance (Polynomial): " << relative_error[1] << std::endl;
+  // Get the theoretical variance using a more accurate approximation
+  Vector<dim_out> var_the = m_function->var(m_parser.n_samples, m_distribution) / n;
+  relative_error.second = (var_the - mca.var()).abs() / var_the;
+
+  return relative_error;
 }

@@ -300,7 +300,7 @@ std::ostream& operator<<(std::ostream& stream, const Vector<dim>& v) {
     for (int idx = 0; idx < dim; ++idx){
         stream << v[idx];
         if (idx < dim - 1){
-            stream << " ";
+            stream << ", ";
         }
    }
 

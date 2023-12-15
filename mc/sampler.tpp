@@ -8,6 +8,11 @@ template<unsigned int dim>
 MonteCarloApproximator<dim>::~MonteCarloApproximator() {}
 
 template<unsigned int dim>
+std::vector<Vector<dim>>& MonteCarloApproximator<dim>::data() {
+  return *m_samples;
+}
+
+template<unsigned int dim>
 double MonteCarloApproximator<dim>::moment_dim(unsigned int k, std::string mode, const Eigen::VectorXd& samples_dim) {
 
   if (mode == "raw"){

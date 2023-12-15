@@ -14,9 +14,23 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
+#include <utility>
 #include <sys/types.h>
 #include <sys/stat.h>
 
+/// @brief Writes a line with a character to a stream.
+/// @param stream The stream.
+/// @param width The width of the line.
+/// @param symbol The symbol to repeat.
+void write_line(std::ostream& stream, char symbol = '-', int width = 80);
+
+/// @brief Exports a set of vectors to a stream in CSV format.
+/// @tparam dim The dimension of the vectors.
+/// @param stream The output stream.
+/// @param data The vectors.
+template <unsigned int dim>
+void write_csv(std::ostream& stream, const std::vector<Vector<dim>>& data);
 
 /// @brief Class for parsing the input arguments and storing them.
 class ArgParser
@@ -73,7 +87,10 @@ public:
   void launch();
 
   /// @brief Launch the workflow for calculating errors of the central limit theorem.
-  void clt(int n = 10);
+  std::pair<Vector<dim_out>, Vector<dim_out>> clt(int n = 10);
+
+  /// @brief Launch the workflow for calculating errors of the central limit theorem.
+  void write_report(std::ostream& stream, const std::map<std::string, Eigen::VectorXd>& stats);
 
 private:
   /// @brief Argument parser.
@@ -86,29 +103,6 @@ private:
   std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
 };
 
-/**
- * @brief Class for writing a set of vectors to a CSV file.
- * @tparam dim The dimension of the vectors.
- */
-template <unsigned int dim>
-class CSVWriter
-{
-public:
-  /// @brief Construct a CSVWriter object.
-  /// @param dir Directory of the output
-  /// @param filename Filename.
-  CSVWriter(const std::string& dir, const std::string& filename);
-
-  /// @brief Write the data to the file
-  /// @param data 
-  /// @return True if writing to the file has been successful.
-  bool writeCSV(const std::vector<Vector<dim>>& data);
-private:
-  std::string outputDir;
-  std::string filename;
-};
-
 #include "io.tpp"
-#include "csvwriter.tpp"
 
 #endif

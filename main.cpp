@@ -11,7 +11,6 @@
 #include "io.hpp"
 #include "exceptions.hpp"
 
-#define DEBUG
 
 // To make sure that everything works with both distributions
 void test_approximations() {

@@ -187,18 +187,18 @@ template <unsigned int dim_inp, unsigned int dim_out>
 void Workflow<dim_inp, dim_out>::launch() {
   // Calculate the statistics
   std::map<std::string, Eigen::VectorXd> stats {
-    {"mean", m_mca->mean()},
-    {"variance", m_mca->var()},
-    {"std", m_mca->std()},
-    {"skewness", m_mca->skewness()},
-    {"kurtosis", m_mca->kurtosis()},
-    {"hyperskewness", m_mca->hyperskewness()},
-    {"hypertailedness", m_mca->hypertailedness()}
+    {"mean", m_mca.mean()},
+    {"variance", m_mca.var()},
+    {"std", m_mca.std()},
+    {"skewness", m_mca.skewness()},
+    {"kurtosis", m_mca.kurtosis()},
+    {"hyperskewness", m_mca.hyperskewness()},
+    {"hypertailedness", m_mca.hypertailedness()}
   };
   if (m_parser.order > 0) {
     stats.insert(
         {"moment ({" + std::to_string(m_parser.order) + "}, {" + m_parser.mode + "})",
-        m_mca->moment(m_parser.order, m_parser.mode)}
+        m_mca.moment(m_parser.order, m_parser.mode)}
     );
   }
 
@@ -238,7 +238,7 @@ void Workflow<dim_inp, dim_out>::launch() {
     std::string samplesfile = m_parser.output + "/" + "samples.csv";
     std::ofstream samplesstream(samplesfile);
     if (samplesstream.is_open()) {
-      write_csv(samplesstream, m_mca->data());
+      write_csv(samplesstream, m_mca.data());
       samplesstream.close();
       std::cout << "Samples are exported to \"" + samplesfile + "\"." << std::endl;
     }

@@ -3,11 +3,6 @@
 !!. Fix the tests + check the tests
 
 * Change unnecessary pointers to references + use smart pointers
-    - MonteCarloApproximator(std::shared_ptr<std::vector<Vector<dim>>> samples) -> by-reference?
-    - MonteCarloApproximator::m_samples -> reference?
-
-    - Workflow::m_function -> reference?
-    - Workflow::m_dist -> reference?
 
     - Function::mca(unsigned int n, Distribution<dim_inp>* dist) -> dist by-reference !! output by-reference?
     - Function::mean -> dist by-reference !!

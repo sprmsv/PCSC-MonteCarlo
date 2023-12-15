@@ -40,6 +40,9 @@ template <unsigned int dim = 1>
 class MonteCarloApproximator
 {
 public:
+  /// @brief Construct a MonteCarloApproximator object.
+  MonteCarloApproximator() = default;
+
   /// @brief Construct a MonteCarloApproximator object from a set of samples.
   MonteCarloApproximator(std::shared_ptr<std::vector<Vector<dim>>> samples);
 

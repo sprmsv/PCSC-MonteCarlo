@@ -53,10 +53,10 @@ void test_approximations() {
 
   // Print sample approximations
   // TODO: Which distributions should be used?
-  std::cout << "Mean (Polynomial)    : " << mca_poly_uniform->mean().reshaped(1, dim_out) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_poly_uniform->var().reshaped(1, dim_out) << std::endl;
-  std::cout << "Mean (Polynomial)    : " << mca_poly_normal->mean().reshaped(1, dim_out) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca_poly_normal->var().reshaped(1, dim_out) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_uniform.mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_uniform.var().reshaped(1, dim_out) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca_poly_normal.mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca_poly_normal.var().reshaped(1, dim_out) << std::endl;
 }
 
 // Just to show the workflow can be short
@@ -73,8 +73,8 @@ void workflow() {
   auto mca = poly.mca(n, &dist);
 
   // Print approximations
-  std::cout << "Mean (Polynomial)    : " << mca->mean().reshaped(1, dim_out) << std::endl;
-  std::cout << "Variance (Polynomial): " << mca->var().reshaped(1, dim_out) << std::endl;
+  std::cout << "Mean (Polynomial)    : " << mca.mean().reshaped(1, dim_out) << std::endl;
+  std::cout << "Variance (Polynomial): " << mca.var().reshaped(1, dim_out) << std::endl;
 }
 void test_multipoly() {
   Linear<3, 4> l1("tests/data/linear.dat");

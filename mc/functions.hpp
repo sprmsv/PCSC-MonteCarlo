@@ -81,7 +81,7 @@ public:
    * @param dist The source distribution.
    * @return std::unique_ptr<MonteCarloApproximator<dim_out>> The Monte Carlo approximator.
    */
-  std::unique_ptr<MonteCarloApproximator<dim_out>> mca(unsigned int n, Distribution<dim_inp>* dist);
+  MonteCarloApproximator<dim_out> mca(unsigned int n, Distribution<dim_inp>* dist);
 
   /// @brief Return the approximated mean value of the function using n samples from a given distribution.
   Vector<dim_out> mean(unsigned int n, Distribution<dim_inp>* dist);

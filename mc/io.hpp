@@ -100,7 +100,7 @@ private:
   /// @brief Source distribution.
   Distribution<dim_inp>* m_distribution;
   /// @brief Monte Carlo approximator.
-  std::unique_ptr<MonteCarloApproximator<dim_out>> m_mca;
+  MonteCarloApproximator<dim_out> m_mca;
 };
 
 #include "io.tpp"

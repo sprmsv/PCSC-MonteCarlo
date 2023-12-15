@@ -8,7 +8,9 @@ Given a probablity space $(\Omega, \mathcal{F}, P)$, a function $f \colon \mathb
 
 A set of samples $\{X_i\}_{i=1}^N$ is drawn from the distribution of $X$ and the statistical moments are approximated as follows:
 
-\[ \mathbb{E}[f(X)^k] \approx \frac{1}{N} \sum_{i=1}^N f(X_i)^k \]
+$$
+    \mathbb{E}[f(X)^k] \approx \frac{1}{N} \sum_{i=1}^N f(X_i)^k
+$$
 
 for $k \in \mathbb{N}$. Other statistical properties are provided if necessary by the program : variance, standard deviation, skewness, kurtosis, hyper-skewness, hyper-kurtosis.
 
@@ -16,38 +18,40 @@ The functions currently supported by the library are the following:
 
 - Multivariate polynomial
 
- The function \f$ p(u): R^m -> R^n \f$ is evaluated on a vector as
- \f[
+ The function $ p(u): R^m -> R^n $ is evaluated on a vector as
+$$
     p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k),
- \f]
- where \f$ K \f$ is the order of the polynomial,
- \f$ A_k \in R^{m, n} \f$ are coefficients of the function,
- \f$ b \in R^n \f$ is the biase vector,
- and \f$ pow \f$ is the element-wise power function.
+$$
 
-- Exponential sum
- The function \f$ f(u): R^m -> R \f$ is evaluated on a vector as
- \f[
-    f(u) = \sum_{k=0}^{K} c_k . log((k+1)u),
- \f]
+ where $ K $ is the order of the polynomial,
+ $ A_k \in R^{m, n} $ are coefficients of the function,
+ $ b \in R^n $ is the biase vector,
+ and $ pow $ is the element-wise power function.
 
- - Logarithmic sum
+- Logarithmic sum
+ The function $ f(u): R^m -> R $ is evaluated on a vector as
+$$
+    
+$$
+ where $ K $ is the order of the summation, $ c_k \in R^m $ are coefficients of the function, and $ log $ is the element-wise logarithm function.
+
+ - Exponential sum
  The function \f$ f(u): R^m -> R \f$ is evaluated on a vector as
- \f[
+ $$
      f(u) = \sum_{k=0}^{K} c_k . exp(ku),
-  \f]
-  where \f$ K \f$ is the order of the summation,
-  \f$ c_k \in R^m \f$ are coefficients of the function,
-  and \f$ exp \f$ is the element-wise exponential function.
+$$
+  where $ K $ is the order of the summation,
+  $ c_k \in R^m $ are coefficients of the function,
+  and $ exp $ is the element-wise exponential function.
  
  - Polynomials
- The function \f$ p(u): R^m -> R \f$ is evaluated on a vector as
- \f[
+ The function $ p(u): R^m -> R $ is evaluated on a vector as
+$$
    p(u) = \sum_{k=0}^{K} c_k . pow(u, k),
- \f]
- where \f$ K \f$ is the order of the polynomial,
- \f$ c_k \in R^m \f$ are coefficients of the polynomial,
- and \f$ pow \f$ is the element-wise power function.
+$$
+ where $ K $ is the order of the polynomial,
+ $ c_k \in R^m $ are coefficients of the polynomial,
+ and $ pow $ is the element-wise power function.
 
  - Any combination of the above functions. The operators between functions are the following:
    - Addition
@@ -57,8 +61,8 @@ The functions currently supported by the library are the following:
 
 The distribution of the random variable $X$ is defined by the user. The following distributions are currently supported:
 
-- Uniform distribution
-- Normal distribution
+- Uniform distribution $U(a, b)$
+- Normal distribution $\mathcal{N}(\mu, \sigma^2)$
 
 
 ## Code Compilation and Documentation

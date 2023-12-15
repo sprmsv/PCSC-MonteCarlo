@@ -238,7 +238,7 @@ private:
 };
 
 /**
- * @brief Function class for a parameterized summation over element-wise exponential functions.
+ * @brief Functor class for a parameterized summation over element-wise exponential functions.
  * The output dimension is always 1.
  * The function \f$ f(u): R^m -> R \f$ is evaluated on a vector as
  * \f[
@@ -284,7 +284,7 @@ private:
 };
 
 /**
- * @brief Function class for a parameterized summation over element-wise logarithm functions.
+ * @brief Functor class for a parameterized summation over element-wise logarithm functions.
  * The output dimension is always 1.
  * The function \f$ f(u): R^m -> R \f$ is evaluated on a vector as
  * \f[
@@ -330,7 +330,7 @@ private:
 };
 
 /**
- * @brief Function class for a parameterized vectorial multivariate polynomial.
+ * @brief Functor class for a parameterized vectorial multivariate polynomial.
  * The function \f$ p(u): R^m -> R^n \f$ is evaluated on a vector as
  * \f[
  *    p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k),

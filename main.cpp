@@ -48,8 +48,8 @@ void test_approximations() {
   const int dim_inp = 3;
   const int dim_out = 1;
   Polynomial<dim_inp> poly("tests/data/poly.dat");
-  auto mca_poly_uniform = poly.mca(n, &uniform);
-  auto mca_poly_normal = poly.mca(n, &normal);
+  auto mca_poly_uniform = poly.mca(n, uniform);
+  auto mca_poly_normal = poly.mca(n, normal);
 
   // Print sample approximations
   // TODO: Which distributions should be used?
@@ -70,7 +70,7 @@ void workflow() {
   Normal<dim_inp> dist(0., 1.);
   // Pass samples through a function and define the approximator
   Polynomial<dim_inp> poly("tests/data/poly.dat");
-  auto mca = poly.mca(n, &dist);
+  auto mca = poly.mca(n, dist);
 
   // Print approximations
   std::cout << "Mean (Polynomial)    : " << mca.mean().reshaped(1, dim_out) << std::endl;

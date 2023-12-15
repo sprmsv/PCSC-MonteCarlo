@@ -171,12 +171,12 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   // TODO: Parameterize mean and variance
   if (m_parser.dist == "uniform") {
     m_distribution = new Uniform<dim_inp>(0., 1.);
-    m_mca = m_function->mca(m_parser.n_samples, m_distribution);
+    m_mca = m_function->mca(m_parser.n_samples, *m_distribution);
   }
   // TODO: Parameterize mean and variance
   else if (m_parser.dist == "normal") {
     m_distribution = new Normal<dim_inp>(0., 1.);
-    m_mca = m_function->mca(m_parser.n_samples, m_distribution);
+    m_mca = m_function->mca(m_parser.n_samples, *m_distribution);
   }
   else {
     throw InvalidArgumentException("--dist");
@@ -308,17 +308,17 @@ std::pair<Vector<dim_out>, Vector<dim_out>> Workflow<dim_inp, dim_out>::clt(int 
   // Get samples from the approximated mean distribution ($\mu_n$)
   std::vector<Vector<dim_out>> means(m_parser.n_samples);
   std::for_each(means.begin(), means.end(),
-    [this, n](auto& mean){mean = this->m_function->mean(n, this->m_distribution);});
+    [this, n](auto& mean){mean = this->m_function->mean(n, *(this->m_distribution));});
 
   // Get MC approximator from the means
   MonteCarloApproximator<dim_out> mca(std::make_shared<std::vector<Vector<dim_out>>>(means));
 
   // Get the theoretical mean using a more accurate approximation
-  Vector<dim_out> mean_the = m_function->mean(m_parser.n_samples, m_distribution);
+  Vector<dim_out> mean_the = m_function->mean(m_parser.n_samples, *m_distribution);
   relative_error.first = (mean_the - mca.mean()).abs() / mean_the;
 
   // Get the theoretical variance using a more accurate approximation
-  Vector<dim_out> var_the = m_function->var(m_parser.n_samples, m_distribution) / n;
+  Vector<dim_out> var_the = m_function->var(m_parser.n_samples, *m_distribution) / n;
   relative_error.second = (var_the - mca.var()).abs() / var_the;
 
   return relative_error;

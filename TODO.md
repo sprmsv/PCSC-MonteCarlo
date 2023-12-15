@@ -2,13 +2,6 @@
 
 !!. Fix the tests + check the tests
 
-* Change unnecessary pointers to references + use smart pointers
-
-    - Function::mca(unsigned int n, Distribution<dim_inp>* dist) -> dist by-reference !! output by-reference?
-    - Function::mean -> dist by-reference !!
-    - Function::var -> dist by-reference !!
-    - Workflow::m_mca -> reference / copy?
-
 *. Make some of the class members private/protected
 
 *. Features not used:

@@ -18,29 +18,34 @@ The functions currently supported by the library are the following:
 
 - Multivariate polynomial
 
-The function $p(u)\colon \mathbb{R}^m \to \mathb{R}^n$ is evaluated on a vector as 
+The function $p(u) \colon \mathbb{R}^m \to \mathbb{R}^n$ is evaluated on a vector as 
+
 $$ p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k), $$
 
 where $ K $ is the order of the polynomial, $ A_k \in \mathbb{R}^{m, n} $ are coefficients of the function, $ b \in \mathbb{R}^n $ is the biase vector, and $ pow $ is the element-wise power function.
 
+- Linear function
+The function $f(u)\colon \mathbb{R}^m \to \mathbb{R}^n $ is evaluated on a vector as
+
+$$ f(u) = Au + b, $$
+
+where $ A \in \mathbb{R}^{n, m} $ is the linear operator, and $ b \in \mathbb{R}^n $ is the biase vector.
+
 - Logarithmic sum
-The function $ f(u)\colon \mathbb{R}^m -> \mathbb{R} $ is evaluated on a vector as
-$$f(u) = \sum_{k=0}^{K} c_k \cdot \log((k+1)u),$$
+The function $ f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as 
+$$ f(u) = \sum_{k=0}^{K} c_k \cdot \log((k+1)u),$$
 where $ K $ is the order of the summation, $ c_k \in \mathbb{R}^m $ are coefficients of the function, and $ \log $ is the element-wise logarithm function.
 
 - Exponential sum
 The function $f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 $$ f(u) = \sum_{k=0}^{K} c_k \cdot \exp(ku),$$
-where $ K $ is the order of the summation,
-$ c_k \in \mathbb{R}^m $ are coefficients of the function,
-and $ \exp $ is the element-wise exponential function.
+where $ K $ is the order of the summation, $ c_k \in \mathbb{R}^m $ are coefficients of the function, and $ \exp $ is the element-wise exponential function.
 
 - Polynomials
+
 The function $p(u): \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 $$ p(u) = \sum_{k=0}^{K} c_k \cdot pow(u, k),$$
-where $ K $ is the order of the polynomial,
-$ c_k \in \mathbb{R}^m $ are coefficients of the polynomial,
-and $ pow $ is the element-wise power function.
+where $ K $ is the order of the polynomial, $ c_k \in \mathbb{R}^m $ are coefficients of the polynomial, and $ pow $ is the element-wise power function.
 
 - Any combination of the above functions. The operators between functions are the following:
    - Addition

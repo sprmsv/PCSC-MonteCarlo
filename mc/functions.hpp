@@ -66,9 +66,6 @@ public:
   /// @brief Construct a combined function from the present function an another one by dividing their outputs.
   CombinedFunctionDiv<dim_inp, dim_out> operator/(const Function<dim_inp, dim_out>&) const;
 
-  /// @brief Call the function on an input and return its output.
-  virtual Vector<dim_out> call(const Vector<dim_inp>& x) const = 0;
-
   /**
    * @brief Construct a Monte Carlo Approximator object by sampling the function.
    * Random samples ar drawn from the given distribution.
@@ -87,6 +84,15 @@ public:
   Vector<dim_out> mean(unsigned int n, Distribution<dim_inp>& dist);
   /// @brief Return the approximated variance of the function using n samples from a given distribution.
   Vector<dim_out> var(unsigned int n, Distribution<dim_inp>& dist);
+
+protected:
+  friend CombinedFunctionSum<dim_inp, dim_out>;
+  friend CombinedFunctionSub<dim_inp, dim_out>;
+  friend CombinedFunctionMul<dim_inp, dim_out>;
+  friend CombinedFunctionDiv<dim_inp, dim_out>;
+
+  /// @brief Call the function on an input and return its output.
+  virtual Vector<dim_out> call(const Vector<dim_inp>& x) const = 0;
 };
 
 /// @brief Base class for combining two functions by aggregating their outputs.
@@ -100,6 +106,7 @@ public:
   /// @brief Copy a CombinedFunction object.
   CombinedFunction(const CombinedFunction<dim_inp, dim_out>& f);
 
+protected:
   /// @brief The first (left) source function.
   const Function<dim_inp, dim_out>& m_f1;
   /// @brief The second (right) source function.
@@ -122,6 +129,7 @@ public:
     const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2, const Args&... args)
     : CombinedFunctionSum<dim_inp, dim_out>(f1, CombinedFunctionSum<dim_inp, dim_out>(f2, args...)) {};
 
+private:
   /// @brief Call the combined function by calling the source functions.
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
@@ -140,6 +148,7 @@ public:
     const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2, const Args&... args)
     : CombinedFunctionSub<dim_inp, dim_out>(f1, CombinedFunctionSub<dim_inp, dim_out>(f2, args...)) {};
 
+private:
   /// @brief Call the combined function by calling the source functions.
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
@@ -158,6 +167,7 @@ public:
     const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2, const Args&... args)
     : CombinedFunctionMul<dim_inp, dim_out>(f1, CombinedFunctionMul<dim_inp, dim_out>(f2, args...)) {};
 
+private:
   /// @brief Call the combined function by calling the source functions.
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
@@ -176,6 +186,7 @@ public:
     const Function<dim_inp, dim_out>& f1, const Function<dim_inp, dim_out>& f2, const Args&... args)
     : CombinedFunctionDiv<dim_inp, dim_out>(f1, CombinedFunctionDiv<dim_inp, dim_out>(f2, args...)) {};
 
+private:
   /// @brief Call the combined function by calling the source functions.
   Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
@@ -218,6 +229,7 @@ public:
   /// @brief Destroy a Polynomial object.
   ~Polynomial() = default;
 
+private:
   /// @brief coefficients of the function.
   std::vector<std::vector<double>> m_coeffs;
 
@@ -263,6 +275,7 @@ public:
   /// @brief Destroy the object.
   ~SumExponential() = default;
 
+private:
   /// @brief The coefficients of the function.
   std::vector<std::vector<double>> m_coeffs;
 
@@ -308,6 +321,7 @@ public:
   /// @brief Destroy the object.
   ~SumLogarithm() = default;
 
+private:
   /// @brief The coefficients of the function.
   std::vector<std::vector<double>> m_coeffs;
 
@@ -357,6 +371,7 @@ public:
   /// @brief Destroy the object.
   ~MultivariatePolynomial() = default;
 
+protected:
   /// @brief The weight matrices of the function.
   std::vector<std::vector<std::vector<double>>> m_weights;
 

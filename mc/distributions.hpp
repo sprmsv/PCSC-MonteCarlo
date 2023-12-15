@@ -86,11 +86,6 @@ public:
   /// @brief Destroy the Uniform object.
   ~Uniform();
 
-  /// @brief The lower bounds.
-  std::vector<double> m_lower;
-  /// @brief The upper bounds.
-  std::vector<double> m_upper;
-
   /// @brief Returns the mean value of the Uniform distribution.
   virtual Vector<dim> mean() override;
   /// @brief Returns the variance of the Uniform distribution.
@@ -99,6 +94,11 @@ public:
 private:
   /// @brief Returns an element of a random sample from the uniform distribution.
   double sample_dim(const int d) override;
+
+  /// @brief The lower bounds.
+  std::vector<double> m_lower;
+  /// @brief The upper bounds.
+  std::vector<double> m_upper;
 };
 
 /**
@@ -138,12 +138,6 @@ public:
   /// @brief Destroys the Normal object.
   ~Normal();
 
-  /// @brief The mean value of each dimension.
-  std::vector<double> m_mean;
-
-  /// @brief The covariane matrix.
-  std::vector<std::vector<double>> m_covariance;
-
   /// @brief Returns the mean value of the distribution.
   virtual Vector<dim> mean() override;
   /// @return Returns the variance of the distribution.
@@ -162,6 +156,12 @@ private:
    * @return double the sample element.
    */
   double sample_dim(const int d) override;
+
+  /// @brief The mean value of each dimension.
+  std::vector<double> m_mean;
+
+  /// @brief The covariane matrix.
+  std::vector<std::vector<double>> m_covariance;
 };
 
 #include "distributions.tpp"

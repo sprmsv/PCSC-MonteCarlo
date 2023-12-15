@@ -22,7 +22,7 @@ The function $p(u) \colon \mathbb{R}^m \to \mathbb{R}^n$ is evaluated on a vecto
 
 $$ p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k), $$
 
-where $ K $ is the order of the polynomial, $ A_k \in \mathbb{R}^{m, n} $ are coefficients of the function, $ b \in \mathbb{R}^n $ is the biase vector, and $ pow $ is the element-wise power function.
+where $K$ is the order of the polynomial, $A_k \in \mathbb{R}^{m,n}$ are coefficients of the function, and $b \in \mathbb{R}^m$ is the biase vector, and $ pow $ is the element-wise power function.
 
 - Linear function
 

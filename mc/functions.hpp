@@ -1,7 +1,7 @@
 #ifndef MC_FUNCTIONS_HPP
 #define MC_FUNCTIONS_HPP
 
-#include "sampler.hpp"
+#include "mca.hpp"
 #include "distributions.hpp"
 #include "vector.hpp"
 #include "exceptions.hpp"

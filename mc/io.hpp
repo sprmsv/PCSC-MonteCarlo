@@ -3,7 +3,7 @@
 
 #include "functions.hpp"
 #include "distributions.hpp"
-#include "sampler.hpp"
+#include "mca.hpp"
 #include "exceptions.hpp"
 
 #include <string>

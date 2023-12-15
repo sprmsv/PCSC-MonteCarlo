@@ -1,6 +1,6 @@
 #include "exceptions.hpp"
 #include "distributions.hpp"
-#include "sampler.hpp"
+#include "mca.hpp"
 #include "functions.hpp"
 #include "vector.hpp"
 #include "io.hpp"

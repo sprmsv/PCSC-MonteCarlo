@@ -13,10 +13,10 @@ namespace {
 class PolynomialTest : public ::testing::Test
 {
 protected:
-  Polynomial<dim>* f;
+  Polynomial<dim, 1>* f;
 
   virtual void SetUp() override {
-    f = new Polynomial<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/poly.dat");
+    f = new Polynomial<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/poly.dat");
   };
 
   virtual void TearDown() override {
@@ -27,10 +27,10 @@ protected:
 class MultivariatePolynomialTest : public ::testing::Test
 {
 protected:
-  MultivariatePolynomial<3, 4, 2>* f;
+  MultivariatePolynomial<3, 4>* f;
 
   virtual void SetUp() override {
-    f = new MultivariatePolynomial<3, 4, 2>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/multipoly.dat");
+    f = new MultivariatePolynomial<3, 4>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/multipoly.dat");
   };
 
   virtual void TearDown() override {
@@ -55,10 +55,10 @@ protected:
 class SumExponentialTest : public ::testing::Test
 {
 protected:
-  SumExponential<dim>* f;
+  SumExponential<dim, 1>* f;
 
   virtual void SetUp() override {
-    f = new SumExponential<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumexp.dat");
+    f = new SumExponential<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumexp.dat");
   };
 
   virtual void TearDown() override {
@@ -69,10 +69,10 @@ protected:
 class SumLogarithmTest : public ::testing::Test
 {
 protected:
-  SumLogarithm<dim>* f;
+  SumLogarithm<dim, 1>* f;
 
   virtual void SetUp() override {
-    f = new SumLogarithm<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumlog.dat");
+    f = new SumLogarithm<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumlog.dat");
   };
 
   virtual void TearDown() override {
@@ -83,14 +83,14 @@ protected:
 class CombinationTest : public ::testing::Test
 {
 protected:
-  Polynomial<dim>* f1;
-  SumExponential<dim>* f2;
-  SumLogarithm<dim>* f3;
+  Polynomial<dim, 1>* f1;
+  SumExponential<dim, 1>* f2;
+  SumLogarithm<dim, 1>* f3;
 
   virtual void SetUp() override {
-    f1 = new Polynomial<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/poly.dat");
-    f2 = new SumExponential<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumexp.dat");
-    f3 = new SumLogarithm<dim>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumlog.dat");
+    f1 = new Polynomial<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/poly.dat");
+    f2 = new SumExponential<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumexp.dat");
+    f3 = new SumLogarithm<dim, 1>(std::string(PROJECT_SOURCE_DIR) + "/tests/data/sumlog.dat");
   };
 
   virtual void TearDown() override {

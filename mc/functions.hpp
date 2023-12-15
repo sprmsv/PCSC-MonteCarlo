@@ -204,8 +204,8 @@ private:
  *
  * @tparam dim_inp The input dimension of the polynomoal.
  */
-template <unsigned int dim_inp>
-class Polynomial : public Function<dim_inp, 1>
+template <unsigned int dim_inp, unsigned int dim_out>
+class Polynomial : public Function<dim_inp, dim_out>
 {
 public:
   /**
@@ -224,7 +224,7 @@ public:
   Polynomial(std::vector<std::vector<double>> &coeffs);
 
   /// @brief Copy a Polynomial object.
-  Polynomial(const Polynomial<dim_inp>&);
+  Polynomial(const Polynomial<dim_inp, dim_out>&);
 
   /// @brief Destroy a Polynomial object.
   ~Polynomial() = default;
@@ -234,7 +234,7 @@ private:
   std::vector<std::vector<double>> m_coeffs;
 
   /// @brief call the function.
-  Vector<1> call(const Vector<dim_inp>& x) const override;
+  Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
 /**
@@ -250,8 +250,8 @@ private:
  *
  * @tparam dim_inp The input dimension of the function.
  */
-template <unsigned int dim_inp>
-class SumExponential : public Function<dim_inp, 1>
+template <unsigned int dim_inp, unsigned int dim_out>
+class SumExponential : public Function<dim_inp, dim_out>
 {
 public:
   /**
@@ -270,7 +270,7 @@ public:
   SumExponential(std::vector<std::vector<double>> &coeffs);
 
   /// @brief Construct a SumExponential object from a matrix of coefficients.
-  SumExponential(const SumExponential<dim_inp>&);
+  SumExponential(const SumExponential<dim_inp, dim_out>&);
 
   /// @brief Destroy the object.
   ~SumExponential() = default;
@@ -280,7 +280,7 @@ private:
   std::vector<std::vector<double>> m_coeffs;
 
   /// @brief Call the function.
-  Vector<1> call(const Vector<dim_inp>& x) const override;
+  Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
 /**
@@ -296,8 +296,8 @@ private:
  *
  * @tparam dim_inp The input dimension of the function.
  */
-template <unsigned int dim_inp>
-class SumLogarithm : public Function<dim_inp, 1>
+template <unsigned int dim_inp, unsigned int dim_out>
+class SumLogarithm : public Function<dim_inp, dim_out>
 {
 public:
   /**
@@ -316,7 +316,7 @@ public:
   SumLogarithm(std::vector<std::vector<double>> &coeffs);
 
   /// @brief Copy a SumLogarithm object.
-  SumLogarithm(const SumLogarithm<dim_inp>&);
+  SumLogarithm(const SumLogarithm<dim_inp, dim_out>&);
 
   /// @brief Destroy the object.
   ~SumLogarithm() = default;
@@ -326,7 +326,7 @@ private:
   std::vector<std::vector<double>> m_coeffs;
 
   /// @brief Call the function.
-  Vector<1> call(const Vector<dim_inp>& x) const override;
+  Vector<dim_out> call(const Vector<dim_inp>& x) const override;
 };
 
 /**
@@ -344,7 +344,7 @@ private:
  * @tparam dim_out The input dimension of the function.
  * @tparam order The order of the polynomial.
  */
-template <unsigned int dim_inp, unsigned int dim_out, unsigned int order>
+template <unsigned int dim_inp, unsigned int dim_out>
 class MultivariatePolynomial : public Function<dim_inp, dim_out>
 {
 public:
@@ -366,7 +366,7 @@ public:
   MultivariatePolynomial(std::vector<std::vector<std::vector<double>>> &weights, std::vector<double> &biases);
 
   /// @brief Copy a MultivariatePolynomial object.
-  MultivariatePolynomial(const MultivariatePolynomial<dim_inp, dim_out, order>&);
+  MultivariatePolynomial(const MultivariatePolynomial<dim_inp, dim_out>&);
 
   /// @brief Destroy the object.
   ~MultivariatePolynomial() = default;
@@ -395,7 +395,7 @@ protected:
  * @tparam dim_out The input dimension of the function.
  */
 template <unsigned int dim_inp, unsigned int dim_out>
-class Linear : public MultivariatePolynomial<dim_inp, dim_out, 1>
+class Linear : public MultivariatePolynomial<dim_inp, dim_out>
 {
 public:
   /**

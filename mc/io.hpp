@@ -47,6 +47,8 @@ public:
   unsigned int dim_inp;
   /// @brief Output dimension of the function
   unsigned int dim_out;
+  /// @brief Order of the function
+  unsigned int funcorder;
   /// @brief Moment order
   int order;
   /// @brief Moment type
@@ -92,7 +94,7 @@ public:
   /// @brief Launch the workflow for calculating errors of the central limit theorem.
   void write_report(std::ostream& stream, const std::map<std::string, Eigen::VectorXd>& stats);
 
-private:
+protected:
   /// @brief Argument parser.
   const ArgParser& m_parser;
   /// @brief Function of interest.

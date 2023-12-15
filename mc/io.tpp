@@ -52,7 +52,7 @@ void ArgParser::parse()
         throw InvalidArgumentException("--function", "Function type \"" + functype + "\" is not supported.");
     }
     std::getline(file, line);
-    std::istringstream(line) >> dim_inp >> dim_out;
+    std::istringstream(line) >> dim_inp >> dim_out >> funcorder;
     if (dim_inp < 1 || dim_out < 1) {
         file.close();
         throw InvalidArgumentException("--function", "Dimensions (" + line + ") must be positive integers.");
@@ -157,18 +157,27 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
 : m_parser(parser)
 {
   // Construct the function dynamically
-  // TODO: Specialize for dim_out and add other functions
-  // TODO: Separate this part in another method and only specialize that method
   if ((m_parser.functype == "linear")) {
     m_function = new Linear<dim_inp, dim_out>(m_parser.function);
   }
-  // TODO: Add other function types (some of them only with dim_out = 1 specialization)
+  else if ((m_parser.functype == "multivariatepolynomial")) {
+    m_function = new MultivariatePolynomial<dim_inp, dim_out>(m_parser.function);
+  }
+  else if ((m_parser.functype == "polynomial")) {
+    m_function = new Polynomial<dim_inp, dim_out>(m_parser.function);
+  }
+  else if ((m_parser.functype == "sumexponential")) {
+    m_function = new SumExponential<dim_inp, dim_out>(m_parser.function);
+  }
+  else if ((m_parser.functype == "sumlogarithm")) {
+    m_function = new SumLogarithm<dim_inp, dim_out>(m_parser.function);
+  }
   else {
     throw FunctionNotSupported(m_parser.functype + " is not supported.");
   }
 
   // Construct the distibution and MCA
-  // TODO: Parameterize mean and variance
+  // TODO: Parameterize bounds
   if (m_parser.dist == "uniform") {
     m_distribution = new Uniform<dim_inp>(0., 1.);
     m_mca = m_function->mca(m_parser.n_samples, *m_distribution);
@@ -181,6 +190,12 @@ Workflow<dim_inp, dim_out>::Workflow(const ArgParser& parser)
   else {
     throw InvalidArgumentException("--dist");
   }
+}
+
+template <unsigned int dim_inp, unsigned int dim_out>
+Workflow<dim_inp, dim_out>::~Workflow() {
+  delete m_function;
+  delete m_distribution;
 }
 
 template <unsigned int dim_inp, unsigned int dim_out>
@@ -291,12 +306,6 @@ void Workflow<dim_inp, dim_out>::write_report(
   }
   stream << std::endl;
   stream.flush();
-}
-
-template <unsigned int dim_inp, unsigned int dim_out>
-Workflow<dim_inp, dim_out>::~Workflow() {
-  delete m_function;
-  delete m_distribution;
 }
 
 // replace clt() with run()

@@ -47,7 +47,7 @@ void test_approximations() {
   // Pass samples through a function
   const int dim_inp = 3;
   const int dim_out = 1;
-  Polynomial<dim_inp> poly("tests/data/poly.dat");
+  Polynomial<dim_inp, dim_out> poly("tests/data/poly.dat");
   auto mca_poly_uniform = poly.mca(n, uniform);
   auto mca_poly_normal = poly.mca(n, normal);
 
@@ -69,7 +69,7 @@ void workflow() {
   // Get samples from a distribution
   Normal<dim_inp> dist(0., 1.);
   // Pass samples through a function and define the approximator
-  Polynomial<dim_inp> poly("tests/data/poly.dat");
+  Polynomial<dim_inp, dim_out> poly("tests/data/poly.dat");
   auto mca = poly.mca(n, dist);
 
   // Print approximations
@@ -78,7 +78,7 @@ void workflow() {
 }
 void test_multipoly() {
   Linear<3, 4> l1("tests/data/linear.dat");
-  MultivariatePolynomial<3, 4, 2> mp1("tests/data/multipoly.dat");
+  MultivariatePolynomial<3, 4> mp1("tests/data/multipoly.dat");
 
   Vector<3> x = 1.;
   std::cout << "Linear(x) = " << l1(x) << std::endl;

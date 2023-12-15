@@ -45,6 +45,7 @@ message(STATUS "")
 
 # Install targets
 install(TARGETS main DESTINATION bin)
+target_compile_definitions(tests PRIVATE PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
 # Generate API documentation with Doxygen
 # message(STATUS "Generating API documentation with Doxygen.")

@@ -18,39 +18,39 @@ The functions currently supported by the library are the following:
 
 - Multivariate polynomial
 
- The function $ p(u): R^m -> R^n $ is evaluated on a vector as
+ The function $p(u)\colon \mathbb{R}^m \to \mathbb{R}^n $ is evaluated on a vector as
 $$
     p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k),
 $$
 
  where $ K $ is the order of the polynomial,
- $ A_k \in R^{m, n} $ are coefficients of the function,
- $ b \in R^n $ is the biase vector,
+ $ A_k \in \mathbb{R}^{m, n} $ are coefficients of the function,
+ $ b \in \mathbb{R}^n $ is the biase vector,
  and $ pow $ is the element-wise power function.
 
 - Logarithmic sum
- The function $ f(u): R^m -> R $ is evaluated on a vector as
+ The function $ f(u)\colon \mathbb{R}^m -> \mathbb{R} $ is evaluated on a vector as
 $$
-    
+    f(u) = \sum_{k=0}^{K} c_k \cdot \log((k+1)u),
 $$
- where $ K $ is the order of the summation, $ c_k \in R^m $ are coefficients of the function, and $ log $ is the element-wise logarithm function.
+ where $ K $ is the order of the summation, $ c_k \in \mathbb{R}^m $ are coefficients of the function, and $ \log $ is the element-wise logarithm function.
 
  - Exponential sum
- The function \f$ f(u): R^m -> R \f$ is evaluated on a vector as
+ The function $f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
  $$
-     f(u) = \sum_{k=0}^{K} c_k . exp(ku),
+     f(u) = \sum_{k=0}^{K} c_k \cdot \exp(ku),
 $$
   where $ K $ is the order of the summation,
-  $ c_k \in R^m $ are coefficients of the function,
-  and $ exp $ is the element-wise exponential function.
+  $ c_k \in \mathbb{R}^m $ are coefficients of the function,
+  and $ \exp $ is the element-wise exponential function.
  
  - Polynomials
- The function $ p(u): R^m -> R $ is evaluated on a vector as
+ The function $p(u): \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 $$
-   p(u) = \sum_{k=0}^{K} c_k . pow(u, k),
+   p(u) = \sum_{k=0}^{K} c_k \cdot pow(u, k),
 $$
  where $ K $ is the order of the polynomial,
- $ c_k \in R^m $ are coefficients of the polynomial,
+ $ c_k \in \mathbb{R}^m $ are coefficients of the polynomial,
  and $ pow $ is the element-wise power function.
 
  - Any combination of the above functions. The operators between functions are the following:
@@ -112,31 +112,40 @@ build/tests
 
 Implemented tests:
 
-| TestName    | TestFile.cpp |
-| -------- | ------- |
-| VectorInitStd  | vector_test.cpp    |
-| VectorSize | vector_test.cpp    |
-| VectorPlus  | vector_test.cpp    |
-| VectorMinus  | vector_test.cpp    |
-| VectorTimes  | vector_test.cpp    |
-| VectorDivide  | vector_test.cpp    |
-| VectorDot  | vector_test.cpp    |
-| Polynomial eval  | function_test.cpp    |
-| MultivariatePolynomialEval  | function_test.cpp    |
-| LinearEval  | function_test.cpp    |
-| SumExponentialEval  | function_test.cpp    |
-| SumLogarithmEval  | function_test.cpp    |
-| CombinedSum  | function_test.cpp    |
-| CombinedDiff  | function_test.cpp    |
-| CombinedProd  | function_test.cpp    |
-| CombineDiv  | function_test.cpp    |
-| ComplexCombination  | function_test.cpp    |
+| TestName    | TestFile.cpp | Description |
+| -------- | ------- | ----------- |
+| VectorInitStd  | vector_test.cpp    | Initialize a vector with a C++ vector standard library |
+| VectorSize | vector_test.cpp    | Check the size is well defined|
+| VectorPlus  | vector_test.cpp    | Check the addition of two vectors |
+| VectorMinus  | vector_test.cpp    | Check the subtraction of two vectors |
+| VectorTimes  | vector_test.cpp    | Check the multiplication of two vectors elementwise |
+| VectorDivide  | vector_test.cpp    | Check the division of two vectors elementwise |
+| VectorDot  | vector_test.cpp    | Check the dot product of two vectors |
+| Polynomial eval  | function_test.cpp    | Check the evaluation of a polynomial function|
+| MultivariatePolynomialEval  | function_test.cpp    | Check the evaluation of a multivariate polynomial function|
+| LinearEval  | function_test.cpp    |  Check the evaluation of a linear function|
+| SumExponentialEval  | function_test.cpp    | Check the evaluation of a sum of exponential function|
+| SumLogarithmEval  | function_test.cpp    | Check the evaluation of a sum of logarithm function|
+| CombinedSum  | function_test.cpp    | Check the evaluation of a sum of functions|
+| CombinedDiff  | function_test.cpp    | Check the evaluation of a difference of functions|
+| CombinedProd  | function_test.cpp    | Check the evaluation of a product of functions|
+| CombineDiv  | function_test.cpp    | Check the evaluation of a division of functions|
+| ComplexCombination  | function_test.cpp    | Check the evaluation of a complex combination of functions|
 
 The tests are implemented using the Google Test library. The tests are located in the `tests` directory. Each test is built assuming previous correct tests (VectorSum assumes VectorSize works properly).
 
 ## Command-line interface
 
-<!-- TODO: A table with the input arguments + descriptions -->
+| Argument    | Description | Required |
+| -------- | ----------- | -------- |
+| --function | Path to the file containing the function to approximate | Yes |
+| -k | Order of the statistical moment to approximate | No (default: 1) |
+| --mode | Type of moment | No (default: standardized) |
+| --dist | Distribution of the random variable | No (default: normal) |
+| --n | Number of samples | No (default: 1000) |
+| --output | Path to the output file | No (default: stdout) |
+| --plot | Whether to save plots of samples | No (default: none) |
+| --clt | Whether to print the central limit theorem output| No (default: 0) |
 
 To see the input arguments:
 ```bash
@@ -150,7 +159,13 @@ build/main ...
 
 ## Limitations
 
-<!-- TODO: Limitations, TODOs, perspectives, etc. -->
+- The plot are not implemented currently. The option is open for development.
+- Study of the central limit theorem with the relation between the error and the number of samples is not implemented currently. The option is open for development.
+- Other distributions can be implemented.
+- Other functions can be implemented.
+- Boost library could be used for the distribution and set as an option for the user.
+- The code could be parallelized using OpenMP or MPI.
+- Other types of sampler than Monte Carlo could be implemented.
 
 ## Contributions
 

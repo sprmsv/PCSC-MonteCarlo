@@ -1,12 +1,12 @@
-# MCA: Monte Carlo Approximation of Statistical Moments in C++
+# Monte Carlo Approximation of Statistical Moments in C++
 
 ## Project Description
 
 From a user defined function and a distribution, this library approximates the statistical moments using Monte Carlo approximation. The library is written in C++ and uses the Eigen library for linear algebra and the Google Test library for unit testing. The library is tested on Linux and macOS.
 
-Given a probablity space $(\Omega, \mathcal{F}, P)$, a function $f \colon \mathbb{R}^n \to \mathbb{R}^m$ and a random variable $X \colon \Omega \to \mathbb{R}^n$, this library approximates the statistical moments using Monte Carlo approximation. 
+Given a probablity space $(\Omega, \mathcal{F}, P)$, a function $f \colon \mathbb{R}^n \to \mathbb{R}^m$ and a random variable $X \colon \Omega \to \mathbb{R}^n$, this library approximates the statistical moments using Monte Carlo approximation.
 
-A set of samples $\{X_i\}_{i=1}^N$ is drawn from the distribution of $X$ and the statistical moments are approximated as follows:
+A set of samples $\{X\}_{i=1}^N$ is drawn from the distribution of $X$ and the statistical moments are approximated as follows:
 
 $$
     \mathbb{E}[f(X)^k] \approx \frac{1}{N} \sum_{i=1}^N f(X_i)^k
@@ -18,7 +18,7 @@ The functions currently supported by the library are the following:
 
 - Multivariate polynomial
 
-The function $p(u) \colon \mathbb{R}^m \to \mathbb{R}^n$ is evaluated on a vector as 
+The function $p(u) \colon \mathbb{R}^m \to \mathbb{R}^n$ is evaluated on a vector as
 
 $$ p(u) = b + \sum_{k=1}^{K} A_k^{m, n} pow(u, k), $$
 
@@ -34,9 +34,9 @@ where $ A \in \mathbb{R}^{n, m} $ is the linear operator, and $ b \in \mathbb{R}
 
 - Logarithmic sum
 
-The function $ f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as 
+The function $ f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 
-$$ 
+$$
 f(u) = \sum_{k=0}^{K} c_k \cdot \log((k+1)u),
 $$
 
@@ -46,7 +46,7 @@ where $ K $ is the order of the summation, $ c_k \in \mathbb{R}^m $ are coeffici
 
 The function $f(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 
-$$ 
+$$
 f(u) = \sum_{k=0}^{K} c_k \cdot \exp(ku),
 $$
 
@@ -56,7 +56,7 @@ where $ K $ is the order of the summation, $ c_k \in \mathbb{R}^m $ are coeffici
 
 The function $p(u)\colon \mathbb{R}^m \to \mathbb{R} $ is evaluated on a vector as
 
-$$ 
+$$
 p(u) = \sum_{k=0}^{K} c_k \cdot pow(u, k),
 $$
 
@@ -118,6 +118,11 @@ Another functionality is testing the Central Limit Theorem for the provided func
 
 ## Tests
 
+You can run all the tests using the following command:
+```bash
+build/tests
+```
+
 Implemented tests:
 
 | TestName    | TestFile.cpp | Description |
@@ -129,7 +134,7 @@ Implemented tests:
 | VectorTimes  | vector_test.cpp    | Check the multiplication of two vectors elementwise |
 | VectorDivide  | vector_test.cpp    | Check the division of two vectors elementwise |
 | VectorDot  | vector_test.cpp    | Check the dot product of two vectors |
-| Polynomial eval  | function_test.cpp    | Check the evaluation of a polynomial function|
+| PolynomialEval  | function_test.cpp    | Check the evaluation of a polynomial function|
 | MultivariatePolynomialEval  | function_test.cpp    | Check the evaluation of a multivariate polynomial function|
 | LinearEval  | function_test.cpp    |  Check the evaluation of a linear function|
 | SumExponentialEval  | function_test.cpp    | Check the evaluation of a sum of exponential function|
@@ -141,13 +146,6 @@ Implemented tests:
 | ComplexCombination  | function_test.cpp    | Check the evaluation of a complex combination of functions|
 
 The tests are implemented using the Google Test library. The tests are located in the `tests` directory. Each test is built assuming previous correct tests (VectorSum assumes VectorSize works properly).
-
-
-You can run all the tests using the following command:
-```bash
-build/tests
-```
-
 
 ## Command-line interface
 
@@ -172,15 +170,44 @@ To run the code:
 build/main --function <path-to-input-function> [options]
 ```
 
-## Limitations
+## Limitations and prospects
 
-- The plots are not implemented currently. The option is open for development.
+### Future work
+
+- The user input is currently limited to a file with pre-defined structure. An interactive mode can be implemented to define the function via the command line.
+
+- The configurations of the source distributions (mean and variance for the Normal distribution, lower and upper bounds for the Uniform distribution) are currently limited to pre-defined -standard- values. These can be defined by the user.
+
+- Other distributions and function types can be implemented.
+
+- The plots are not implemented currently. The option is open for development. A plot of the distribution of the function samples could be informative. For vectorial functions, this can be more challenging since dimension reduction might be necessary.
+
 - Study of the central limit theorem with the relation between the error and the number of samples is not implemented currently. The option is open for development.
-- Other distributions can be implemented.
-- Other functions can be implemented.
-- Boost library could be used for the distribution and set as an option for the user.
-- The code could be parallelized using OpenMP or MPI.
-- Other types of sampler than Monte Carlo could be implemented.
+
+### Code optimization
+
+- Currently, the input and output dimensions of the functions are limited to 4. This can easily be extended to any number before the compilation of `main`. However, when used as a library, functions from any arbitrary dimension can be built statically before compilation. Extending the `Function` class to allocate dimensions dynamically is open for development.
+
+- The `Vector` class can be easily extended to be defined on other data types. Currently, it is limited to `double`.
+
+- Replacing standard vectors (`std::vector`) with standard arrays (`std::array`) can make the memory management more efficient, since we are dealing with fixed-size vectors most of the times.
+
+- The `Vector` class can be extended and also used in the `MonteCarloApproximator` instead of Eigen matrices.
+
+- The code could be parallelized using OpenMP or MPI. As a starting point, the generation of random samples and passing them through the function is a perfect candidate for parallelization.
+
+### Boost library
+
+- Distributions from the Boost library can be used.
+
+- The inverse error function is naively implemented. More sophisticated implementations are available in the Boost library, which will make the random sampling of the Normal distribution much faster.
+
+### Other
+
+- Initialization of the git submodules can be handled by `CMakeLists.txt`.
+
+- Building the documentation can be an option.
+
 
 ## Contributions
 

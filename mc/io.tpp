@@ -32,7 +32,7 @@ void ArgParser::parse() {
   auto pos_clt = std::find(args.begin(), args.end(), "--clt");
 
   // Set the function file
-  std::set<std::string> allowed_functypes = {"polynomial", "sumexponential", "sumlogarithm", "linear"};
+  std::set<std::string> allowed_functypes = {"polynomial", "sumexponential", "sumlogarithm", "multivariatepolynomial", "linear"};
   if (pos_function != args.end()) {
     function = *(pos_function + 1);
     // Check existence of the file
